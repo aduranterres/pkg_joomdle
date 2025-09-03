@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="component" version="5.0.0" method="upgrade" client="site">
+    <name>com_joomdle</name>
+    <author>Qontori Pte Ltd</author>
+    <authorEmail>development@qontori.com</authorEmail>
+    <creationDate>04/02/2010</creationDate>
+	<copyright>Copyright (C) 2014 Qontori Pte Ltd</copyright>
+	<license>http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL</license>
+    <version>3.0.0</version>
+    <description>Tools for Joomla - Moodle integration</description>
+    <namespace path="src">Joomdle\Component\Joomdle</namespace>
+	<scriptfile>install.php</scriptfile>
+
+    <requiresMoodleVersion>2018120300</requiresMoodleVersion>
+
+    <!-- installation part -->
+	<install folder="com_joomdle/administrator/components/com_joomdle">
+		<sql>
+			<file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file>
+			<file driver="postgresql" charset="utf8">sql/install.postgresql.utf8.sql</file>
+		</sql>
+	</install>
+    <update>
+        <schemas>
+            <schemapath type="mysql">sql/updates/mysql</schemapath>
+        </schemas>
+    </update>
+
+    <!-- user part -->
+    <files folder="components/com_joomdle">
+        <filename>index.html</filename>
+        <filename>connection_test.php</filename>
+        <folder>forms</folder>
+        <folder>src</folder>
+        <folder>tmpl</folder>
+    </files>
+
+    <languages>
+        <language tag="en-GB">language/en-GB/com_joomdle.ini</language>
+    </languages>
+
+	<media destination="com_joomdle" folder="/administrator/components/com_joomdle/assets">
+		<folder>images</folder>
+		<folder>css</folder>
+		<folder>js</folder>
+		<filename>joomla.asset.json</filename>
+	</media>
+
+    <!--  task="default" administration part -->
+    <administration>
+
+	<menu>COM_JOOMDLE</menu>
+    <submenu>
+        <menu link="option=com_joomdle" img="components/com_joomdle/assets/images/icon-16-cpanel.png">COM_JOOMDLE_CONTROL_PANEL</menu>
+        <menu link="option=com_joomdle&amp;view=config" img="components/com_joomdle/assets/images/icon-16-config.png">COM_JOOMDLE_CONFIGURATION</menu>
+        <menu link="option=com_joomdle&amp;view=users" img="components/com_joomdle/assets/images/icon-16-users.png">COM_JOOMDLE_USERS</menu>
+        <menu link="option=com_joomdle&amp;view=mappings" img="components/com_joomdle/assets/images/icon-16-mappings.png">COM_JOOMDLE_MAPPINGS</menu>
+        <menu link="option=com_joomdle&amp;view=shop" img="components/com_joomdle/assets/images/icon-16-vmart.png">COM_JOOMDLE_SHOP</menu>
+        <menu link="option=com_joomdle&amp;view=mailinglist" img="components/com_joomdle/assets/images/icon-16-lists.png">COM_JOOMDLE_MAILING_LIST</menu>
+        <menu link="option=com_joomdle&amp;view=check" img="components/com_joomdle/assets/images/icon-16-info.png">COM_JOOMDLE_SYSTEM_CHECK</menu>
+    </submenu>
+
+
+    <files folder="administrator/components/com_joomdle">
+        <filename>access.xml</filename>
+        <filename>config.xml</filename>
+        <filename>joomdle.xml</filename>
+        <filename>index.html</filename>
+        <folder>assets</folder>
+        <folder>forms</folder>
+        <folder>presets</folder>
+        <folder>services</folder>
+        <folder>sql</folder>
+        <folder>src</folder>
+        <folder>tmpl</folder>
+    </files>
+
+    <languages>
+		<language tag="en-GB">administrator/language/en-GB/com_joomdle.sys.ini</language>
+		<language tag="en-GB">administrator/language/en-GB/com_joomdle.ini</language>
+    </languages>
+
+    </administration>
+
+    <updateservers>
+        <server type="extension" priority="1" name="Joomdle">http://www.joomdle.com/index.php?option=com_ars&amp;view=update&amp;task=stream&amp;format=xml&amp;id=1</server>
+    </updateservers>
+
+</extension>

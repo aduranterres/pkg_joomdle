@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension type="module" client="site" method="upgrade">
+	<name>mod_joomdle_courses</name>
+	<author>Antonio Duran Terres</author>
+	<creationDate>2009-10</creationDate>
+	<copyright>Antonio Duran Terres</copyright>
+	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+    <authorEmail>antonio@joomdle.com</authorEmail>
+    <authorUrl>www.joomdle.com</authorUrl>
+	<version>3.0.0</version>
+	<description>MOD_JOOMDLE_COURSES_XML_DESCRIPTION</description>
+	<namespace path="src">Joomla\Module\JoomdleCourses</namespace>
+	<files>
+		<folder module="mod_joomdle_courses">services</folder>
+		<folder>src</folder>
+		<folder>tmpl</folder>
+	</files>
+	<languages>
+		<language tag="en-GB">language/en-GB/mod_joomdle_courses.ini</language>
+		<language tag="en-GB">language/en-GB/mod_joomdle_courses.sys.ini</language>
+	</languages>
+	<config>
+		<fields name="params">
+			<fieldset name="basic" addfieldprefix="Joomdle\Component\Joomdle\Administrator\Field">
+				<field name="linkto" type="list" default="description" label="COM_JOOMDLE_LINKTO" description="COM_JOOMDLE_LINKTO_DESCRIPTION">
+					<option value="moodle">Moodle course</option>
+					<option value="description">Course description</option>
+				</field>
+
+				<field name="guest courses only" type="list" default="0" label="COM_JOOMDLE_GUEST_COURSES_ONLY"
+					description="COM_JOOMDLE_GUEST_COURSES_ONLY_DESCRIPTION">
+					<option value="0">No</option>
+					<option value="1">Yes</option>
+				</field>
+
+				<field name="free courses only" type="list" default="0" label="COM_JOOMDLE_FREE_COURSES_ONLY"
+					description="COM_JOOMDLE_FREE_COURSES_ONLY_DESCRIPTION">
+					<option value="0">No</option>
+					<option value="1">Yes</option>
+				</field>
+
+				<field name="sort_by" type="list" default="name" label="COM_JOOMDLE_SORT_BY" description="COM_JOOMDLE_SORT_BY_DESCRIPTION">
+					<option value="name">Name</option>
+					<option value="date">Date</option>
+					<option value="sortorder">Moodle Sortorder</option>
+				</field>
+
+				<field name="latest courses only" type="text" size="3" default="" label="COM_JOOMDLE_LATEST_COURSES_ONLY"
+					description="COM_JOOMDLE_LATEST_COURSES_ONLY_DESCRIPTION" />
+
+				<field name="courses_shown" type="courselist" default="" multiple="multiple" label="COM_JOOMDLE_SELECT_COURSES"
+					description="COM_JOOMDLE_SELECT_COURSES_DESCRIPTION" />
+
+				<field name="categories_shown" type="coursecategorylist" default="" multiple="multiple" label="COM_JOOMDLE_SELECT_CATEGORIES"
+					description="COM_JOOMDLE_SELECT_CATEGORIES_DESCRIPTION" />
+			</fieldset>
+
+			<fieldset name="advanced">
+				<field
+					name="layout"
+					type="modulelayout"
+					label="JFIELD_ALT_LAYOUT_LABEL"
+					description="JFIELD_ALT_MODULE_LAYOUT_DESC"
+				/>
+
+				<field
+					name="moduleclass_sfx"
+					type="textarea"
+					label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL"
+					description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC"
+					rows="3"
+				/>
+			</fieldset>
+		</fields>
+	</config>
+</extension>

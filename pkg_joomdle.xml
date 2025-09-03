@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="package" version="5.0" method="upgrade">
+    <name>PKG_Joomdle</name>
+    <packagename>joomdle</packagename>
+    <version>3.0.0</version>
+    <description>Joomdle Package</description>
+    <author>Antonio Duran Terres</author>
+    <creationDate>2025-07</creationDate>
+    <license>GNU General Public License version 2 or later</license>
+
+    <files>
+        <file type="component" id="com_joomdle">com_joomdle.zip</file>
+        <file type="module" id="mod_joomdle_courses" client="site">mod_joomdle_courses.zip</file>
+        <file type="module" id="mod_joomdle_my_courses" client="site">mod_joomdle_my_courses.zip</file>
+        <file type="plugin" group="system" id="joomdlesession">plg_system_joomdlesession.zip</file>
+        <file type="plugin" group="user" id="joomdle">plg_user_joomdle.zip</file>
+    </files>
+</extension>

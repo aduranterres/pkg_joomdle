@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="component" version="5.0.0" method="upgrade" client="site">
+    <name>com_joomdle</name>
+    <author>Qontori Pte Ltd</author>
+    <authorEmail>development@qontori.com</authorEmail>
+    <creationDate>04/02/2010</creationDate>
+	<copyright>Copyright (C) 2014 Qontori Pte Ltd</copyright>
+	<license>http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL</license>
+    <version>3.0.0</version>
+    <description>Tools for Joomla - Moodle integration</description>
+    <requiresMoodleVersion>2018120300</requiresMoodleVersion>
+    <namespace path="src">Joomdle\Component\Joomdle</namespace>
+
+	<scriptfile>install.php</scriptfile>
+    <!-- installation part -->
+	<install folder="com_joomdle/administrator/components/com_joomdle">
+		<sql>
+			<file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file>
+			<file driver="postgresql" charset="utf8">sql/install.postgresql.utf8.sql</file>
+		</sql>
+	</install>
+    <update>
+        <schemas>
+            <schemapath type="mysql">sql/updates/mysql</schemapath>
+        </schemas>
+    </update>
+
+    <!-- user part -->
+    <files folder="site">
+		<folder>forms</folder>
+		<folder>src</folder>
+		<folder>tmpl</folder>
+    </files>
+
+    <languages folder="site">
+		<language tag="en-GB">language/en-GB/com_joomdle.ini</language>
+    </languages>
+
+	<media destination="joomdle" folder="media">
+		<folder>images</folder>
+		<folder>css</folder>
+	</media>
+
+    <administration>
+
+    <files folder="administrator">
+		<filename>access.xml</filename>
+		<filename>config.xml</filename>
+		<folder>forms</folder>
+		<folder>src</folder>
+		<folder>tmpl</folder>
+		<folder>services</folder>
+		<folder>sql</folder>
+        <folder>assets</folder>
+    </files>
+
+    <languages folder="administrator">
+		<language tag="en-GB">language/en-GB/com_joomdle.sys.ini</language>
+		<language tag="en-GB">language/en-GB/com_joomdle.ini</language>
+    </languages>
+
+    </administration>
+
+<updateservers>
+    <server type="extension" priority="1" name="Joomdle">http://www.joomdle.com/index.php?option=com_ars&amp;view=update&amp;task=stream&amp;format=xml&amp;id=1</server>
+</updateservers>
+
+</extension>

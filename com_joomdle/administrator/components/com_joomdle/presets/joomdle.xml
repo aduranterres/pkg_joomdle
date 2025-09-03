@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<menu
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="urn:joomla.org"
+	xsi:schemaLocation="urn:joomla.org menu.xsd"
+	>
+	<menuitem
+		title="COM_JOOMDLE_MENUS"
+		type="heading"
+		icon="file-alt"
+		class="class:file-alt"
+		>
+
+		<menuitem
+			title="COM_JOOMDLE_CONTROL_PANEL"
+			type="component"
+			element="com_joomdle"
+			link="index.php?option=com_joomdle&amp;view=default"
+		/>
+
+		<menuitem
+			title="COM_JOOMDLE_CONFIGURATION"
+			type="component"
+			element="com_joomdle"
+			link="index.php?option=com_joomdle&amp;view=config"
+		/>
+
+		<menuitem
+			title="COM_JOOMDLE_USERS"
+			type="component"
+			element="com_joomdle"
+			link="index.php?option=com_joomdle&amp;view=users"
+		/>
+
+		<menuitem
+			title="COM_JOOMDLE_MAPPINGS"
+			type="component"
+			element="com_joomdle"
+			link="index.php?option=com_joomdle&amp;view=mappings"
+		/>
+
+		<menuitem
+			title="COM_JOOMDLE_SHOP_INTEGRATION"
+			type="component"
+			element="com_joomdle"
+			link="index.php?option=com_joomdle&amp;view=shop"
+		/>
+
+		<menuitem
+			title="COM_JOOMDLE_MAILING_LIST_INTEGRATION"
+			type="component"
+			element="com_joomdle"
+			link="index.php?option=com_joomdle&amp;view=mailinglist"
+		/>
+
+		<menuitem
+			title="COM_JOOMDLE_SYSTEM_CHECK"
+			type="component"
+			element="com_joomdle"
+			link="index.php?option=com_joomdle&amp;view=check"
+		/>
+
+	</menuitem>
+</menu>

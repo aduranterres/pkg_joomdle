@@ -1,0 +1,24 @@
+Joomdle Team
+------------
+Antonio Duran Terres
+Chris Rogers
+
+Code contributors (Listed in Changelog)
+---------------------------------------
+Carlos Mansilla
+red_muze
+Shekar
+Lambert
+
+Special Thanks
+--------------
+Saman Samani
+
+External credits
+----------------
+As Joomdle integrates Joomla and Moodle, it borrows code from both projects.
+The same is true for other components integrated: Virtuemart, Hikashop....
+Auto height in wrapper code for Moodle ported form JFusion
+Installer ported from Joomfish
+Includes some icons from the great icon collection Dropline Neu. For more information about the Dropline Neu, icon set, see Silvestre's website at http://www.silvestre.com.ar.
+Includes code from iframe-resizer (https://github.com/davidjbradshaw/iframe-resizer from David J. Bradshaw) to provide cross-domain auto height in wrapper.

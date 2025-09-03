@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="plugin" group="user" method="upgrade" version="5.0">
+    <name>Joomdle - User plugin</name>
+    <author>Antonio Duran</author>
+    <creationDate>2025-06</creationDate>
+    <license>GNU General Public License version 3 or later; see LICENSE.txt</license>
+    <version>3.0.0</version>
+    <description>PLG_USER_JOOMDLE_XML_DESCRIPTION</description>
+    <namespace path="src">Joomla\Plugin\User\Joomdle</namespace>
+   
+    <files>
+        <folder plugin="joomdle">services</folder>
+        <folder>src</folder>
+    </files>
+
+    <languages>
+        <language tag="en-GB">language/en-GB/plg_user_joomdle.ini</language>
+        <language tag="en-GB">language/en-GB/plg_user_joomdle.sys.ini</language>
+    </languages>
+    <config>
+        <fields name="params">
+            <fieldset name="basic">
+                <field name="login_event_to_hook" type="list" default="onUserAfterLogin" label="COM_JOOMDLE_LOGIN_EVENT" description="COM_JOOMDLE_LOGIN_EVENT_DESCRIPTION">
+                    <option value="0">COM_JOOMDLE_NONE</option>
+                    <option value="onUserLogin">onUserLogin</option>
+                    <option value="onUserAfterLogin">onUserAfterLogin</option>
+                </field>
+
+				<field name="extendedusernamechars" type="radio"
+                    class="btn-group btn-group-yesno"
+                    default="0"
+                    description="COM_JOOMDLE_ALLOW_EXTENDED_CHARS_IN_USERNAME_DESCRIPTION"
+                    label="COM_JOOMDLE_ALLOW_EXTENDED_CHARS_IN_USERNAME_LABEL"
+                >
+                    <option value="1">JYES</option>
+                    <option value="0">JNO</option>
+                </field>
+
+                <field name="space_in_name" type="radio"
+                    class="btn-group btn-group-yesno"
+                    default="0"
+                    description="COM_JOOMDLE_REQUIRE_SPACE_IN_NAME_DESCRIPTION"
+                    label="COM_JOOMDLE_REQUIRE_SPACE_IN_NAME_LABEL"
+                >
+                    <option value="1">JYES</option>
+                    <option value="0">JNO</option>
+                </field>
+
+            </fieldset>
+        </fields>
+    </config>
+</extension>

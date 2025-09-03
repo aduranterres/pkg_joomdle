@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+    <layout title="COM_JOOMDLE_MYCERTIFICATES_LAYOUT">
+        <message>
+            <![CDATA[COM_JOOMDLE_MYCERTIFICATES_LAYOUT_DESCRIPTION]]>
+        </message>
+    </layout>
+    <state>
+        <name>COM_JOOMDLE_MYCERTIFICATES_LAYOUT</name>
+        <description>COM_JOOMDLE_MYCERTIFICATES_LAYOUT_DESCRIPTION</description>
+          <config><fields name="params"><fieldset name="basic">
+
+            <field name="show_send_certificate" type="list" default="0" label="COM_JOOMDLE_SHOW_SEND_CERTIFICATE" description="COM_JOOMDLE_SHOW_SEND_CERTIFICATE_DESCRIPTION">
+                <option value="0">No</option>
+                <option value="1">Yes</option>
+            </field>
+            <field name="certificate_type" type="list" default="custom" label="COM_JOOMDLE_CERTIFICATE_TYPE" description="COM_JOOMDLE_CERTIFICATE_TYPE_DESCRIPTION">
+                <option value="normal">Moodle Certificate module</option>
+                <option value="simple">Simplecertificate</option>
+                <option value="custom">Custom certificate</option>
+                <option value="coursecertificate">Workplace course certificate</option>
+            </field>
+
+
+            </fieldset></fields></config>
+
+        <advanced>
+
+        </advanced>
+    </state>
+</metadata>

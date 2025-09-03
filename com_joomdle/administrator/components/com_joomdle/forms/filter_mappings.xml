@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form addfieldprefix="Joomdle\Component\Joomdle\Administrator\Field">
+    <fields name="filter">
+        <field
+            name="search"
+            type="text"
+            label="JSEARCH_FILTER"
+            description="JSEARCH_FILTER"
+        />
+
+        <field
+            name="joomla_app"
+            type="datasource"
+            label="COM_JOOMDLE_SELECT_USERS"
+            description="COM_JOOMDLE_SELECT_USERS"
+            onchange="this.form.submit();"
+        >
+        </field>
+    </fields>
+    <fields name="list">
+        <field
+            name="fullordering"
+            type="list"
+            label="COM_JOOMDLE_LIST_FULL_ORDERING"
+            description="COM_JOOMDLE_LIST_FULL_ORDERING_DESC"
+            onchange="this.form.submit();"
+            default="joomla_app ASC"
+            >
+            <option value="">JGLOBAL_SORT_BY</option>
+            <option value="joomla_app ASC">COM_JOOMDLE_HEADING_JOOMLA_APP_ASC</option>
+            <option value="joomla_app DESC">COM_JOOMDLE_HEADING_JOOMLA_APP_DESC</option>
+        </field>
+        <field
+            name="limit"
+            type="limitbox"
+            class="input-mini"
+            default="25"
+            label="JGLOBAL_LIST_LIMIT"
+            onchange="this.form.submit();"
+        />
+    </fields>
+</form>
