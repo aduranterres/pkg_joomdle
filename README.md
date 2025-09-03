@@ -3,7 +3,8 @@
 Joomdle is a set of extensions for Moodle and Joomla to integrate both systems.
 
 Web site: http://www.joomdle.com
-Author: Antonio duran Terres (antonio@joomdle.com)
+
+Author: Antonio Duran Terres (antonio@joomdle.com)
 
 ## Documentation
 
