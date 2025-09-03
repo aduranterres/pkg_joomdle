@@ -6,7 +6,7 @@
     <description>Joomdle Package</description>
     <author>Antonio Duran Terres</author>
     <creationDate>2025-07</creationDate>
-    <license>GNU General Public License version 2 or later</license>
+    <license>GNU General Public License version 3 or later</license>
 
     <files>
         <file type="component" id="com_joomdle">com_joomdle.zip</file>
