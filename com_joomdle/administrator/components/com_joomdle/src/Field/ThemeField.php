@@ -14,6 +14,7 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Form\Field\ListField;
 use Joomla\Database\Exception\ExecutionFailureException;
+use Joomla\CMS\Component\ComponentHelper;
 use Joomdle\Component\Joomdle\Administrator\Helper\ContentHelper;
 
 // phpcs:disable PSR1.Files.SideEffects
@@ -56,10 +57,20 @@ class ThemeField extends ListField
      */
     protected function getOptions()
     {
-        $user = Factory::getApplication()->getIdentity();
-        $themes = ContentHelper::getThemes();
-
         $options = array ();
+
+        // If Joomdle not configured, return
+        $params = ComponentHelper::getParams('com_joomdle');
+        if ($params->get('MOODLE_URL') == "") {
+            return $options;
+        }
+
+        // If any fatal error in system check, return
+        if (!ContentHelper::systemOk()) {
+            return $options;
+        }
+
+        $themes = ContentHelper::getThemes();
 
         $option = new \stdClass();
         $option->value = '';

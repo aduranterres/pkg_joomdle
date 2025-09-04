@@ -435,6 +435,38 @@ class ContentHelper
         return $system;
     }
 
+    public static function systemOk()
+    {
+        $comp_params = ComponentHelper::getParams('com_joomdle');
+        $connection = $comp_params->get('connection_method');
+
+        if ($connection == 'fgc') {
+            $connection_method_enabled = ini_get('allow_url_fopen');
+        } elseif ($connection == 'curl') {
+            $connection_method_enabled = function_exists('curl_version') == "Enabled";
+        }
+
+        if (!$connection_method_enabled) {
+            return false;
+        }
+
+        /* Test Moodle Web services in joomdle plugin */
+        $response = ContentHelper::callMethodDebug('system_check');
+        if ($response == '') {
+            return false;
+        } else {
+            if ((!array_key_exists('joomdle_auth', $response)) || ($response ['joomdle_auth'] != 1)) {
+                return false;
+            } elseif ((!array_key_exists('joomdle_configured', $response)) || ($response ['joomdle_configured'] == 0)) {
+                return false;
+            } elseif ((!array_key_exists('test_data', $response)) || ($response ['test_data'] != 'It works')) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public static function getFile($file)
     {
         $cm = ContentHelper::getConnectionMethod();

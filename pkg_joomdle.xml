@@ -7,6 +7,9 @@
     <author>Antonio Duran Terres</author>
     <creationDate>2025-07</creationDate>
     <license>GNU General Public License version 3 or later</license>
+    <scriptfile>install.php</scriptfile>
+
+    <requiresMoodleVersion>2018120300</requiresMoodleVersion>
 
     <files>
         <file type="component" id="com_joomdle">com_joomdle.zip</file>
