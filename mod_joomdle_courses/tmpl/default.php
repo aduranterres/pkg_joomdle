@@ -1,10 +1,12 @@
 <?php
 
 /**
-  * @package      Joomdle
-  * @copyright    Qontori Pte Ltd
-  * @license      http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
-  */
+ * @package     Joomdle
+ * @subpackage  mod_joomdle_courses
+ *
+ * @copyright   Antonio Duran Terres
+ * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ */
 
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Language\Text;

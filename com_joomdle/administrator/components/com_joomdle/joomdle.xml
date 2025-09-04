@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="component" version="5.0.0" method="upgrade" client="site">
     <name>com_joomdle</name>
-    <author>Qontori Pte Ltd</author>
-    <authorEmail>development@qontori.com</authorEmail>
+    <author>Antonio Duran Terres</author>
+    <authorEmail>antonio@joomdle.com</authorEmail>
     <creationDate>04/02/2010</creationDate>
-	<copyright>Copyright (C) 2014 Qontori Pte Ltd</copyright>
+	<copyright>Copyright (C) 2014 Antonio Duran Terres</copyright>
 	<license>http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL</license>
     <version>3.0.0</version>
     <description>Tools for Joomla - Moodle integration</description>

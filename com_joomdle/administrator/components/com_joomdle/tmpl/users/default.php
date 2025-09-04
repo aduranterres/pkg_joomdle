@@ -1,11 +1,11 @@
 <?php
 
 /**
- * @version    CVS: 2.0.0
- * @package    Com_Smspassword
- * @author     Antonio Duran <antonio@joomdle.com>
- * @copyright  2025 Antonio Duran
- * @license    GNU General Public License version 2 or later; see LICENSE.txt
+ * @package     Joomdle
+ * @subpackage  com_joomdle
+ *
+ * @copyright   Antonio Duran Terres
+ * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
 // No direct access
