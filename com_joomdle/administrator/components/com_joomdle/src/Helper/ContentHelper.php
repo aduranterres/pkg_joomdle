@@ -1129,6 +1129,7 @@ class ContentHelper
     public static function filterByValue($array, $index, $value)
     {
         $newarray = array ();
+        $temp = array ();
         if (is_array($array) && count($array) > 0) {
             foreach (array_keys($array) as $key) {
                 if (array_key_exists($index, $array[$key])) {
@@ -1148,6 +1149,7 @@ class ContentHelper
     public static function excludeByValue($array, $index, $value)
     {
         $newarray = array ();
+        $temp = array ();
         if (is_array($array) && count($array) > 0) {
             foreach (array_keys($array) as $key) {
                 if (array_key_exists($index, $array[$key])) {

@@ -50,9 +50,9 @@ class Dispatcher extends AbstractModuleDispatcher // implements HelperFactoryAwa
         $data['nocourses_text'] = $params->get('nocourses_text');
         $data['show_unenrol_link'] = $params->get('show_unenrol_link');
         $data['courses_shown'] = $params->get('courses_shown');
-        $data['courses_not_shown'] = $params->get('courses_shown');
-        $data['categories_shown'] = $params->get('courses_shown');
-        $data['categories_not_shown'] = $params->get('courses_shown');
+        $data['courses_not_shown'] = $params->get('courses_not_shown');
+        $data['categories_shown'] = $params->get('categories_shown');
+        $data['categories_not_shown'] = $params->get('categories_not_shown');
 
         $mycourses_model = new MycoursesModel();
         $data['courses'] = $mycourses_model->getCourses($data);
