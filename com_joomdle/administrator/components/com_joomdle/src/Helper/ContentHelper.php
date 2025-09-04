@@ -499,7 +499,7 @@ class ContentHelper
         // set url
         curl_setopt($ch, CURLOPT_URL, $file);
 
-        $comp_params = JComponentHelper::getParams('com_joomdle');
+        $comp_params = ComponentHelper::getParams('com_joomdle');
         $user_agent = $comp_params->get('user_agent', 'Joomdle');
 
         curl_setopt($ch, CURLOPT_USERAGENT, $user_agent);
@@ -570,6 +570,43 @@ class ContentHelper
         $config = Factory::getConfig();
         $log_path = $config->get('log_path');
         file_put_contents($log_path . '/' . 'joomdle_system_check.json', $file);
+
+        return $response;
+    }
+
+    public static function callMethodDebugRestCurl($method, $params = array())
+    {
+        $moodle_rest_server_url = ContentHelper::getRestUrl();
+
+        $url = $moodle_rest_server_url . '&wsfunction=joomdle_' . $method;
+
+        $request = ContentHelper::getRequestRest($method, $params);
+
+        $headers = array();
+        array_push($headers, "Content-Type: application/x-www-form-urlencoded");
+        array_push($headers, "Content-Length: " . strlen($request));
+        array_push($headers, "\r\n");
+
+        $comp_params = ComponentHelper::getParams('com_joomdle');
+        $user_agent = $comp_params->get('user_agent', 'Joomdle');
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url); # URL to post to
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); # return into a variable
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers); # custom headers, see above
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $request);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST'); # This POST is special, and uses its specified Content-type
+        curl_setopt($ch, CURLOPT_USERAGENT, $user_agent);
+        $response = curl_exec($ch); # run!
+        curl_close($ch);
+
+        // Save raw reply to log
+        $config = Factory::getConfig();
+        $log_path = $config->get('log_path');
+        file_put_contents($log_path . '/' . 'joomdle_system_check.json', $response);
+
+        $response = trim($response);
+        $response = json_decode($response, true);
 
         return $response;
     }
