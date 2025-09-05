@@ -8,7 +8,7 @@
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-namespace Joomdle\Component\Joomdle\Site\View\Detail;
+namespace Joomdle\Component\Joomdle\Site\View\Sendcert;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
@@ -27,13 +27,11 @@ use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
  */
 class HtmlView extends BaseHtmlView
 {
-    protected $items;
-
-    protected $pagination;
-
     protected $state;
 
-    protected $params;
+    protected $form;
+
+    protected $item;
 
     /**
      * Execute and display a template script.
@@ -51,17 +49,19 @@ class HtmlView extends BaseHtmlView
         $app  = Factory::getApplication();
 
         // Get model data.
-        $this->state = $this->get('State');
-        $id = $this->state->params->get('course_id');
-        $this->course_info = $this->getModel()->getCourse($id);
+        $this->form = $this->get('Form');
+//        $this->state = $this->get('State');
+        $this->item = $this->get('Item');
 
         // Check for errors.
+        /*
         if (\count($errors = $this->get('Errors'))) {
             throw new GenericDataException(implode("\n", $errors), 500);
         }
+        */
 
         // Create a shortcut to the parameters.
-        $this->params = $this->state->params;
+//        $this->params = $this->state->params;
 
         $this->prepareDocument();
 
@@ -85,15 +85,16 @@ class HtmlView extends BaseHtmlView
         // we need to get it from the menu item itself
         $menu = $app->getMenu()->getActive();
 
+        /*
         if ($menu) {
             $this->params->def('page_heading', $this->params->get('page_title', $menu->title));
         } else {
-            $this->params->def('page_heading', Text::_('COM_JOOMDLE_DETAIL'));
+            $this->params->def('page_heading', Text::_('COM_JOOMDLE_SEND_CERTIFICATE'));
         }
 
-        $title = $this->params->def('page_title', Text::_('COM_JOOMDLE_DETAIL'));
-
+        $title = $this->params->def('page_title', Text::_('COM_JOOMDLE_SEND_CERTIFICATE'));
         $this->setDocumentTitle($title);
+*/
 
         $pathway = $app->getPathWay();
         $pathway->addItem($title, '');

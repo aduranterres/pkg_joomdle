@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form addfieldprefix="Joomdle\Component\Joomdle\Site\Field">
+    <fieldset name="sendcert">
+        <field name="to" type="email"
+            description="COM_JOOMDLE_SENDCERT_TO"
+            label="COM_JOOMDLE_SENDCERT_TO"
+        />
+
+        <field name="sender" type="text"
+            description="COM_JOOMDLE_SENDCERT_SENDER_NAME"
+            label="COM_JOOMDLE_SENDCERT_SENDER_NAME"
+        />
+
+        <field name="from" type="email"
+            description="COM_JOOMDLE_SENDCERT_SENDER_MAIL"
+            label="COM_JOOMDLE_SENDCERT_SENDER_MAIL"
+        />
+
+        <field name="subject" type="text"
+            description="COM_JOOMDLE_SENDCERT_SUBJECT"
+            label="COM_JOOMDLE_SENDCERT_SUBJECT"
+        />
+
+        <field
+            name="cert_id"
+            type="hidden"
+            class="readonly"
+            label="COM_JOOMDLE_SENDCERT_CERT_ID"
+            description ="COM_JOOMDLE_SENDCERT_CERT_ID"
+            default="0"
+            readonly="true"
+            />
+
+        <field
+            name="cert_type"
+            type="hidden"
+            class="readonly"
+            label="COM_JOOMDLE_SENDCERT_CERT_TYPE"
+            description ="COM_JOOMDLE_SENDCERT_CERT_TYPE"
+            default="0"
+            readonly="true"
+            />
+
+    </fieldset>
+</form>

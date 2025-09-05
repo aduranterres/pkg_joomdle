@@ -10,11 +10,23 @@
         <description>COM_JOOMDLE_MYCERTIFICATES_LAYOUT_DESCRIPTION</description>
           <config><fields name="params"><fieldset name="basic">
 
-            <field name="show_send_certificate" type="list" default="0" label="COM_JOOMDLE_SHOW_SEND_CERTIFICATE" description="COM_JOOMDLE_SHOW_SEND_CERTIFICATE_DESCRIPTION">
+            <field 
+                name="show_send_certificate"
+                type="list"
+                default="0"
+                layout="joomla.form.field.radio.switcher"
+                label="COM_JOOMDLE_SHOW_SEND_CERTIFICATE"
+                description="COM_JOOMDLE_SHOW_SEND_CERTIFICATE_DESCRIPTION">
                 <option value="0">No</option>
                 <option value="1">Yes</option>
             </field>
-            <field name="certificate_type" type="list" default="custom" label="COM_JOOMDLE_CERTIFICATE_TYPE" description="COM_JOOMDLE_CERTIFICATE_TYPE_DESCRIPTION">
+
+            <field
+                name="certificate_type"
+                type="list"
+                default="custom"
+                label="COM_JOOMDLE_CERTIFICATE_TYPE"
+                description="COM_JOOMDLE_CERTIFICATE_TYPE_DESCRIPTION">
                 <option value="normal">Moodle Certificate module</option>
                 <option value="simple">Simplecertificate</option>
                 <option value="custom">Custom certificate</option>
