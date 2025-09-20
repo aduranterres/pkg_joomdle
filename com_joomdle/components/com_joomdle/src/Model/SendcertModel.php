@@ -102,7 +102,7 @@ class SendcertModel extends AdminModel
     }
 
     public function getItem($pk = null)
-	{
+    {
         $item = new \stdClass();
 
         $user = Factory::getApplication()->getIdentity();
@@ -113,7 +113,7 @@ class SendcertModel extends AdminModel
         }
 
         return $item;
-	}
+    }
 
     /**
      * Method to get the data that should be injected in the form.
@@ -134,8 +134,8 @@ class SendcertModel extends AdminModel
 
             $data = $this->item;
 
-			$data->cert_id = Factory::getApplication()->getInput()->get('cert_id', '', 'string');
-			$data->cert_type = Factory::getApplication()->getInput()->get('type', '', 'string');
+            $data->cert_id = Factory::getApplication()->getInput()->get('cert_id', '', 'string');
+            $data->cert_type = Factory::getApplication()->getInput()->get('type', '', 'string');
         }
 
         return $data;
@@ -149,13 +149,14 @@ class SendcertModel extends AdminModel
         $params = $app->getParams();
         $moodle_url = $params->get('MOODLE_URL');
 
-		$user = Factory::getApplication()->getIdentity();
+        $user = Factory::getApplication()->getIdentity();
         $username = $user->username;
 
         $subject_default = Text::sprintf('COM_JOOMDLE_CERTIFICATE_EMAIL_SUBJECT', $user->name);
         $subject  = $data['subject'];
-        if (!$subject)
+        if (!$subject) {
             $subject = $subject_default;
+        }
 
         $mailer = Factory::getMailer();
 
@@ -165,7 +166,6 @@ class SendcertModel extends AdminModel
             $data['sender']
         );
 
-       // $mailer->setSender($data['from']);
         $mailer->setSender($sender);
         $mailer->addRecipient($data['to']);
 
@@ -174,32 +174,31 @@ class SendcertModel extends AdminModel
         $mailer->setBody($body);
 
         $session = Factory::getSession();
-        $token = md5 ($session->getId());
+        $token = md5($session->getId());
 
         $cert_id = $data['cert_id'];
-        switch ($data['cert_type'])
-        {
+        switch ($data['cert_type']) {
             case "simple":
-                $url = $moodle_url.'/auth/joomdle/simplecertificate_view.php?id='.$cert_id.'&certificate=1&action=review&username='.$username.'&token='.$token;
+                $url = $moodle_url . '/auth/joomdle/simplecertificate_view.php?id=' . $cert_id . '&certificate=1&action=review&username=' . $username . '&token=' . $token;
                 break;
             case "custom":
-                $url = $moodle_url.'/auth/joomdle/customcert_view.php?id='.$cert_id.'&action=download&username='.$username.'&token='.$token
+                $url = $moodle_url . '/auth/joomdle/customcert_view.php?id=' . $cert_id . '&action=download&username=' . $username . '&token=' . $token
                     . '&downloadcert=1';
                 break;
             case "normal":
             default:
-                $url = $moodle_url.'/auth/joomdle/certificate_view.php?id='.$cert_id.'&certificate=1&action=review&username='.$username.'&token='.$token;
+                $url = $moodle_url . '/auth/joomdle/certificate_view.php?id=' . $cert_id . '&certificate=1&action=review&username=' . $username . '&token=' . $token;
                 break;
         }
 
-        $pdf = ContentHelper::getFile ($url);
+        $pdf = ContentHelper::getFile($url);
         $tmp_path = $config->get('tmp_path');
-        $filename = 'certificate-'.$cert_id.'-'.$user->name.'.pdf';
-        file_put_contents ($tmp_path.'/'.$filename, $pdf);
-        $mailer->addAttachment($tmp_path.'/'.$filename);
+        $filename = 'certificate-' . $cert_id . '-' . $user->name . '.pdf';
+        file_put_contents($tmp_path . '/' . $filename, $pdf);
+        $mailer->addAttachment($tmp_path . '/' . $filename);
 
         $sent = $mailer->Send();
-        unlink ($tmp_path.'/'.$filename);
+        unlink($tmp_path . '/' . $filename);
 
         return $sent;
     }

@@ -205,7 +205,7 @@ class ShopModel extends ListModel
         return strcasecmp($a->fullname, $b->fullname);
     }
 
-    private function getTotal()
+    public function getTotal()
     {
         $bundles = ShopHelper::getBundles();
         $courses = ShopHelper::getShopCourses();

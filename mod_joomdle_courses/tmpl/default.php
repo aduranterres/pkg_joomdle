@@ -20,7 +20,7 @@ defined('_JEXEC') or die('Restricted access');
 $itemid = ContentHelper::getMenuItem();
 ?>
 
-<ul class="joomdlecourses<?php echo $moduleclass_sfx; ?>">
+<ul class="joomdlecourses">
 <?php
     $i = 0;
 if (is_array($courses)) {

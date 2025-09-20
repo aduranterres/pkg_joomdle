@@ -34,6 +34,8 @@ use Joomla\CMS\User\User;
  */
 class ContentHelper
 {
+    public const COM_JOOMDLE_ROLE_STUDENT = 0;
+
     public static function getCourseList($enrollable_only = 0, $orderby = 'fullname ASC', $guest = 0, $username = '')
     {
         $params = [
@@ -315,6 +317,55 @@ class ContentHelper
     public static function getThemes()
     {
         return ContentHelper::callMethod('get_themes');
+    }
+
+    public static function getCourseTeachers($id)
+    {
+        $params = [
+            'id' => (int) $id,
+        ];
+
+        return ContentHelper::callMethod('get_course_editing_teachers', $params);
+    }
+
+    public static function getTeacherCourses($username)
+    {
+        $params = [
+            'username' => $username,
+        ];
+
+        return ContentHelper::callMethod('teacher_courses', $params);
+    }
+
+    public static function multipleEnrol($username, $courses, $roleid = self::COM_JOOMDLE_ROLE_STUDENT)
+    {
+        $params = [
+            'username' => $username,
+            'courses' => $courses,
+            'roleid' => $roleid,
+        ];
+
+        return ContentHelper::callMethod('multiple_enrol', $params);
+    }
+
+    public static function multipleUnenrolUser($username, $courses)
+    {
+        $params = [
+            'username' => $username,
+            'courses' => $courses,
+        ];
+
+        return ContentHelper::callMethod('multiple_unenrol_user', $params);
+    }
+
+    public static function multipleSuspendEnrolment($username, $courses)
+    {
+        $params = [
+            'username' => $username,
+            'courses' => $courses,
+        ];
+
+        return ContentHelper::callMethod('multiple_suspend_enrolment', $params);
     }
 
     public static function checkJoomdleSystem()

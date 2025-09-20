@@ -80,13 +80,15 @@ class MappingsHelper
         return $result;
     }
 
-    private static function getUserInfoJoomla($username)
+    public static function getUserInfoJoomla($username)
     {
         $user_id = UserHelper::getUserId($username);
         $user = Factory::getContainer()->get(UserFactoryInterface::class)->loadUserById($user_id);
 
+        $user_info = array();
         $user_info['firstname'] = MappingsHelper::getFirstname($user->name);
         $user_info['lastname'] = MappingsHelper::getLastname($user->name);
+        $user_info['name'] = $user->name;
         $user_info['pic_url'] =  'none';
 
         return $user_info;

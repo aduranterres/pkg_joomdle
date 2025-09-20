@@ -78,7 +78,8 @@ class HtmlView extends BaseHtmlView
         $toolbar    = $this->getDocument()->getToolbar();
 
         if ($canDo->get('core.create')) {
-            $toolbar->addNew('shop.addbundle');
+            $toolbar->addNew('bundle.add')
+                ->text('COM_JOOMDLE_NEW_BUNDLE');
         }
 
         if ($canDo->get('core.delete')) {

@@ -96,10 +96,10 @@ class WrapperModel extends ListModel
             case "course":
                 $path = '/course/view.php?id=';
                 $url = $params->get('MOODLE_URL') . $path . $data['id'];
-                if ($topic) {
+                if ($data['topic']) {
                     $url .= '&topic=' . $data['topic'];
                 }
-                if ($section) {
+                if ($data['section']) {
                     $url .= '#section-' . $data['section'];
                 }
                 break;

@@ -42,6 +42,7 @@ if ($linkto == 'moodle') {
     }
 }
 
+$target = "";
 if ($linkstarget == 'wrapper') {
     $open_in_wrapper = 1;
 } else {
@@ -49,8 +50,6 @@ if ($linkstarget == 'wrapper') {
 
     if ($linkstarget == "new") {
         $target = " target='_blank'";
-    } else {
-        $target = "";
     }
 }
 
@@ -58,7 +57,7 @@ $lang = ContentHelper::getLang();
 $prev_cat = 0;
 ?>
 
-<ul class="joomdlecourses<?php echo $moduleclass_sfx; ?>">
+<ul class="joomdlecourses">
 <?php
     $group_by_category = $params->get('group_by_category');
 

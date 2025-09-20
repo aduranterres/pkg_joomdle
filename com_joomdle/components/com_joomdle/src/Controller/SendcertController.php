@@ -27,7 +27,7 @@ use Joomdle\Component\Joomdle\Administrator\Helper\MappingsHelper;
 
 class SendcertController extends FormController
 {
-    public function sendcertificate ()
+    public function sendcertificate()
     {
         $app = Factory::getApplication();
         $params = $app->getParams();
@@ -37,22 +37,22 @@ class SendcertController extends FormController
 
         $sent = $this->getModel()->sendCertificate($data);
 
-        if ( $sent !== true ) {
-            $error = Text::_( 'COM_JOOMDLE_EMAIL_NOT_SENT' );
+        if ($sent !== true) {
+            $error = Text::_('COM_JOOMDLE_EMAIL_NOT_SENT');
             $app->enqueueMessage($error, 'notice');
         } else {
-        ?>
+            ?>
         <div style="padding: 10px;">
             <div style="text-align:right">
                 <a href="javascript: void window.close()">
-                    <?php echo Text::_('COM_JOOMDLE_CLOSE_WINDOW'); ?> <?php echo HTMLHelper::_('image','mailto/close-x.png', NULL, NULL, true); ?></a>
+                    <?php echo Text::_('COM_JOOMDLE_CLOSE_WINDOW'); ?> <?php echo HTMLHelper::_('image', 'mailto/close-x.png', null, null, true); ?></a>
             </div>
 
             <h2>
                 <?php echo Text::_('COM_JOOMDLE_EMAIL_SENT'); ?>
             </h2>
         </div>
-        <?php
+            <?php
         }
     }
 }
