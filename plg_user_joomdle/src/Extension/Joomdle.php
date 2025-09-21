@@ -93,8 +93,9 @@ final class Joomdle extends CMSPlugin implements SubscriberInterface
         $user  = $event->getUser();
         $isnew = $event->getIsNew();
 
-        // FIXME he puesto el msg=''; Ver q es esto
+        // FIXME he puesto el msg='' u ssucess=''; Ver q es esto ... parece q no lo usamos ahora, mirar codigo antiguo
         $msg = '';
+        $success = '';
         ContentHelper::syncUser($user, $isnew, $success, $msg);
     }
 

@@ -67,8 +67,8 @@ class DatasourceField extends ListField
         $app = Factory::getApplication();
 
         $dispatcher = Factory::getApplication()->getDispatcher();
-        $event = new Event('onGetAdditionalDataSource', []);
-        $dispatcher->dispatch('onGetAdditionalDataSource', $event);
+        $event = new Event('onJoomdleGetAdditionalDataSource', ['results' => []]);
+        $dispatcher->dispatch('onJoomdleGetAdditionalDataSource', $event);
         $more_sources = $event->getArgument('results') ?? null;
 
         if (is_array($more_sources)) {

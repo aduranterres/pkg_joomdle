@@ -132,7 +132,7 @@ class MappingsHelper
         $itemid = $comp_params->get('joomdle_itemid');
 
         $url = '';
-        //XXX return only seems to work with normal Joomla login page (not CB or Jomsocial)
+        // Note: return only seems to work with normal Joomla login page (not CB or Jomsocial)
         $return = base64_encode('index.php?option=com_joomdle&view=detail&course_id=' . $course_id . '&Itemid=' . $itemid);
         switch ($app) {
             case 'no':
@@ -142,8 +142,8 @@ class MappingsHelper
                 PluginHelper::importPlugin('joomdleprofile');
                 $app = Factory::getApplication();
                 $dispatcher = Factory::getApplication()->getDispatcher();
-                $event = new Event('getJoomdleLoginUrl', ['return' => $return]);
-                $dispatcher->dispatch('onJoomdleGetUserInfo', $event);
+                $event = new Event('onJoomdleGetLoginUrl', ['return' => $return]);
+                $dispatcher->dispatch('onJoomdleGetLoginUrl', $event);
                 $result = $event->getArgument('results') ?? null;
                 foreach ($result as $url) {
                     if ($url != '') {
@@ -218,7 +218,7 @@ class MappingsHelper
                 PluginHelper::importPlugin('joomdleprofile');
                 $app = Factory::getApplication();
                 $dispatcher = Factory::getApplication()->getDispatcher();
-                $event = new Event('onJoomdleGetFields', ['field' => $field]);
+                $event = new Event('onJoomdleGetFields', ['field' => $app]);
                 $dispatcher->dispatch('onJoomdleGetFields', $event);
                 $result = $event->getArgument('results') ?? null;
                 foreach ($result as $fields) {
@@ -274,7 +274,8 @@ class MappingsHelper
             $user->setParam('timezone', $user_info['timezone']);
         }
 
-        $user->block = (int) $user_info['block'];
+        // FIXME this is not working now...
+ //       $user->block = (int) $user_info['block'];
 
         switch ($app) {
             default:
@@ -305,7 +306,37 @@ class MappingsHelper
     {
         $user_info = ContentHelper::userDetails($username);
 
- //       JoomdleHelperMappings::create_additional_profile ($user_info); // FIXME probar cd tenga alguna extension q cree perfil
+        if (!$user_info)
+            return;
+
+        MappingsHelper::createAdditionalProfile ($user_info);
         MappingsHelper::saveUserInfo($user_info);
     }
+
+    public static function createAdditionalProfile ($user_info)
+    {
+        $comp_params = ComponentHelper::getParams( 'com_joomdle' );
+        $app = $comp_params->get( 'additional_data_source' );
+
+        $username = $user_info['username'];
+        $user_id = UserHelper::getUserId($username);
+
+        if (!$user_id)
+            return;
+
+        $user = Factory::getContainer()->get(UserFactoryInterface::class)->loadUserById($user_id);
+
+        switch ($app)
+        {
+            default:
+                PluginHelper::importPlugin('joomdleprofile');
+                $app = Factory::getApplication();
+                $dispatcher = Factory::getApplication()->getDispatcher();
+                $event = new Event('onJoomdleCreateAdditionalProfile', ['user_info' => $user_info]);
+                $dispatcher->dispatch('onJoomdleCreateAdditionalProfile', $event);
+                break;
+        }
+    }
+
+
 }
