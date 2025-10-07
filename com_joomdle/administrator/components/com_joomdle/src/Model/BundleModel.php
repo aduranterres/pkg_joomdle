@@ -13,12 +13,8 @@ namespace Joomdle\Component\Joomdle\Administrator\Model;
 use Joomla\CMS\Table\Table;
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Model\AdminModel;
-use Joomla\Database\ParameterType;
-use Joomla\CMS\User\UserFactoryInterface;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Plugin\PluginHelper;
-use Joomla\CMS\User\UserHelper;
-use Joomla\CMS\Language\Text;
 use Joomla\Event\Event;
 
 // phpcs:disable PSR1.Files.SideEffects
@@ -81,9 +77,6 @@ class BundleModel extends AdminModel
      */
     public function getForm($data = array(), $loadData = true)
     {
-        // Initialise variables.
-        $app = Factory::getApplication();
-
         // Get the form.
         $form = $this->loadForm(
             'com_joomdle.bundle',
@@ -153,9 +146,6 @@ class BundleModel extends AdminModel
         $return = parent::save($data);
 
         $insert_id = $this->getState($this->getName() . '.id');
-
-        $params = ComponentHelper::getParams('com_joomdle');
-        $shop = $params->get('shop_integration');
 
         // Create product in shop: this also creates entry in joomdle products table
         PluginHelper::importPlugin('joomdleshop');

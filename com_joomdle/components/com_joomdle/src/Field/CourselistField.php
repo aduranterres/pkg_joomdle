@@ -11,9 +11,7 @@
 namespace Joomdle\Component\Joomdle\Site\Field;
 
 use Joomla\CMS\Factory;
-use Joomla\CMS\Language\Text;
 use Joomla\CMS\Form\Field\ListField;
-use Joomla\Database\Exception\ExecutionFailureException;
 use Joomdle\Component\Joomdle\Administrator\Helper\ContentHelper;
 
 // phpcs:disable PSR1.Files.SideEffects
@@ -61,7 +59,6 @@ class CourselistField extends ListField
 
         $options = array();
 
-        $current_level = 0;
         foreach ($courses as $course) {
             $option = new \stdClass();
             $option->value = $course['remoteid'];

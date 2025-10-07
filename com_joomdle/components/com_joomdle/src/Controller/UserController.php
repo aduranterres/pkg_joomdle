@@ -15,8 +15,6 @@ namespace Joomdle\Component\Joomdle\Site\Controller;
 // phpcs:enable PSR1.Files.SideEffects
 
 use Joomla\CMS\MVC\Controller\BaseController;
-use Joomla\CMS\User\UserHelper;
-use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Uri\Uri;
 
@@ -24,6 +22,7 @@ class UserController extends BaseController
 {
     public function login()
     {
+        /** @var CMSApplication $app */
         $app = Factory::getApplication();
 
         $params = $app->getParams();
@@ -56,6 +55,7 @@ class UserController extends BaseController
 
     public function logout()
     {
+        /** @var CMSApplication $app */
         $app = Factory::getApplication();
         $app->redirect(URI::root() . 'index.php?option=com_joomdle&task=getoutlogout');
     }

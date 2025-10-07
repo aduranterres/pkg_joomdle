@@ -14,10 +14,8 @@ use Joomla\CMS\Table\Table;
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Model\AdminModel;
 use Joomla\Database\ParameterType;
-use Joomla\CMS\User\UserFactoryInterface;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\User\UserHelper;
-use Joomla\CMS\Language\Text;
 use Joomla\Component\Config\Administrator\Model\ComponentModel;
 
 // phpcs:disable PSR1.Files.SideEffects
@@ -139,8 +137,6 @@ class ConfigModel extends AdminModel
 
     public function save($data)
     {
-        $app = Factory::getApplication();
-
         //Get joomdle extension id
         $db = $this->getDatabase();
         $query = 'SELECT extension_id ' .
@@ -159,8 +155,8 @@ class ConfigModel extends AdminModel
             $data['joomla_auth_token'] = $token;
         }
 
-        $data['license_key'] = trim($data['license_key']);
-        $license_key = $data['license_key'];
+//        $data['license_key'] = trim($data['license_key']);
+//        $license_key = $data['license_key'];
 
         // Token cannot have spaces
         $data['auth_token'] = trim($data['auth_token']);
@@ -179,13 +175,6 @@ class ConfigModel extends AdminModel
 
         return $return;
     }
-
-    /*
-    protected function cleanCache($group = null)
-    {
-        return;
-    }
-    */
 
     public function regenerateJoomlaToken()
     {

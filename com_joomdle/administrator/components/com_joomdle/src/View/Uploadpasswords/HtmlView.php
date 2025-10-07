@@ -14,7 +14,6 @@ use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
 use Joomla\CMS\Toolbar\ToolbarHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
-use Joomla\CMS\MVC\View\GenericDataException;
 use Joomdle\Component\Joomdle\Administrator\Helper\JoomdleHelper;
 
 // phpcs:disable PSR1.Files.SideEffects
@@ -62,10 +61,6 @@ class HtmlView extends BaseHtmlView
     protected function addToolbar()
     {
         Factory::getApplication()->getInput()->set('hidemainmenu', true);
-
-        $isNew = ($this->item->id == 0);
-
-        $canDo = JoomdleHelper::getActions();
 
         ToolbarHelper::title(Text::_('COM_JOOMDLE_TITLE_UPLOAD_PASSWORDS'), "generic");
 

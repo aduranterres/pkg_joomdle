@@ -11,12 +11,8 @@
 namespace Joomdle\Component\Joomdle\Administrator\View\Check;
 
 use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
-use Joomla\CMS\Factory;
 use Joomla\CMS\Toolbar\ToolbarHelper;
 use Joomla\CMS\Language\Text;
-use Joomla\CMS\HTML\Helpers\Sidebar;
-use Joomla\CMS\MVC\View\GenericDataException;
-use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomdle\Component\Joomdle\Administrator\Helper\ContentHelper;
 
@@ -37,6 +33,8 @@ class HtmlView extends BaseHtmlView
 
     protected $state;
 
+    protected $system_info;
+
     /**
      * Display the view
      *
@@ -48,6 +46,8 @@ class HtmlView extends BaseHtmlView
      */
     public function display($tpl = null)
     {
+        ToolbarHelper::title(Text::_('COM_JOOMDLE_TITLE_CHECK'), "generic");
+
         $params = ComponentHelper::getParams('com_joomdle');
         if ($params->get('MOODLE_URL') == "") {
             echo "Joomdle is not configured yet. Please fill Moodle URL setting in Configuration";

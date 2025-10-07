@@ -10,10 +10,8 @@
 
 namespace Joomdle\Component\Joomdle\Administrator\Field;
 
-use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Form\Field\ListField;
-use Joomla\Database\Exception\ExecutionFailureException;
 
 // phpcs:disable PSR1.Files.SideEffects
 \defined('_JEXEC') or die;

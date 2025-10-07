@@ -16,7 +16,6 @@ namespace Joomdle\Component\Joomdle\Administrator\Controller;
 
 use Joomla\CMS\MVC\Controller\FormController;
 use Joomla\CMS\Language\Text;
-use Joomla\CMS\Component\ComponentHelper;
 
 /**
  * Config controller class.

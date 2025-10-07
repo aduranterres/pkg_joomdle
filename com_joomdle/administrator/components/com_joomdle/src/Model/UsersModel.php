@@ -18,6 +18,7 @@ use Joomla\CMS\User\UserFactoryInterface;
 use Joomla\CMS\Language\Text;
 use Joomdle\Component\Joomdle\Administrator\Helper\ContentHelper;
 use Joomdle\Component\Joomdle\Administrator\Helper\MappingsHelper;
+use Joomdle\Component\Joomdle\Administrator\Helper\ArrayHelper;
 
 // phpcs:disable PSR1.Files.SideEffects
 \defined('_JEXEC') or die;
@@ -129,7 +130,6 @@ class UsersModel extends ListModel
 
     public function getData()
     {
-        $db     = $this->getDbo();
         $search = $this->getState('filter.search');
 
         $pagination = $this->getPagination();
@@ -316,9 +316,10 @@ class UsersModel extends ListModel
             }
 
             $merged = array_merge($rdo, $rdo2);
-            $all = ContentHelper::multisort(
+
+            $all = ArrayHelper::multisort(
                 $merged,
-                $order_dir,
+                strtolower($order_dir),
                 $order,
                 'id',
                 'name',
@@ -672,7 +673,7 @@ class UsersModel extends ListModel
         }
 
         $merged = array_merge($rdo, $rdo2);
-        $all = ContentHelper::multisort($merged, $order_dir, $order, 'id', 'name', 'username', 'email', 'm_account', 'j_account', 'auth', 'admin');
+        $all = ArrayHelper::multisort($merged, strtolower($order_dir), $order, 'id', 'name', 'username', 'email', 'm_account', 'j_account', 'auth', 'admin');
         if ($limit) {
             return array_slice($all, $limitstart, $limit);
         } else {
@@ -715,6 +716,7 @@ class UsersModel extends ListModel
             /* Here we already know ID is from Moodle, as it is not from Joomla */
             $moodle_user = ContentHelper::userDetailsById(-$id); //We remove the minus
             if (!$moodle_user) {
+                $user = Factory::getContainer()->get(UserFactoryInterface::class)->loadUserById($id);
                 $error = Text::_('COM_JOOMDLE_USER_ID_DOES_NOT_EXIT_IN_MOODLE') . ": " . $user->username;
                 Factory::getApplication()->enqueueMessage($error, 'error');
                 continue;

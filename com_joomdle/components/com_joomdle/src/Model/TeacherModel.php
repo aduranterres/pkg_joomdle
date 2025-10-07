@@ -12,7 +12,6 @@ namespace Joomdle\Component\Joomdle\Site\Model;
 
 use Joomla\CMS\MVC\Model\ListModel;
 use Joomla\CMS\Factory;
-use Joomla\CMS\Component\ComponentHelper;
 use Joomdle\Component\Joomdle\Administrator\Helper\ContentHelper;
 use Joomdle\Component\Joomdle\Administrator\Helper\MappingsHelper;
 
@@ -62,6 +61,7 @@ class TeacherModel extends ListModel
         parent::populateState("a.id", "ASC");
 
         // Load the parameters.
+        /** @var CMSApplication $app */
         $app  = Factory::getApplication();
         $params = $app->getParams();
         $this->setState('params', $params);

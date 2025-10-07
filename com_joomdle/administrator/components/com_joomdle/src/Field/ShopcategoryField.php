@@ -13,7 +13,6 @@ namespace Joomdle\Component\Joomdle\Administrator\Field;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Form\Field\ListField;
-use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\Event\Event;
 
@@ -64,7 +63,6 @@ class ShopcategoryField extends ListField
 
         // Add items added via plugins
         PluginHelper::importPlugin('joomdleshop');
-        $app = Factory::getApplication();
 
         $dispatcher = Factory::getApplication()->getDispatcher();
         $event = new Event('onJoomdleGetShopCategories', []);
@@ -74,13 +72,6 @@ class ShopcategoryField extends ListField
 
         if (is_array($more_items)) {
             foreach ($more_items as $item) {
-                /*
-                $keys = array_keys ($item);
-                $key = $keys[0];
-                $item_name = array_shift ($item);
-                $option['value'] = $key;
-                $option['text'] = $item_name;
-*/
                 $option['value'] = $item['id'];
                 $option['text'] = $item['name'];
                 $options[] = $option;

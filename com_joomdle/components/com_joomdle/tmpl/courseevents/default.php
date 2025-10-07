@@ -16,7 +16,6 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomdle\Component\Joomdle\Administrator\Helper\ContentHelper;
 
-
 ?>
 
 <div class="joomdle-itemlist<?php echo $this->pageclass_sfx;?>">
@@ -41,7 +40,7 @@ foreach ($this->items as $item) : ?>
 
             $data = [];
             $data['moodle_page_type'] = 'event';
-            $data['id'] = $item['id'];
+            $data['id'] = ''; // Not needed here
             $jump_url = ContentHelper::getJumpURL($data);
 
             $link = $jump_url . "&mtype=item&id=" . $item['courseid'] . "&time=" . $item['timestart'];

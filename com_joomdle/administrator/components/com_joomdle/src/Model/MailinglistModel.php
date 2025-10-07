@@ -8,20 +8,23 @@
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-namespace Joomdle\Component\Joomdle\Site\Model;
+namespace Joomdle\Component\Joomdle\Administrator\Model;
 
+use Joomdle\Component\Joomdle\Administrator\Helper\MailinglistHelper;
 use Joomla\CMS\MVC\Model\ListModel;
-use Joomla\CMS\Factory;
-use Joomdle\Component\Joomdle\Administrator\Helper\ContentHelper;
+use Joomdle\Component\Joomdle\Administrator\Helper\ShopHelper;
+use Joomla\Component\Fields\Administrator\Helper\FieldsHelper;
 
 // phpcs:disable PSR1.Files.SideEffects
 \defined('_JEXEC') or die;
 // phpcs:enable PSR1.Files.SideEffects
 
 /**
- * Coursecategories model.
+ * Mailinglist model.
+ *
+ * @since  2.0.0
  */
-class CoursecategoriesModel extends ListModel
+class MailinglistModel extends ListModel
 {
     /**
     * Constructor.
@@ -36,6 +39,7 @@ class CoursecategoriesModel extends ListModel
         if (empty($config['filter_fields'])) {
             $config['filter_fields'] = array(
                 'id', 'a.id',
+                'name',
             );
         }
 
@@ -59,11 +63,18 @@ class CoursecategoriesModel extends ListModel
         // List state information.
         parent::populateState("a.id", "ASC");
 
-        // Load the parameters.
-        /** @var CMSApplication $app */
-        $app  = Factory::getApplication();
-        $params = $app->getParams();
-        $this->setState('params', $params);
+        $context = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
+        $this->setState('filter.search', $context);
+
+        // Split context into component and optional section
+        if (!empty($context)) {
+            $parts = FieldsHelper::extract($context);
+
+            if ($parts) {
+                $this->setState('filter.component', $parts[0]);
+                $this->setState('filter.section', $parts[1]);
+            }
+        }
     }
 
     /**
@@ -90,8 +101,13 @@ class CoursecategoriesModel extends ListModel
 
     public function getItems()
     {
-        $items = ContentHelper::getCourseCategories();
+        $items = MailinglistHelper::getListCourses ();
 
         return $items;
+    }
+
+    private function cmp($a, $b)
+    {
+        return strcasecmp($a->fullname, $b->fullname);
     }
 }

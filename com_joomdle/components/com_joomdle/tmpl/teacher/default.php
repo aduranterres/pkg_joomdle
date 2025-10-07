@@ -10,15 +10,13 @@
 
 defined('_JEXEC') or die('Restricted access');
 
-use Joomla\CMS\Factory;
+use Joomla\CMS\Application\ApplicationHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Router\Route;
 use Joomdle\Component\Joomdle\Administrator\Helper\ContentHelper;
-use Joomdle\Component\Joomdle\Administrator\Helper\MappingsHelper;
 
 $itemid = ContentHelper::getMenuItem();
 
-$unicodeslugs = Factory::getConfig()->get('unicodeslugs');
 ?>
 <div class="joomdle-teacher">
     <h1>
@@ -68,22 +66,17 @@ $unicodeslugs = Factory::getConfig()->get('unicodeslugs');
 
         <?php
         if (is_array($this->courses)) {
-            foreach ($this->courses as $id => $curso) :
-                $cat_id = $curso['cat_id'];
-                $course_id = $curso['remoteid'];
-                if ($unicodeslugs == 1) {
-                    $course_slug = JFilterOutput::stringURLUnicodeSlug($curso['fullname']);
-                    $cat_slug = JFilterOutput::stringURLUnicodeSlug($curso['cat_name']);
-                } else {
-                    $course_slug = JFilterOutput::stringURLSafe($curso['fullname']);
-                    $cat_slug = JFilterOutput::stringURLSafe($curso['cat_name']);
-                }
+            foreach ($this->courses as $id => $course) :
+                $cat_id = $course['cat_id'];
+                $course_id = $course['remoteid'];
+                $course_slug = ApplicationHelper::stringURLSafe($course['fullname']);
+                $cat_slug = ApplicationHelper::stringURLSafe($course['cat_name']);
                 ?>
                 <tr class="sectiontableentry">
                     <td align="left">
                     <?php
                         $link = Route::_("index.php?option=com_joomdle&view=detail&cat_id=$cat_id-$cat_slug&course_id=$course_id-$course_slug&Itemid=$itemid");
-                        echo "<a href=\"$link\">" . $curso['fullname'] . "</a>";
+                        echo "<a href=\"$link\">" . $course['fullname'] . "</a>";
                     ?>
                     </td>
                 </tr>

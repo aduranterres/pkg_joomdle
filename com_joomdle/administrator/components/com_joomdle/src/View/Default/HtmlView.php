@@ -11,11 +11,7 @@
 namespace Joomdle\Component\Joomdle\Administrator\View\Default;
 
 use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
-use Joomla\CMS\Factory;
-use Joomla\CMS\Toolbar\ToolbarHelper;
 use Joomla\CMS\Language\Text;
-use Joomla\CMS\HTML\Helpers\Sidebar;
-use Joomla\CMS\MVC\View\GenericDataException;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Installer\Installer;
 
@@ -50,21 +46,20 @@ class HtmlView extends BaseHtmlView
         parent::display($tpl);
     }
 
-    private function showButton($link, $image, $text)
+    public function showButton($link, $image, $text)
     {
-            $lang = Factory::getApplication()->getLanguage();
         ?>
-                <a href="<?php echo $link; ?>">
-                    <button  type="button" class="panel_btn btn-default" style="width:140px;height:120px"> 
-                        <?php echo HTMLHelper::_('image', "com_joomdle/" . $image, '', null, true); ?>
-                        <br>
-                        <span><?php echo $text; ?></span>
-                    </button>
-                </a>
-            <?php
+        <a href="<?php echo $link; ?>">
+            <button  type="button" class="panel_btn btn-default" style="width:140px;height:120px"> 
+                <?php echo HTMLHelper::_('image', "com_joomdle/" . $image, '', null, true); ?>
+                <br>
+                <span><?php echo $text; ?></span>
+            </button>
+        </a>
+        <?php
     }
 
-    private function renderAbout()
+    public function renderAbout()
     {
         $xmlfile = JPATH_ADMINISTRATOR . '/components/com_joomdle/joomdle.xml';
 

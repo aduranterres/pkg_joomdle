@@ -15,13 +15,6 @@ namespace Joomdle\Component\Joomdle\Administrator\Helper;
 // phpcs:enable PSR1.Files.SideEffects
 
 use Joomla\CMS\Factory;
-use Joomla\CMS\Object\CMSObject;
-use Joomla\CMS\Component\ComponentHelper;
-use Joomla\CMS\Plugin\PluginHelper;
-use Joomla\CMS\Language\Text;
-use Joomla\CMS\Installer\Installer;
-use Joomla\CMS\Uri\Uri;
-use Joomla\CMS\Router\Route;
 
 /**
  * Joomdle helper.

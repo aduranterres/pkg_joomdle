@@ -15,8 +15,6 @@ namespace Joomdle\Component\Joomdle\Administrator\Controller;
 // phpcs:enable PSR1.Files.SideEffects
 
 use Joomla\CMS\MVC\Controller\FormController;
-use Joomla\CMS\Language\Text;
-use Joomla\CMS\Component\ComponentHelper;
 
 /**
  * Bundle controller class.

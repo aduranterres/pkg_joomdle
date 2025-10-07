@@ -10,11 +10,7 @@
 
 namespace Joomdle\Component\Joomdle\Administrator\Field;
 
-use Joomla\CMS\Factory;
-use Joomla\CMS\Language\Text;
 use Joomla\CMS\Form\Field\ListField;
-use Joomla\Database\Exception\ExecutionFailureException;
-use Joomla\CMS\Component\ComponentHelper;
 use Joomdle\Component\Joomdle\Administrator\Helper\MappingsHelper;
 
 // phpcs:disable PSR1.Files.SideEffects

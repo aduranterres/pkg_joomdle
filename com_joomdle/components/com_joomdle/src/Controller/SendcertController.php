@@ -15,20 +15,15 @@ namespace Joomdle\Component\Joomdle\Site\Controller;
 // phpcs:enable PSR1.Files.SideEffects
 
 use Joomla\CMS\MVC\Controller\FormController;
-use Joomla\CMS\User\UserHelper;
-use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
-use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
-use Joomdle\Component\Joomdle\Administrator\Helper\ContentHelper;
-use Joomdle\Component\Joomdle\Administrator\Helper\MappingsHelper;
-
 
 class SendcertController extends FormController
 {
     public function sendcertificate()
     {
+        /** @var CMSApplication $app */
         $app = Factory::getApplication();
         $params = $app->getParams();
         $moodle_url = $params->get('MOODLE_URL');

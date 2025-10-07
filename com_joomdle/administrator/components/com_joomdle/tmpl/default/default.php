@@ -113,26 +113,18 @@ div.cpanel-component {
             </div>
             </td>
             <td width="45%" valign="top">
-            <div style="width: 100%">
-<?php
-            $title = Text::_("COM_JOOMDLE_ABOUT");
-$options = array ('active' => 'about');
-echo HTMLHelper :: _('bootstrap.startTabSet', 'myTab', $options);
-echo HTMLHelper :: _('bootstrap.addTab', 'myTab', 'about', $title);
-$renderer = 'renderAbout';
-echo $this->$renderer();
-echo HTMLHelper :: _('bootstrap.endTabSet');
-?>
-
-            </div>
+                <div style="width: 100%">
+                <?php
+                $title = Text::_("COM_JOOMDLE_ABOUT");
+                $options = array ('active' => 'about');
+                echo HTMLHelper :: _('bootstrap.startTabSet', 'myTab', $options);
+                echo HTMLHelper :: _('bootstrap.addTab', 'myTab', 'about', $title);
+                $renderer = 'renderAbout';
+                echo $this->$renderer();
+                echo HTMLHelper :: _('bootstrap.endTabSet');
+                ?>
+                </div>
             </td>
         </tr>
              </tbody>
        </table>
-        <input type="hidden" name="option" value="com_joomdle"/>
-        <input type="hidden" name="task" value=""/>
-        <input type="hidden" name="boxchecked" value="0"/>
-        <input type="hidden" name="hidemainmenu" value="0"/>
-
-        <?php echo HTMLHelper::_('form.token'); ?>
-

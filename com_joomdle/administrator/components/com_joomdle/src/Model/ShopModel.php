@@ -12,6 +12,7 @@ namespace Joomdle\Component\Joomdle\Administrator\Model;
 
 use Joomla\CMS\MVC\Model\ListModel;
 use Joomdle\Component\Joomdle\Administrator\Helper\ShopHelper;
+use Joomla\Component\Fields\Administrator\Helper\FieldsHelper;
 
 // phpcs:disable PSR1.Files.SideEffects
 \defined('_JEXEC') or die;
@@ -128,7 +129,7 @@ class ShopModel extends ListModel
 
         $filter_type = $this->getState('filter.state');
         if ($filter_type) {
-                $query->where('a.joomla_app = ' . $db->quote($filder_type));
+                $query->where('a.joomla_app = ' . $db->quote($filter_type));
         }
 
         $orderCol    = $this->state->get('list.ordering', 'name');

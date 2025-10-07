@@ -11,9 +11,7 @@
 namespace Joomdle\Component\Joomdle\Site\Field;
 
 use Joomla\CMS\Factory;
-use Joomla\CMS\Language\Text;
 use Joomla\CMS\Form\Field\ListField;
-use Joomla\Database\Exception\ExecutionFailureException;
 use Joomdle\Component\Joomdle\Administrator\Helper\ContentHelper;
 
 // phpcs:disable PSR1.Files.SideEffects
@@ -56,12 +54,10 @@ class CoursecategorylistField extends ListField
      */
     protected function getOptions()
     {
-        $user = Factory::getApplication()->getIdentity();
         $cats = ContentHelper::getCourseCategories(0);
 
         $options = array();
 
-        $current_level = 0;
         foreach ($cats as $cat) {
             $option = new \stdClass();
             $option->value = $cat['id'];

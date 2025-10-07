@@ -13,7 +13,6 @@ namespace Joomdle\Component\Joomdle\Administrator\Field;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Form\Field\ListField;
-use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\Event\Event;
 
@@ -64,7 +63,6 @@ class ShopcurrencyField extends ListField
 
         // Add items added via plugins
         PluginHelper::importPlugin('joomdleshop');
-        $app = Factory::getApplication();
 
         $dispatcher = Factory::getApplication()->getDispatcher();
         $event = new Event('onJoomdleGetShopCurrencies', []);

@@ -22,6 +22,8 @@ use Joomla\Application\Web\WebClient;
 use Joomla\CMS\Uri\Uri;
 use Joomdle\Component\Joomdle\Administrator\Helper\MappingsHelper;
 use Joomdle\Component\Joomdle\Administrator\Helper\ContentHelper;
+use Joomdle\Component\Joomdle\Administrator\Helper\MailinglistHelper;
+use Joomla\CMS\User\UserFactoryInterface;
 
 class WsController extends BaseController
 {
@@ -48,6 +50,7 @@ class WsController extends BaseController
         $username = $params['username'];
         $password = $params['password'];
 
+        /** @var CMSApplication $app */
         $app = Factory::getApplication('site');
 
         $user_id = UserHelper::getUserId($username);
@@ -82,7 +85,7 @@ class WsController extends BaseController
         $username = $params['username'];
         $token = $params['joomdle_auth_token'];
 
-        $db = Factory::getDBO();
+        $db = Factory::getContainer()->get('DatabaseDriver');
         $query = 'SELECT session_id' .
                 ' FROM #__session' .
                 " WHERE username = " . $db->Quote($username) . " and  md5(session_id) = " . $db->Quote($token);
@@ -123,7 +126,7 @@ class WsController extends BaseController
         $series = $params['series'];
 
         // Delete the key
-        $db = Factory::getDBO();
+        $db = Factory::getContainer()->get('DatabaseDriver');
         $query = $db->createQuery();
         $query
             ->delete('#__user_keys')
@@ -159,8 +162,8 @@ class WsController extends BaseController
         $user_id = UserHelper::getUserId($username);
         $user = Factory::getContainer()->get(UserFactoryInterface::class)->loadUserById($user_id);
 
-        // Password comes hashed from Moodle, just store it XXX NOT anymore
- //       $user->password = $password;
+        // Password comes hashed from Moodle, just store it
+        // NOT anymore: hash algo is different in Joomla and Moodle
         $user->password = UserHelper::hashPassword($password);
 
         @$user->save();
@@ -203,7 +206,7 @@ class WsController extends BaseController
         $course_id = $params['course_id'];
         $type = $params['type'];
 
-        return JoomdleHelperMailinglist::add_list_member($username, $course_id, $type);
+        return MailinglistHelper::addListMember($username, $course_id, $type);
     }
 
     private function removeMailingSub($params)
@@ -212,7 +215,7 @@ class WsController extends BaseController
         $course_id = $params['course_id'];
         $type = $params['type'];
 
-        return JoomdleHelperMailinglist::remove_list_member($username, $course_id, $type);
+        return MailinglistHelper::removeListMember($username, $course_id, $type);
     }
 
     private function addUserGroups($params)

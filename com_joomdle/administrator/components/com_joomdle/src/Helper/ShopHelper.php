@@ -15,17 +15,16 @@ namespace Joomdle\Component\Joomdle\Administrator\Helper;
 // phpcs:enable PSR1.Files.SideEffects
 
 use Joomla\CMS\Factory;
-use Joomla\CMS\Object\CMSObject;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Language\Text;
-use Joomla\CMS\Installer\Installer;
+use Joomla\CMS\Mail\MailerFactoryInterface;
 use Joomla\CMS\Uri\Uri;
-use Joomla\CMS\Router\Route;
 use Joomla\Event\Event;
 use Joomla\Database\ParameterType;
 use Joomla\CMS\User\UserHelper;
 use Joomla\CMS\User\UserFactoryInterface;
+use Joomla\Uri\Uri as UriUri;
 
 /**
  * Shop helper.
@@ -36,9 +35,6 @@ class ShopHelper
 {
     public static function getShopCourses()
     {
-        $params = ComponentHelper::getParams('com_joomdle');
-        $shop = $params->get('shop_integration');
-
         $courses = array ();
         PluginHelper::importPlugin('joomdleshop');
         $dispatcher = Factory::getApplication()->getDispatcher();
@@ -84,7 +80,6 @@ class ShopHelper
             $c[$i]->is_bundle = true;
             $i++;
         }
-//echo "<pre>"; print_R ($c);
 
         return $c;
     }
@@ -128,9 +123,6 @@ class ShopHelper
 
     public static function sellCourses($courses)
     {
-        $params = ComponentHelper::getParams('com_joomdle');
-        $shop = $params->get('shop_integration');
-
         PluginHelper::importPlugin('joomdleshop');
         $dispatcher = Factory::getApplication()->getDispatcher();
         $event = new Event('onJoomdleSellCourses', ['courses' => $courses]);
@@ -139,9 +131,6 @@ class ShopHelper
 
     public static function dontSellCourses($courses)
     {
-        $params = ComponentHelper::getParams('com_joomdle');
-        $shop = $params->get('shop_integration');
-
         PluginHelper::importPlugin('joomdleshop');
         $dispatcher = Factory::getApplication()->getDispatcher();
         $event = new Event('onJoomdleDontSellCourses', ['courses' => $courses]);
@@ -150,9 +139,6 @@ class ShopHelper
 
     public static function reloadCourses($courses)
     {
-        $params = ComponentHelper::getParams('com_joomdle');
-        $shop = $params->get('shop_integration');
-
         PluginHelper::importPlugin('joomdleshop');
         $dispatcher = Factory::getApplication()->getDispatcher();
         $event = new Event('onJoomdleReloadCourses', ['courses' => $courses]);
@@ -161,9 +147,6 @@ class ShopHelper
 
     public static function deleteCourses($courses)
     {
-        $params = ComponentHelper::getParams('com_joomdle');
-        $shop = $params->get('shop_integration');
-
         $db = Factory::getContainer()->get('DatabaseDriver');
         foreach ($courses as $sku) {
             if (strncmp($sku, 'bundle_', 7) == 0) {
@@ -186,6 +169,7 @@ class ShopHelper
 
     public static function sendConfirmationEmail($email, $course_id)
     {
+        /** @var CMSApplication $app */
         $app = Factory::getApplication();
 
         $comp_params = ComponentHelper::getParams('com_joomdle');
@@ -223,7 +207,8 @@ class ShopHelper
         $fromname       = $app->getCfg('fromname');
 
         // Send the e-mail
-        if (!Factory::getMailer()->sendMail($from, $fromname, $email, $email_subject, $email_text, true)) {
+        $mailer = Factory::getContainer()->get(MailerFactoryInterface::class)->createMailer(); 
+        if (!$mailer->sendMail($from, $fromname, $email, $email_subject, $email_text, true)) {
                 return false;
         }
 
@@ -278,16 +263,17 @@ class ShopHelper
 
     public static function sendBundleEmail($email, $bundle)
     {
-        $app = JFactory::getApplication();
+        /** @var CMSApplication $app */
+        $app = Factory::getApplication();
 
-        $comp_params = JComponentHelper::getParams('com_joomdle');
+        $comp_params = ComponentHelper::getParams('com_joomdle');
         $linkstarget = $comp_params->get('linkstarget');
         $moodle_url = $comp_params->get('MOODLE_URL');
         $email_subject = $comp_params->get('bundle_email_subject');
         $email_text = $comp_params->get('bundle_email_text');
 
         $course_ids = explode(',', $bundle['courses']);
-        $courses = JoomdleHelperContent::getCourseList();
+        $courses = ContentHelper::getCourseList();
         $courses_text = '';
         foreach ($courses as $course) {
             if (!in_array($course['remoteid'], $course_ids)) {
@@ -300,7 +286,7 @@ class ShopHelper
                 /* XXX After and hour tryng and searching I could not find the GOOD way
                    to do this, so I do this kludge and it seems to work ;)
                    */
-                $url            = JURI::base();
+                $url            = URI::base();
                 $pos =  strpos($url, '/administrator/');
                 if ($pos) {
                     $url = substr($url, 0, $pos);
@@ -324,10 +310,34 @@ class ShopHelper
         $fromname       = $app->getCfg('fromname');
 
         // Send the e-mail
-        if (!JFactory::getMailer()->sendMail($from, $fromname, $email, $email_subject, $email_text, true)) {
+        $mailer = Factory::getContainer()->get(MailerFactoryInterface::class)->createMailer(); 
+        if (!$mailer->sendMail($from, $fromname, $email, $email_subject, $email_text, true)) {
                 return false;
         }
 
         return true;
     }
+
+    static function getSellUrl ($course_id)
+    {
+        $params = ComponentHelper::getParams( 'com_joomdle' );
+
+        PluginHelper::importPlugin('joomdleshop');
+        $dispatcher = Factory::getApplication()->getDispatcher();
+        $event = new Event('onJoomdleGetSellUrl', ['course' => $course_id]);
+        $dispatcher->dispatch('onJoomdleGetSellUrl', $event);
+        $items = $event->getArgument('results') ?? null;
+
+        foreach ($items as $url)
+        {
+            if ($url != '')
+                break;
+        }
+        $shop_itemid = $params->get( 'shop_itemid' );
+        if ($shop_itemid)
+            $url .= "&Itemid=$shop_itemid";
+
+        return Uri::root() . $url;
+    }
+
 }

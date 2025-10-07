@@ -15,16 +15,15 @@ namespace Joomdle\Component\Joomdle\Administrator\Helper;
 // phpcs:enable PSR1.Files.SideEffects
 
 use Joomla\CMS\Factory;
-use Joomla\CMS\Object\CMSObject;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Installer\Installer;
+use Joomla\CMS\Router\Route;
 use Joomla\CMS\User\UserHelper;
 use Joomla\Utilities\ArrayHelper;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\User\UserFactoryInterface;
-use Joomla\CMS\Router\Route;
 use Joomla\CMS\User\User;
 
 /**
@@ -219,7 +218,7 @@ class ContentHelper
         return ContentHelper::callMethod('my_certificates', $params);
     }
 
-    public static function getMyCourses($username, $order_by_cat)
+    public static function getMyCourses($username, $order_by_cat = false)
     {
         $params = [
             'username' => $username,
@@ -317,6 +316,16 @@ class ContentHelper
     public static function getThemes()
     {
         return ContentHelper::callMethod('get_themes');
+    }
+
+    public static function getCourseStudents($id, $active = 1)
+    {
+        $params = [
+            'id' => (int) $id,
+            'active' => (int) $active,
+        ];
+
+        return ContentHelper::callMethod('get_course_students', $params);
     }
 
     public static function getCourseTeachers($id)
@@ -602,7 +611,7 @@ class ContentHelper
 
         $url = $moodle_rest_server_url . '&wsfunction=joomdle_' . $method;
 
-        $request = ContentHelper::getRequestRest($method, $params, $params2);
+        $request = ContentHelper::getRequestRest($method, $params);
 
         $comp_params = ComponentHelper::getParams('com_joomdle');
         $user_agent = $comp_params->get('user_agent', 'Joomdle');
@@ -618,7 +627,7 @@ class ContentHelper
         $response = json_decode($file, true);
 
         // Save raw reply to log
-        $config = Factory::getConfig();
+        $config = Factory::getApplication()->getConfig();
         $log_path = $config->get('log_path');
         file_put_contents($log_path . '/' . 'joomdle_system_check.json', $file);
 
@@ -652,7 +661,7 @@ class ContentHelper
         curl_close($ch);
 
         // Save raw reply to log
-        $config = Factory::getConfig();
+        $config = Factory::getApplication()->getConfig();
         $log_path = $config->get('log_path');
         file_put_contents($log_path . '/' . 'joomdle_system_check.json', $response);
 
@@ -775,48 +784,9 @@ class ContentHelper
         return $convertedpostdata;
     }
 
-    // FIXME NOT USED?
-    /*
-    public static function getCourseUrl($course_id)
-    {
-        $app = Factory::getApplication('site');
-
-        $user = Factory::getApplication()->getIdentity();
-        $username = $user->username;
-
-        if (!$user->id) {
-            $username = 'guest';
-        }
-
-        $session = Factory::getSession();
-        $token = md5($session->getId());
-
-        $itemid   = Factory::getApplication()->input->get('Itemid');
-        $params = $app->getParams();
-
-        $comp_params = ComponentHelper::getParams('com_joomdle');
-        if ($comp_params->get('goto_course_button') == 'moodle') {
-            if ($comp_params->get('linkstarget') == 'wrapper') {
-                $open_in_wrapper = 1;
-            } else {
-                $open_in_wrapper = 0;
-            }
-            $moodle_auth_land_url = $comp_params->get('MOODLE_URL') . '/auth/joomdle/land.php';
-            // FIXME esto del land ya habria q quirarlo
-
-            $url = $moodle_auth_land_url . "?username=$username&token=$token&mtype=course&id=$course_id&use_wrapper=$open_in_wrapper&Itemid=$itemid";
-        } else // link to course Joomdle view
-        {
-            $itemid = $params->get('courseview_itemid');
-            $url = Route::_("index.php?option=com_joomdle&view=course&course_id=$course_id&Itemid=$itemid");
-        }
-
-        return $url;
-    }
-    */
-
     public static function getMenuItem()
     {
+        /** @var CMSApplication $app */
         $app = Factory::getApplication();
         $menu = $app->getMenu();
         $menuItem = $menu->getActive();
@@ -877,37 +847,25 @@ class ContentHelper
                 return;
         }
 
-        $is_child = false;
-        if (array_key_exists('params', $user)) {
-            if (is_string($user['params'])) { // check added because CB passes different info in params
-                if (strstr($user['params'], '_parent_id')) {
-                    $is_child = true;
-                }
-            }
-        }
-
         // If we reach here, user has to be created.
         ContentHelper::createJoomdleUser($username);
     }
 
     public static function logIntoMoodle($username, $token)
     {
-        $app = Factory::getApplication('site');
-
         $comp_params = ComponentHelper::getParams('com_joomdle');
 
         $moodle_url = $comp_params->get('MOODLE_URL');
         $cookie_path = $comp_params->get('cookie_path', "/");
 
         $username = str_replace(' ', '%20', $username);
-        $login_url = $moodle_url;
         $land_file = $moodle_url . "/auth/joomdle/land.php?username=$username&token=$token&use_wrapper=0&create_user=1";
 
         $ch = curl_init();
         // set url
         curl_setopt($ch, CURLOPT_URL, $land_file);
 
-        $config = Factory::getConfig();
+        $config = Factory::getApplication()->getConfig();
         $temppath = $config->get('tmp_path');
         $file = $temppath . "/" . UserHelper::genRandomPassword() . ".txt";
 
@@ -972,7 +930,6 @@ class ContentHelper
     public static function getJumpURL($data)
     {
         $params = ComponentHelper::getParams('com_joomdle');
-        $moodle_auth_land_url = $params->get('MOODLE_URL') . '/auth/joomdle/land.php';
 
          $linkstarget = $params->get('linkstarget');
         if ($linkstarget == 'wrapper') {
@@ -992,58 +949,11 @@ class ContentHelper
             $url = $params->get('MOODLE_URL') . "/course/view.php?id=" . $data['id'];
 
             if ($data['lang']) {
-                $url .= "&lang=$lang";
+                $url .= "&lang=" . $data['lang'];
             }
         }
 
          return $url;
-    }
-
-    public static function multisort($array, $order_dir, $sort_by, $key1, $key2 = null, $key3 = null, $key4 = null, $key5 = null, $key6 = null, $key7 = null, $key8 = null)
-    {
-        if (!count($array)) {
-            return $array;
-        }
-
-        foreach ($array as $pos => $val) {
-            $tmp_array[$pos] = $val[$sort_by];
-        }
-
-        $order_dir = strtolower($order_dir);
-        if ($order_dir == 'desc') {
-            arsort($tmp_array);
-        } else {
-            asort($tmp_array);
-        }
-
-        // display however you want
-        foreach ($tmp_array as $pos => $val) {
-            $return_array[$pos][$sort_by] = $array[$pos][$sort_by];
-            $return_array[$pos][$key1] = $array[$pos][$key1];
-            if (isset($key2)) {
-                $return_array[$pos][$key2] = $array[$pos][$key2];
-            }
-            if (isset($key3)) {
-                $return_array[$pos][$key3] = $array[$pos][$key3];
-            }
-            if (isset($key4)) {
-                $return_array[$pos][$key4] = $array[$pos][$key4];
-            }
-            if (isset($key5)) {
-                $return_array[$pos][$key5] = $array[$pos][$key5];
-            }
-            if (isset($key6)) {
-                $return_array[$pos][$key6] = $array[$pos][$key6];
-            }
-            if (isset($key7)) {
-                $return_array[$pos][$key7] = $array[$pos][$key7];
-            }
-            if (isset($key8)) {
-                $return_array[$pos][$key8] = $array[$pos][$key8];
-            }
-        }
-
-        return $return_array;
     }
 
     public static function isJoomlaAdmin($userid)
@@ -1071,10 +981,8 @@ class ContentHelper
 
         // Get required system objects
         $user = Factory::getApplication()->getIdentity();
-        $config = Factory::getConfig();
 
         $usersConfig = ComponentHelper::getParams('com_users');
-        $useractivation = $usersConfig->get('useractivation');
 
         $newUsertype = 'Registered';
 
@@ -1127,8 +1035,6 @@ class ContentHelper
         if ($user->id) {
             return array();
         }
-
-        $db = Factory::getContainer()->get('DatabaseDriver');
 
         $usersConfig = ComponentHelper::getParams('com_users');
 

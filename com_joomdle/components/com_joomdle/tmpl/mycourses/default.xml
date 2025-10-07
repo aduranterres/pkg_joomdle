@@ -18,7 +18,6 @@
 
             <field name="mycourses_linkto" type="list" default="moodle" label="COM_JOOMDLE_LINKTO" description="COM_JOOMDLE_LINKTO_DESCRIPTION">
                 <option value="moodle">Moodle course</option>
-                <option value="joomdlecourse">Joomdle Course view</option>
                 <option value="detail">Joomdle Course details view</option>
             </field>
 

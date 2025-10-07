@@ -9,6 +9,9 @@
  */
 
 defined('_JEXEC') or die;
+
+use Joomla\CMS\Language\Text;
+
 ?>
 <fieldset class="form-horizontal">
     <legend><?php echo Text::_('COM_JOOMDLE_SHOP'); ?></legend>

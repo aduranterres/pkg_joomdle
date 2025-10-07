@@ -24,9 +24,10 @@ $itemid = ContentHelper::getMenuItem();
     </h1>
 
 <?php
-$app        = Factory::getApplication();
+/** @var CMSApplication $app */
+$app = Factory::getApplication();
 $params = $app->getParams();
-$jump_url =  ContentHelper::getJumpURL();
+$jump_url = ContentHelper::getJumpURL();
 
 $use_pdf_integration = $params->get('use_pdf_integration');
 
@@ -92,8 +93,13 @@ if (is_array($this->gcats)) {
                         <td width="30%">
                             <?php
                             if ($item['module']) {
+
+                                $data = [];
+                                $data['moodle_page_type'] = $item['module'];
+                                $data['id'] = ''; // Not needed here
+                                $jump_url =  ContentHelper::getJumpURL($data);
                                 $url = $jump_url . '&mtype=' . $item['module'] . '&id=' . $item['course_module_id'] . '&course_id=' .
-                                $this->course_info['remoteid'] . '&create_user=0&Itemid=' . $itemid;
+                                    $this->course['remoteid'] . '&create_user=0&Itemid=' . $itemid;
                                 echo "<a href='$url'>" . $item['name'] . '</a>';
                             } else {
                                 echo $item['name'];

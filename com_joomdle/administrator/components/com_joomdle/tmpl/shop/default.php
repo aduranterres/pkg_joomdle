@@ -9,10 +9,12 @@
  */
 
 \defined('_JEXEC') or die;
+
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Layout\LayoutHelper;
 use Joomla\CMS\Router\Route;
+
 $listOrder  = $this->state->get('list.ordering');
 $listDirn   = $this->state->get('list.direction');
 ?>
@@ -56,7 +58,7 @@ $listDirn   = $this->state->get('list.direction');
                                 } else {
                                     $checked = HTMLHelper::_('grid.id', $i, $item->id);
                                 }
-                                   $published = HTMLHelper::_('jgrid.published', $item->published, $i, 'shop.');
+                                $published = HTMLHelper::_('jgrid.published', $item->published, $i, 'shop.');
                                 ?>
                             <tr class="row<?php echo $i % 2; ?>">
                                 <td><?php echo $checked; ?></td>

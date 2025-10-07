@@ -19,10 +19,8 @@ use Joomla\CMS\Component\Router\RouterView;
 use Joomla\CMS\Component\Router\Rules\StandardRules;
 use Joomla\CMS\Component\Router\Rules\NomenuRules;
 use Joomla\CMS\Component\Router\Rules\MenuRules;
-use Joomla\CMS\Factory;
 use Joomla\CMS\Application\SiteApplication;
 use Joomla\CMS\Categories\CategoryFactoryInterface;
-use Joomla\CMS\Categories\CategoryInterface;
 use Joomla\Database\DatabaseInterface;
 use Joomla\CMS\Menu\AbstractMenu;
 

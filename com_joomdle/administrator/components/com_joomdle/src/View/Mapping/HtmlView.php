@@ -70,8 +70,6 @@ class HtmlView extends BaseHtmlView
     {
         Factory::getApplication()->getInput()->set('hidemainmenu', true);
 
-        $isNew = ($this->item->id == 0);
-
         $canDo = JoomdleHelper::getActions();
 
         ToolbarHelper::title(Text::_('COM_JOOMDLE_TITLE_MAPPING'), "generic");

@@ -10,8 +10,7 @@
 
 \defined('_JEXEC') or die;
 
-use Joomla\CMS\Factory;
-use Joomla\CMS\Filter\OutputFilter;
+use Joomla\CMS\Application\ApplicationHelper;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Language\Text;
 use Joomdle\Component\Joomdle\Administrator\Helper\SystemHelper;
@@ -19,8 +18,6 @@ use Joomdle\Component\Joomdle\Administrator\Helper\SystemHelper;
 $free_courses_button = $this->params->get('free_courses_button');
 $paid_courses_button = $this->params->get('paid_courses_button');
 $show_buttons = $this->params->get('coursecategory_show_buttons');
-
-$unicodeslugs = Factory::getConfig()->get('unicodeslugs');
 ?>
 <div class="joomdle-coursecategory<?php echo $this->pageclass_sfx;?>">
     <h1>
@@ -48,25 +45,20 @@ $unicodeslugs = Factory::getConfig()->get('unicodeslugs');
     <?php
     if (is_array($this->categories)) {
         foreach ($this->categories as $cat) : ?>
-                <?php
-                if ($unicodeslugs == 1) {
-                    $cat_slug = OutputFilter::stringURLUnicodeSlug($cat['name']);
-                } else {
-                    $cat_slug = OutputFilter::stringURLSafe($cat['name']);
-                }
-                ?>
-
+            <?php
+            $cat_slug = ApplicationHelper::stringURLSafe($cat['name']);
+            ?>
             <div class="joomdle_category_list_item">
                 <div class="joomdle_card">
                     <div class="joomdle_category_info">
 
                 <div class="joomdle_category_list_item_title">
-                    <?php $url = JRoute::_("index.php?option=com_joomdle&view=coursecategory&cat_id=" . $cat['id'] . '-' . $cat_slug); ?>
+                    <?php $url = Route::_("index.php?option=com_joomdle&view=coursecategory&cat_id=" . $cat['id'] . '-' . $cat_slug); ?>
                     <?php  echo "<a href=\"$url\">" . $cat['name'] . "</a>"; ?>
                 </div>
                 <?php if ($cat['description']) : ?>
                 <div class="joomdle_course_list_item_description">
-                    <?php echo SystemHelper::fixTextFormat($cat['description']); ?>
+                    <?php echo $cat['description']; ?>
                 </div>
                 <?php endif; ?>
             </div>
@@ -94,15 +86,9 @@ $unicodeslugs = Factory::getConfig()->get('unicodeslugs');
             <div class="joomdle_course_info">
                 <div class=" joomdle_course_list_item_title">
                     <?php
-                    if ($unicodeslugs == 1) {
-                        $slug = OutputFilter::stringURLUnicodeSlug($course['fullname']);
-                        $cat_slug = OutputFilter::stringURLUnicodeSlug($course['cat_name']);
-                    } else {
-                        $slug = OutputFilter::stringURLSafe($course['fullname']);
-                        $cat_slug = OutputFilter::stringURLSafe($course['cat_name']);
-                    }
+                    $slug = ApplicationHelper::stringURLSafe($course['fullname']);
 
-                    $url = JRoute::_("index.php?option=com_joomdle&view=detail&course_id=" . $course['remoteid'] . '-' . $slug); ?>
+                    $url = Route::_("index.php?option=com_joomdle&view=detail&course_id=" . $course['remoteid'] . '-' . $slug); ?>
                     <?php  echo "<a href=\"$url\">" . $course['fullname'] . "</a><br>"; ?>
                 </div>
                 <?php if ($course['summary']) : ?>

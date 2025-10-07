@@ -23,9 +23,9 @@ $itemid = ContentHelper::getMenuItem();
             <?php echo $this->course['fullname']; ?>
     </h1>
 <?php
+/** @var CMSApplication $app */
 $app = Factory::getApplication();
 $params = $app->getParams();
-$jump_url =  ContentHelper::getJumpURL();
 
 $use_pdf_integration = $params->get('use_pdf_integration');
 
@@ -94,8 +94,12 @@ if (is_array($this->gcats['data'])) {
                         <td width="30%" class="simpletable<?php echo $this->params->get('pageclass_sfx'); ?>">
                             <?php
                             if ($item['module']) {
+                                $data = [];
+                                $data['moodle_page_type'] = $item['module'];
+                                $data['id'] = ''; // Not needed here
+                                $jump_url =  ContentHelper::getJumpURL($data);
                                 $url = $jump_url . '&mtype=' . $item['module'] . '&id=' . $item['course_module_id'] . '&course_id=' .
-                                $this->course['remoteid'] . '&create_user=0&Itemid=' . $itemid;
+                                    $this->course['remoteid'] . '&create_user=0&Itemid=' . $itemid;
                                 echo "<a href='$url'>" . $item['name'] . '</a>';
                             } else {
                                 echo $item['name'];
@@ -110,7 +114,7 @@ if (is_array($this->gcats['data'])) {
                             ?>      
                         </td>
                         <td width="5%"  style="text-align:center;" class="simpletable<?php echo $this->params->get('pageclass_sfx'); ?>">
-                            <?php printf("%d", $item['grademin']); ?> - <?php printf("%d", $item['grademax']); ?>
+                            <?php printf("%d", $item['grademax']); ?>
                         </td>
                         <td width="10%" align="center" class="simpletable<?php echo $this->params->get('pageclass_sfx'); ?>">
                         <?php if ($item['finalgrade'] < 0) : ?>
@@ -141,7 +145,7 @@ if (is_array($this->gcats['data'])) {
                     <td class="simpletable<?php echo $this->params->get('pageclass_sfx'); ?>">
                     </td>
                     <td align="center" class="simpletable<?php echo $this->params->get('pageclass_sfx'); ?>">
-                    <?php printf("%d", $gcat['grademin']); ?> - <?php printf("%d", $gcat['grademax']); ?>
+                    <?php printf("%d", $gcat['grademax']); ?>
                     </td>
                     <td align="center" class="simpletable<?php echo $this->params->get('pageclass_sfx'); ?>">
                     <?php
@@ -178,7 +182,7 @@ if (is_array($this->gcats['data'])) {
                     <td class="simpletable<?php echo $this->params->get('pageclass_sfx'); ?>">
                     </td>
                     <td align="center" class="simpletable<?php echo $this->params->get('pageclass_sfx'); ?>">
-                    <?php printf("%d", $total['grademin']); ?> - <?php printf("%d", $total['grademax']); ?>
+                    <?php printf("%d", $total['grademax']); ?>
                     </td>
                     <td align="center" class="simpletable<?php echo $this->params->get('pageclass_sfx'); ?>">
                     <?php

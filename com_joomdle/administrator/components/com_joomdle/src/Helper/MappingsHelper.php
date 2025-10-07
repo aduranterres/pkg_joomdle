@@ -15,11 +15,8 @@ namespace Joomdle\Component\Joomdle\Administrator\Helper;
 // phpcs:enable PSR1.Files.SideEffects
 
 use Joomla\CMS\Factory;
-use Joomla\CMS\Object\CMSObject;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Plugin\PluginHelper;
-use Joomla\CMS\Language\Text;
-use Joomla\CMS\Installer\Installer;
 use Joomla\CMS\User\UserHelper;
 use Joomla\CMS\User\UserFactoryInterface;
 use Joomla\Event\Event;
@@ -46,7 +43,13 @@ class MappingsHelper
 
         $user_info['email'] = $user->email;
         $user_info['lang'] = MappingsHelper::getMoodleLang($user->getParam('language'));
-        $user_info['timezone'] = $user->getParam('timezone');
+        if ($user->getParam('timezone')) {
+            $user_info['timezone'] = $user->getParam('timezone');
+        } else {
+            // If no timezone set, it is set to the server default, use that
+            $config = Factory::getApplication()->getConfig();
+            $user_info['timezone'] = $config->get('offset');
+        }
         $user_info['password'] = $user->password;
         $user_info['suspended'] = $user->block;
 
@@ -274,8 +277,7 @@ class MappingsHelper
             $user->setParam('timezone', $user_info['timezone']);
         }
 
-        // FIXME this is not working now...
- //       $user->block = (int) $user_info['block'];
+        $user->block = (int) $user_info['block'];
 
         switch ($app) {
             default:
@@ -306,28 +308,27 @@ class MappingsHelper
     {
         $user_info = ContentHelper::userDetails($username);
 
-        if (!$user_info)
+        if (!$user_info) {
             return;
+        }
 
-        MappingsHelper::createAdditionalProfile ($user_info);
+        MappingsHelper::createAdditionalProfile($user_info);
         MappingsHelper::saveUserInfo($user_info);
     }
 
-    public static function createAdditionalProfile ($user_info)
+    public static function createAdditionalProfile($user_info)
     {
-        $comp_params = ComponentHelper::getParams( 'com_joomdle' );
-        $app = $comp_params->get( 'additional_data_source' );
+        $comp_params = ComponentHelper::getParams('com_joomdle');
+        $app = $comp_params->get('additional_data_source');
 
         $username = $user_info['username'];
         $user_id = UserHelper::getUserId($username);
 
-        if (!$user_id)
+        if (!$user_id) {
             return;
+        }
 
-        $user = Factory::getContainer()->get(UserFactoryInterface::class)->loadUserById($user_id);
-
-        switch ($app)
-        {
+        switch ($app) {
             default:
                 PluginHelper::importPlugin('joomdleprofile');
                 $app = Factory::getApplication();
@@ -337,6 +338,4 @@ class MappingsHelper
                 break;
         }
     }
-
-
 }

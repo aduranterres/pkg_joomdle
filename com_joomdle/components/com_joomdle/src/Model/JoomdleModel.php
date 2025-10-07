@@ -63,6 +63,7 @@ class JoomdleModel extends ListModel
         parent::populateState("a.id", "ASC");
 
         // Load the parameters.
+        /** @var CMSApplication $app */
         $app  = Factory::getApplication();
         $params = $app->getParams();
         $this->setState('params', $params);

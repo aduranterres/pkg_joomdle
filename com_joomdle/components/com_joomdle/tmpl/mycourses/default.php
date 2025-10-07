@@ -10,10 +10,9 @@
 
 \defined('_JEXEC') or die;
 
-use Joomla\CMS\Factory;
+use Joomla\CMS\Application\ApplicationHelper;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Language\Text;
-use Joomla\CMS\Filter\OutputFilter;
 use Joomdle\Component\Joomdle\Administrator\Helper\ContentHelper;
 
 if (!count($this->items)) {
@@ -48,9 +47,6 @@ if ($linkstarget == "new") {
 
 $show_unenrol_link = $this->params->get('show_unenrol_link');
 $show_images_and_summary = $this->params->get('show_images_and_summary');
-
-$unicodeslugs = Factory::getConfig()->get('unicodeslugs');
-
 ?>
 <div class="joomdle-mycourses<?php echo $this->pageclass_sfx;?>">
     <?php if ($this->params->get('show_page_heading', 1)) : ?>
@@ -70,11 +66,7 @@ $unicodeslugs = Factory::getConfig()->get('unicodeslugs');
     if (is_array($this->items)) {
         foreach ($this->items as $id => $item) :  ?>
                 <?php
-                if ($unicodeslugs == 1) {
-                    $slug = OutputFilter::stringURLUnicodeSlug($item['fullname']);
-                } else {
-                    $slug = OutputFilter::stringURLSafe($item['fullname']);
-                }
+                $slug = ApplicationHelper::stringURLSafe($item['fullname']);
                 ?>
             <li>
                 <?php

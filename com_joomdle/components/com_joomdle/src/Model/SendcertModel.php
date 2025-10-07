@@ -13,12 +13,9 @@ namespace Joomdle\Component\Joomdle\Site\Model;
 use Joomla\CMS\Table\Table;
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Model\AdminModel;
-use Joomla\Database\ParameterType;
-use Joomla\CMS\User\UserFactoryInterface;
-use Joomla\CMS\Component\ComponentHelper;
-use Joomla\CMS\User\UserHelper;
 use Joomla\CMS\Language\Text;
 use Joomdle\Component\Joomdle\Administrator\Helper\ContentHelper;
+use Joomla\CMS\Mail\MailerFactoryInterface;
 
 // phpcs:disable PSR1.Files.SideEffects
 \defined('_JEXEC') or die;
@@ -81,9 +78,6 @@ class SendcertModel extends AdminModel
      */
     public function getForm($data = array(), $loadData = true)
     {
-        // Initialise variables.
-        $app = Factory::getApplication();
-
         // Get the form.
         $form = $this->loadForm(
             'com_joomdle.sendcert',
@@ -139,12 +133,11 @@ class SendcertModel extends AdminModel
         }
 
         return $data;
-
-        return $data;
     }
 
     public function sendCertificate($data)
     {
+        /** @var CMSApplication $app */
         $app = Factory::getApplication();
         $params = $app->getParams();
         $moodle_url = $params->get('MOODLE_URL');
@@ -158,9 +151,9 @@ class SendcertModel extends AdminModel
             $subject = $subject_default;
         }
 
-        $mailer = Factory::getMailer();
+        $mailer = Factory::getContainer()->get(MailerFactoryInterface::class)->createMailer(); ;
 
-        $config = Factory::getConfig();
+        $config = Factory::getApplication()->getConfig();  
         $sender = array(
             $data['from'],
             $data['sender']
@@ -173,7 +166,8 @@ class SendcertModel extends AdminModel
         $mailer->setSubject($subject);
         $mailer->setBody($body);
 
-        $session = Factory::getSession();
+        // $session = Factory::getSession();
+        $session = Factory::getApplication()->getSession();
         $token = md5($session->getId());
 
         $cert_id = $data['cert_id'];

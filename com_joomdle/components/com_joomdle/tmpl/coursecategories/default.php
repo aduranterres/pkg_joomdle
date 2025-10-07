@@ -10,11 +10,9 @@
 
 \defined('_JEXEC') or die;
 
-use Joomla\CMS\Factory;
-use Joomla\CMS\Filter\OutputFilter;
+use Joomla\CMS\Application\ApplicationHelper;
 use Joomla\CMS\Router\Route;
 
-$unicodeslugs = Factory::getConfig()->get('unicodeslugs');
 ?>
 
 <div class="joomdle-categorylist<?php echo $this->pageclass_sfx;?>">
@@ -32,11 +30,7 @@ $unicodeslugs = Factory::getConfig()->get('unicodeslugs');
             <div class="joomdle_category_info">
                 <div class="joomdle_category_list_item_title">
                     <?php
-                    if ($unicodeslugs == 1) {
-                        $slug = OutputFilter::stringURLUnicodeSlug($cat['name']);
-                    } else {
-                        $slug = OutputFilter::stringURLSafe($cat['name']);
-                    }
+                    $slug = ApplicationHelper::stringURLSafe($cat['name']);
 
                     $url = Route::_("index.php?option=com_joomdle&view=coursecategory&cat_id=" . $cat['id'] . '-' . $slug); ?>
                     <?php  echo "<a href=\"$url\">" . $cat['name'] . "</a>"; ?>

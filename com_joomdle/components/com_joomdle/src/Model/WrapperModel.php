@@ -61,6 +61,7 @@ class WrapperModel extends ListModel
         parent::populateState("a.id", "ASC");
 
         // Load the parameters.
+        /** @var CMSApplication $app */
         $app  = Factory::getApplication();
         $params = $app->getParams();
         $this->setState('params', $params);
@@ -125,7 +126,7 @@ class WrapperModel extends ListModel
                 break;
             case "edituser":
                 $user = Factory::getApplication()->getIdentity();
-                $id = ContentHelper::call_method('user_id', $user->username);
+                $id = ContentHelper::getUserId($user->username);
                 $path = '/user/edit.php?&course_id=1&id=';
                 $url = $params->get('MOODLE_URL') . $path . $id;
                 break;
@@ -170,8 +171,8 @@ class WrapperModel extends ListModel
                 $url = $gotourl;
                 break;
             default:
-                if ($mtype) {
-                    $path = '/mod/' . $mtype . '/view.php?id=';
+                if ($data['mtype']) {
+                    $path = '/mod/' . $data['mtype'] . '/view.php?id=';
                     $url = $params->get('MOODLE_URL') . $path . $data['id'];
                     break;
                 } else {

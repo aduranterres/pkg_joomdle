@@ -14,18 +14,8 @@ namespace Joomdle\Component\Joomdle\Administrator\Helper;
 \defined('_JEXEC') or die;
 // phpcs:enable PSR1.Files.SideEffects
 
-use Joomla\CMS\Factory;
-use Joomla\CMS\Object\CMSObject;
-use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Language\Text;
-use Joomla\CMS\Installer\Installer;
-use Joomla\CMS\User\UserHelper;
-use Joomla\Utilities\ArrayHelper;
-use Joomla\CMS\Uri\Uri;
-use Joomla\CMS\User\UserFactoryInterface;
-use Joomla\CMS\Router\Route;
-use Joomla\CMS\User\User;
 use Joomla\Registry\Registry;
 use Joomdle\Component\Joomdle\Administrator\Helper\ContentHelper;
 

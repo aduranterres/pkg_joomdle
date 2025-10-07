@@ -12,7 +12,6 @@ namespace Joomdle\Component\Joomdle\Site\View\Wrapper;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
-use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\MVC\View\GenericDataException;
 use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
 
@@ -35,6 +34,9 @@ class HtmlView extends BaseHtmlView
 
     protected $params;
 
+    protected $wrapper_url;
+
+
     /**
      * Execute and display a template script.
      *
@@ -47,7 +49,6 @@ class HtmlView extends BaseHtmlView
      */
     public function display($tpl = null)
     {
-        $user = $this->getCurrentUser();
         $app  = Factory::getApplication();
 
         // Get model data.
@@ -130,6 +131,7 @@ class HtmlView extends BaseHtmlView
      */
     protected function prepareDocument()
     {
+        /** @var CMSApplication $app */
         $app = Factory::getApplication();
 
         // Because the application sets a default page title,

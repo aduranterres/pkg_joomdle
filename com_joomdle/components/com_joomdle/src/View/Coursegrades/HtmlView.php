@@ -12,7 +12,6 @@ namespace Joomdle\Component\Joomdle\Site\View\Coursegrades;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
-use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\MVC\View\GenericDataException;
 use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
 
@@ -35,6 +34,10 @@ class HtmlView extends BaseHtmlView
 
     protected $params;
 
+    protected $pageclass_sfx = '';
+
+    protected $course;
+
     /**
      * Execute and display a template script.
      *
@@ -47,9 +50,6 @@ class HtmlView extends BaseHtmlView
      */
     public function display($tpl = null)
     {
-        $user = $this->getCurrentUser();
-        $app  = Factory::getApplication();
-
         // Get model data.
         $this->items = $this->get('Items');
         $this->course = $this->get('Course');
@@ -68,6 +68,8 @@ class HtmlView extends BaseHtmlView
         // Create a shortcut to the parameters.
         $this->params = $this->state->params;
 
+        $this->pageclass_sfx = htmlspecialchars($this->params->get('pageclass_sfx', ''));
+
         $this->prepareDocument();
 
         parent::display($tpl);
@@ -84,6 +86,7 @@ class HtmlView extends BaseHtmlView
      */
     protected function prepareDocument()
     {
+        /** @var CMSApplication $app */
         $app = Factory::getApplication();
 
         // Because the application sets a default page title,

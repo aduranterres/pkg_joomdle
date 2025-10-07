@@ -12,7 +12,6 @@ namespace Joomdle\Component\Joomdle\Site\Model;
 
 use Joomla\CMS\MVC\Model\ListModel;
 use Joomla\CMS\Factory;
-use Joomla\CMS\Component\ComponentHelper;
 use Joomdle\Component\Joomdle\Administrator\Helper\ContentHelper;
 
 // phpcs:disable PSR1.Files.SideEffects
@@ -61,6 +60,7 @@ class TeachersModel extends ListModel
         parent::populateState("a.id", "ASC");
 
         // Load the parameters.
+        /** @var CMSApplication $app */
         $app  = Factory::getApplication();
         $params = $app->getParams();
         $this->setState('params', $params);
@@ -103,9 +103,6 @@ class TeachersModel extends ListModel
             $this->setError('COM_JOOMDLE_NO_COURSE_SELECTED');
             return;
         }
-
-        $user = Factory::getApplication()->getIdentity();
-        $username = $user->username;
 
         $items = ContentHelper::getCourseTeachers($id);
 

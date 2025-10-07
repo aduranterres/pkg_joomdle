@@ -14,7 +14,6 @@ defined('_JEXEC') or die;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Language\Text;
-use Joomla\CMS\Layout\LayoutHelper;
 
 $wa = $this->document->getWebAssetManager();
 $wa->useScript('keepalive')
@@ -26,7 +25,7 @@ HTMLHelper::_('bootstrap.tooltip');
 <form action="<?php echo Route::_('index.php?option=com_joomdle&view=uploadpasswords'); ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-horizontal" enctype="multipart/form-data">
     <fieldset>
         <ul class="nav nav-tabs">
-        <li class="active"><a href="#details" data-toggle="tab"><?php echo JText::_('COM_JOOMDLE_UPLOAD_PASSWORDS');?></a></li>
+        <li class="active"><a href="#details" data-toggle="tab"><?php echo Text::_('COM_JOOMDLE_UPLOAD_PASSWORDS');?></a></li>
         </ul>
 
             <div class="tab-content">

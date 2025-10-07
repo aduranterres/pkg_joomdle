@@ -8,7 +8,7 @@
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-namespace Joomdle\Component\Joomdle\Administrator\View\Users;
+namespace Joomdle\Component\Joomdle\Administrator\View\Mailinglist;
 
 use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
 use Joomdle\Component\Joomdle\Administrator\Helper\JoomdleHelper;
@@ -22,7 +22,7 @@ use Joomla\CMS\MVC\View\GenericDataException;
 // phpcs:enable PSR1.Files.SideEffects
 
 /**
- * View class for a list of Users.
+ * View class for a list of mailing lists.
  *
  * @since  2.0.0
  */
@@ -45,11 +45,11 @@ class HtmlView extends BaseHtmlView
      */
     public function display($tpl = null)
     {
-        $this->state = $this->get('State');
+//        $this->state = $this->get('State');
         $this->items = $this->get('Items');
-        $this->pagination = $this->get('Pagination');
-        $this->filterForm = $this->get('FilterForm');
-        $this->activeFilters = $this->get('ActiveFilters');
+//        $this->pagination = $this->get('Pagination');
+ //       $this->filterForm = $this->get('FilterForm');
+  //      $this->activeFilters = $this->get('ActiveFilters');
 
         // Check for errors.
         if (count($errors = $this->get('Errors'))) {
@@ -72,25 +72,9 @@ class HtmlView extends BaseHtmlView
     {
         $canDo = JoomdleHelper::getActions();
 
-        ToolbarHelper::title(Text::_('COM_JOOMDLE_TITLE_USERS'), "generic");
+        ToolbarHelper::title(Text::_('COM_JOOMDLE_TITLE_MAILINGLIST'), "generic");
 
         $toolbar    = $this->getDocument()->getToolbar();
-
-        $toolbar->standardButton('addtojoomla')
-            ->text('COM_JOOMDLE_ADD_USERS_TO_JOOMLA')
-            ->task('users.addtojoomla')
-            ->icon('fas fa-plus')
-            ->listCheck(true);
-        $toolbar->standardButton('addtomoodle')
-            ->text('COM_JOOMDLE_ADD_USERS_TO_MOODLE')
-            ->task('users.addtomoodle')
-            ->icon('fas fa-plus')
-            ->listCheck(true);
-        $toolbar->standardButton('migratetojoomdle')
-            ->text('COM_JOOMDLE_MIGRATE_USERS_TO_JOOMDLE')
-            ->task('users.migratetojoomdle')
-            ->icon('fas fa-check')
-            ->listCheck(true);
 
         $dropdown = $toolbar->dropdownButton('status-group')
             ->text('JTOOLBAR_CHANGE_STATUS')
@@ -101,26 +85,35 @@ class HtmlView extends BaseHtmlView
 
         $childBar = $dropdown->getChildToolbar();
 
-        $childBar->standardButton('syncprofiletomoodle')
-            ->text('COM_JOOMDLE_SYNC_MOODLE_PROFILES')
-            ->task('users.syncprofiletomoodle')
-            ->icon('fas fa-forward')
+        $childBar->standardButton('studentspublish')
+            ->text('COM_JOOMDLE_CREATE_STUDENT_LIST')
+            ->task('mailinglist.students_publish')
+            ->icon('fas fa-check')
             ->listCheck(true);
-        $childBar->standardButton('syncprofiletojoomla')
-            ->text('COM_JOOMDLE_SYNC_JOOMLA_PROFILES')
-            ->task('users.syncprofiletojoomla')
-            ->icon('fas fa-forward')
+
+        $childBar->standardButton('studentsunpublish')
+            ->text('COM_JOOMDLE_DELETE_STUDENT_LIST')
+            ->task('mailinglist.students_unpublish')
+            ->icon('fas fa-times')
             ->listCheck(true);
-        $toolbar->standardButton('uploadpasswordfile')
-            ->text('COM_JOOMDLE_UPLOAD_PASSWORD_FILE')
-            ->task('uploadpasswords.uploadpasswordfile')
-            ->icon('fas fa-upload');
+
+        $childBar->standardButton('teacherspublish')
+            ->text('COM_JOOMDLE_CREATE_TEACHER_LIST')
+            ->task('mailinglist.teachers_publish')
+            ->icon('fas fa-check')
+            ->listCheck(true);
+
+        $childBar->standardButton('teachersunpublish')
+            ->text('COM_JOOMDLE_DELETE_TEACHER_LIST')
+            ->task('mailinglist.teachers_unpublish')
+            ->icon('fas fa-times')
+            ->listCheck(true);
 
         if ($canDo->get('core.admin')) {
             $toolbar->preferences('com_joomdle');
         }
 
         // Set sidebar action
-        Sidebar::setAction('index.php?option=com_joomdle&view=users');
+        Sidebar::setAction('index.php?option=com_joomdle&view=mailinglist');
     }
 }

@@ -14,10 +14,7 @@ namespace Joomdle\Component\Joomdle\Administrator\Controller;
 \defined('_JEXEC') or die;
 // phpcs:enable PSR1.Files.SideEffects
 
-use Joomla\CMS\Factory;
-use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Controller\AdminController;
-use Joomla\Utilities\ArrayHelper;
 
 /**
  * Mappings controller.

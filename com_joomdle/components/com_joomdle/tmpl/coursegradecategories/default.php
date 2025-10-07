@@ -10,7 +10,6 @@
 
 \defined('_JEXEC') or die;
 
-use Joomdle\Component\Joomdle\Administrator\Helper\ContentHelper;
 use Joomla\CMS\Language\Text;
 
 ?>

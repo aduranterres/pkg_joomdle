@@ -10,10 +10,8 @@
 
 namespace Joomdle\Component\Joomdle\Administrator\Field;
 
-use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Form\Field\ListField;
-use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomdle\Component\Joomdle\Administrator\Helper\ContentHelper;
 
@@ -77,7 +75,6 @@ class ThemeField extends ListField
         $option->text = Text::_('COM_JOOMDLE_DEFAULT');
         $options[] = $option;
 
-        $current_level = 0;
         foreach ($themes as $theme) {
             $option = new \stdClass();
             $option->value = $theme['name'];

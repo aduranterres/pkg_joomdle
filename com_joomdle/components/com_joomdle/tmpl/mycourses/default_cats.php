@@ -10,10 +10,10 @@
 
 \defined('_JEXEC') or die;
 
-use Joomla\CMS\Factory;
+use Joomla\CMS\Application\ApplicationHelper;
 use Joomla\CMS\Language\Text;
-use Joomla\CMS\Filter\OutputFilter;
 use Joomdle\Component\Joomdle\Administrator\Helper\ContentHelper;
+use Joomla\CMS\Router\Route;
 
 $linkto = $this->params->get('mycourses_linkto');
 $default_itemid = $this->params->get('default_itemid');
@@ -44,7 +44,6 @@ if ($linkstarget == "new") {
 $show_unenrol_link = $this->params->get('show_unenrol_link');
 $show_images_and_summary = $this->params->get('show_images_and_summary');
 
-$unicodeslugs = Factory::getConfig()->get('unicodeslugs');
 ?>
 
 <div class="joomdle-mycourses<?php echo $this->pageclass_sfx;?>">
@@ -83,25 +82,25 @@ if (is_array($this->items)) {
         ?>
             <li>
                 <?php
-                if ($unicodeslugs == 1) {
-                    $slug = OutputFilter::stringURLUnicodeSlug($course['fullname']);
-                } else {
-                    $slug = OutputFilter::stringURLSafe($course['fullname']);
-                }
+                $slug = ApplicationHelper::stringURLSafe($course['fullname']);
                 ?>
 
                 <?php
                 if ($linkto == 'moodle') {
-                    $link = $this->jump_url . "&mtype=course&id=" . $course['id'] . "&Itemid=$itemid";
+                    $data = array ();
+                    $data['moodle_page_type'] = 'course';
+                    $data['id'] = $course['id'];
                     if ($lang) {
-                        $link .= "&lang=$lang";
+                        $data['lang'] = $lang;
                     }
+
+                    $link = ContentHelper::getJumpURL($data);
                     $redirect_url = $link;
 
-                    $course_link = "<a $target href=\"$link\">" . $course['fullname'] . "</a>";
+                    $course_link =  "<a $target href=\"$link\">" . $course['fullname'] . "</a>";
                 } elseif ($linkto == 'detail') {
                     // Link to detail view
-                    $redirect_url = JRoute::_("index.php?option=com_joomdle&view=detail&course_id=" . $course['id'] . '-' . $slug .
+                    $redirect_url = Route::_("index.php?option=com_joomdle&view=detail&course_id=" . $course['id'] . '-' . $slug .
                     "&Itemid=$itemid");
                     $course_link = "<a href=\"" . $redirect_url . "\">" . $course['fullname'] . "</a>";
                 }

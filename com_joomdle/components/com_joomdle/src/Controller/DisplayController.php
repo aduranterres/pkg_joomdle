@@ -16,13 +16,14 @@ namespace Joomdle\Component\Joomdle\Site\Controller;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Factory\MVCFactoryInterface;
+use Joomla\CMS\MVC\Controller\BaseController;
 
 /**
  * Display Component Controller
  *
  * @since  1.0.0
  */
-class DisplayController extends \Joomla\CMS\MVC\Controller\BaseController
+class DisplayController extends BaseController
 {
     /**
      * Constructor.
@@ -36,7 +37,7 @@ class DisplayController extends \Joomla\CMS\MVC\Controller\BaseController
      *
      * @since  1.0.0
      */
-    public function __construct($config = array(), MVCFactoryInterface $factory = null, $app = null, $input = null)
+    public function __construct($config = array(), ?MVCFactoryInterface $factory = null, $app = null, $input = null)
     {
         parent::__construct($config, $factory, $app, $input);
     }

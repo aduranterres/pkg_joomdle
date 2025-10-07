@@ -521,7 +521,7 @@
             label="COM_JOOMDLE_ENROL_EMAIL_TEXT"
             rows="5" cols="70"
             filter="safehtml"
-            default="To enter the course, go to: COURSE_URL"
+            default="<p>To enter the course, go to:</p><p><a href='COURSE_URL'>COURSE_URL</a></p>"
         />
 
         <field name="send_bundle_emails" type="list" label="COM_JOOMDLE_SEND_BUNDLE_EMAILS"

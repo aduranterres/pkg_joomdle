@@ -4,21 +4,25 @@
         <field name="to" type="email"
             description="COM_JOOMDLE_SENDCERT_TO"
             label="COM_JOOMDLE_SENDCERT_TO"
+            required="true"
         />
 
         <field name="sender" type="text"
             description="COM_JOOMDLE_SENDCERT_SENDER_NAME"
             label="COM_JOOMDLE_SENDCERT_SENDER_NAME"
+            required="true"
         />
 
         <field name="from" type="email"
             description="COM_JOOMDLE_SENDCERT_SENDER_MAIL"
             label="COM_JOOMDLE_SENDCERT_SENDER_MAIL"
+            required="true"
         />
 
         <field name="subject" type="text"
             description="COM_JOOMDLE_SENDCERT_SUBJECT"
             label="COM_JOOMDLE_SENDCERT_SUBJECT"
+            required="true"
         />
 
         <field

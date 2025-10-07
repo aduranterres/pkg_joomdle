@@ -1,3 +1,13 @@
+Joomdle 2.4 for Joomla 3, 4 and 5
+------------------------------------
+- Added config options to set User agent for web service calls
+- Fixed deprecatted warning in urlencode calls
+- Fixed undefined constant in wrapper view
+- Improved custom certificate integration: show certificates for expired enrolments
+- Fixed password change from Moodle with XMLRPC
+- Changed SQL install to use InnoDB
+- Fixed pagination in Users backed view with Moodle users filter
+
 Joomdle 2.3.1 for Joomla 3, 4 and 5
 ------------------------------------
 - Fixed bug in user activation from Moodle

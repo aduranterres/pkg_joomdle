@@ -15,19 +15,17 @@ namespace Joomdle\Component\Joomdle\Site\Controller;
 // phpcs:enable PSR1.Files.SideEffects
 
 use Joomla\CMS\MVC\Controller\BaseController;
-use Joomla\CMS\User\UserHelper;
-use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
-use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Language\Text;
 use Joomdle\Component\Joomdle\Administrator\Helper\ContentHelper;
 use Joomdle\Component\Joomdle\Administrator\Helper\MappingsHelper;
-
+use Joomla\CMS\Router\Route;
 
 class CourseController extends BaseController
 {
     public function enrol()
     {
+        /** @var CMSApplication $app */
         $app = Factory::getApplication();
 
         $user = Factory::getApplication()->getIdentity();
@@ -38,8 +36,6 @@ class CourseController extends BaseController
         if (!$user->id) {
             $app->redirect($login_url);
         }
-
-        $params = $app->getParams();
 
         /* Check that self enrolments are OK in course */
         $enrol_methods = ContentHelper::courseEnrolMethods($course_id);
@@ -72,6 +68,7 @@ class CourseController extends BaseController
 
     public function unenrol()
     {
+        /** @var CMSApplication $app */
         $app = Factory::getApplication();
 
         $user = Factory::getApplication()->getIdentity();
@@ -82,8 +79,6 @@ class CourseController extends BaseController
         if (!$user->id) {
             $app->redirect($login_url);
         }
-
-        $params = $app->getParams();
 
         $username = $user->username;
         ContentHelper::unenrolUser($username, $course_id);

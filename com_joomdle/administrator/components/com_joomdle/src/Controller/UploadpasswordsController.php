@@ -17,7 +17,6 @@ namespace Joomdle\Component\Joomdle\Administrator\Controller;
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Controller\FormController;
 use Joomla\CMS\Language\Text;
-use Joomla\CMS\Component\ComponentHelper;
 
 /**
  * Mapping controller class.
@@ -60,5 +59,7 @@ class UploadpasswordsController extends FormController
     public function cancel($key = null)
     {
         $this->setRedirect('index.php?option=com_joomdle&view=users');
+
+        return true;
     }
 }

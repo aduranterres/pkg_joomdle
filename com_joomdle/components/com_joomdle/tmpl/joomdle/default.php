@@ -10,8 +10,7 @@
 
 \defined('_JEXEC') or die;
 
-use Joomla\CMS\Factory;
-use Joomla\CMS\Filter\OutputFilter;
+use Joomla\CMS\Application\ApplicationHelper;
 use Joomla\CMS\Router\Route;
 use Joomdle\Component\Joomdle\Administrator\Helper\SystemHelper;
 
@@ -19,8 +18,6 @@ $free_courses_button = $this->params->get('free_courses_button');
 $paid_courses_button = $this->params->get('paid_courses_button');
 $show_buttons = $this->params->get('show_buttons');
 $show_description = $this->params->get('show_description');
-
-$unicodeslugs = Factory::getConfig()->get('unicodeslugs');
 ?>
 <div class="joomdle-courselist<?php echo $this->pageclass_sfx;?>">
     <?php if ($this->params->get('show_page_heading', 1)) : ?>
@@ -35,13 +32,9 @@ $unicodeslugs = Factory::getConfig()->get('unicodeslugs');
             <?php
             $cat_id = $item['cat_id'];
             $course_id = $item['remoteid'];
-            if ($unicodeslugs == 1) {
-                $course_slug = OutputFilter::stringURLUnicodeSlug($item['fullname']);
-                $cat_slug = OutputFilter::stringURLUnicodeSlug($item['cat_name']);
-            } else {
-                $course_slug = OutputFilter::stringURLSafe($item['fullname']);
-                $cat_slug = OutputFilter::stringURLSafe($item['cat_name']);
-            }
+
+            $course_slug = ApplicationHelper::stringURLSafe($item['fullname']);
+            $cat_slug = ApplicationHelper::stringURLSafe($item['cat_name']);
 
             ?>
     <div class="joomdle_course_list_item">

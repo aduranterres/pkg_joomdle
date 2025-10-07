@@ -12,7 +12,6 @@ namespace Joomdle\Component\Joomdle\Site\View\Mycourses;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
-use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\MVC\View\GenericDataException;
 use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
 
@@ -35,6 +34,8 @@ class HtmlView extends BaseHtmlView
 
     protected $params;
 
+    protected $pageclass_sfx = '';
+
     /**
      * Execute and display a template script.
      *
@@ -47,7 +48,7 @@ class HtmlView extends BaseHtmlView
      */
     public function display($tpl = null)
     {
-        $user = $this->getCurrentUser();
+        /** @var CMSApplication $app */
         $app  = Factory::getApplication();
 
         // Get model data.
@@ -67,12 +68,13 @@ class HtmlView extends BaseHtmlView
 
         // Create a shortcut to the parameters.
         $this->params = $this->state->params;
-        $app    = Factory::getApplication();
         $params = $app->getParams();
 
         if ($data['group_by_category']) {
             $tpl =  "cats";
         }
+
+        $this->pageclass_sfx = htmlspecialchars($this->params->get('pageclass_sfx', ''));
 
         $this->prepareDocument();
 
@@ -90,6 +92,7 @@ class HtmlView extends BaseHtmlView
      */
     protected function prepareDocument()
     {
+        /** @var CMSApplication $app */
         $app = Factory::getApplication();
 
         // Because the application sets a default page title,

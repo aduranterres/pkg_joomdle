@@ -13,9 +13,7 @@ namespace Joomdle\Component\Joomdle\Administrator\Model;
 use Joomla\CMS\Table\Table;
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Model\AdminModel;
-use Joomla\Database\ParameterType;
 use Joomla\CMS\User\UserFactoryInterface;
-use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\User\UserHelper;
 use Joomla\CMS\Language\Text;
 
@@ -79,9 +77,6 @@ class UploadpasswordsModel extends AdminModel
      */
     public function getForm($data = array(), $loadData = true)
     {
-        // Initialise variables.
-        $app = Factory::getApplication();
-
         // Get the form.
         $form = $this->loadForm(
             'com_joomdle.uploadpasswords',

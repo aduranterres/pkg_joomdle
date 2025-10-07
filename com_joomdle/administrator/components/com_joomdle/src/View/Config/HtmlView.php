@@ -34,6 +34,14 @@ class HtmlView extends BaseHtmlView
 
     protected $state;
 
+    protected $fieldsets;
+
+    protected $formControl;
+
+    protected $form;
+
+    protected $data;
+
     /**
      * Display the view
      *
@@ -58,7 +66,6 @@ class HtmlView extends BaseHtmlView
 
         $this->addToolbar();
 
-        $this->sidebar = Sidebar::render();
         parent::display($tpl);
     }
 
@@ -75,7 +82,7 @@ class HtmlView extends BaseHtmlView
 
         ToolbarHelper::title(Text::_('COM_JOOMDLE_TITLE_CONFIG'), "generic");
 
-        $toolbar    = $this->getDocument()->getToolbar();
+        $toolbar = $this->getDocument()->getToolbar();
 
         if ($canDo->get('core.edit') || ($canDo->get('core.create'))) {
             ToolbarHelper::apply('config.apply', 'JTOOLBAR_APPLY');
