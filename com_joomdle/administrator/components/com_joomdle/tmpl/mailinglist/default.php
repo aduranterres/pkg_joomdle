@@ -32,13 +32,13 @@ $i = 0;
         </thead>
         <tbody>
         <?php
-        $row = MailinglistHelper::getGeneralLists ();
+        $row = MailinglistHelper::getGeneralLists();
         $checked = HTMLHelper::_('grid.id', $i, $row->id);
         $row->published = $row->published_students;
-        $published_students      = HTMLHelper::_('jgrid.published', $row->published, $i , 'mailinglist.students');
+        $published_students      = HTMLHelper::_('jgrid.published', $row->published, $i, 'mailinglist.students');
 
         $row->published = $row->published_teachers;
-        $published_teachers      = HTMLHelper::_('jgrid.published', $row->published, $i , 'mailinglist.teachers');
+        $published_teachers      = HTMLHelper::_('jgrid.published', $row->published, $i, 'mailinglist.teachers');
         $i++;
         ?>
             <tr>
@@ -66,10 +66,10 @@ $i = 0;
             $i++;
             $checked = HTMLHelper::_('grid.id', $i, $row->id);
             $row->published = $row->published_students;
-            $published_students      = HTMLHelper::_('jgrid.published', $row->published, $i , 'mailinglist.students');
+            $published_students      = HTMLHelper::_('jgrid.published', $row->published, $i, 'mailinglist.students');
             $row->published = $row->published_teachers;
-            $published_teachers      = HTMLHelper::_('jgrid.published', $row->published, $i , 'mailinglist.teachers');
-        ?>
+            $published_teachers      = HTMLHelper::_('jgrid.published', $row->published, $i, 'mailinglist.teachers');
+            ?>
             <tr>
                 <td><?php echo $row->id;?></td>
                 <td><?php echo $checked; ?></td>
@@ -84,5 +84,5 @@ $i = 0;
     <input type="hidden" name="task" value=""/>
     <input type="hidden" name="boxchecked" value="0"/>   
     <input type="hidden" name="option" value="com_joomdle"/>
-    <?php echo HTMLHelper::_( 'form.token' ); ?>
+    <?php echo HTMLHelper::_('form.token'); ?>
 </form>

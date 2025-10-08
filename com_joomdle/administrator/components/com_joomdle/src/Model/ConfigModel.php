@@ -137,11 +137,19 @@ class ConfigModel extends AdminModel
 
     public function save($data)
     {
+        $params = json_encode($data);
+//      dd($params);
+
         //Get joomdle extension id
         $db = $this->getDatabase();
-        $query = 'SELECT extension_id ' .
-                ' FROM #__extensions' .
-                " WHERE name = 'com_joomdle'";
+        $query = $db->createQuery()
+            ->select($db->quoteName('extension_id'))
+            ->from($db->quoteName('#__extensions'))
+            ->where($db->quoteName('name') . ' = :name');
+
+        // Bind parameter safely
+        $query->bind(':name', 'com_joomdle', ParameterType::STRING);
+
         $db->setQuery($query);
         $extension_id = $db->loadResult();
 
@@ -161,17 +169,26 @@ class ConfigModel extends AdminModel
         // Token cannot have spaces
         $data['auth_token'] = trim($data['auth_token']);
 
+//        $data['id'] = $extension_id;
+
+      //  Factory::getApplication()->getInput()->set('id', 253);
+
+
         $data = array(
             'params'    => $data,
             'id'        => $extension_id,
             'option'    => $option
         );
 
+    //unset ($data['params']['id']);
+        unset($data['params']['tags']);
+
+    // dd($data);
         // Save config using the com_config component.
         $model = Factory::getApplication()->bootComponent('com_config')
             ->getMVCFactory()
             ->createModel('Component', 'Administrator');
-        $return = $model->save($data);
+        $return = $model->save($data, 'extension_id');
 
         return $return;
     }

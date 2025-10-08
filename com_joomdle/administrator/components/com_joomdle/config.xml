@@ -91,6 +91,13 @@
             <option
                 value="1">JYES</option>
         </field>
+
+        <field name="user_agent" type="text"
+            label="COM_JOOMDLE_USER_AGENT"
+            description="COM_JOOMDLE_USER_AGENT_DESCRIPTION"
+            default="Joomdle"
+        />
+
     </fieldset>
 
     <fieldset name="links" label="COM_JOOMDLE_CONFIG_LINKS_BEHAVIOUR" addfieldpath="/administrator/components/com_joomdle/models/fields">
@@ -520,9 +527,9 @@
             description="COM_JOOMDLE_ENROL_EMAIL_TEXT_DESCRIPTION"
             label="COM_JOOMDLE_ENROL_EMAIL_TEXT"
             rows="5" cols="70"
-            filter="safehtml"
-            default="<p>To enter the course, go to:</p><p><a href='COURSE_URL'>COURSE_URL</a></p>"
-        />
+            filter="safehtml">
+            <![CDATA[<p>To enter the course, go to:</p><p><a href='COURSE_URL'>COURSE_URL</a></p>]]>
+        </field>
 
         <field name="send_bundle_emails" type="list" label="COM_JOOMDLE_SEND_BUNDLE_EMAILS"
             description="COM_JOOMDLE_SEND_BUNDLE_EMAILS_DESCRIPTION" 

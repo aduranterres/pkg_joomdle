@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form addfieldprefix="Joomdle\Component\Joomdle\Administrator\Field">
     <fieldset name="general" label="COM_JOOMDLE_CONFIG_GENERAL">
+        <field name="id" type="hidden" value="253"
+        />
+
         <field name="MOODLE_URL" type="text" required="true"
             description="COM_JOOMDLE_MOODLE_SERVER_URL_DESCRIPTION"
             label="COM_JOOMDLE_MOODLE_SERVER_URL"

@@ -28,21 +28,21 @@ use Joomla\Event\Event;
  */
 class MailinglistHelper
 {
-    public static function getListCourses ()
+    public static function getListCourses()
     {
-        $cursos = ContentHelper::getCourseList (0);
+        $cursos = ContentHelper::getCourseList(0);
 
         $cs = array ();
-        if (!is_array ($cursos))
+        if (!is_array($cursos)) {
             return $cs;
+        }
 
-        foreach ($cursos as $curso)
-        {
-            $c = new \stdClass ();
+        foreach ($cursos as $curso) {
+            $c = new \stdClass();
             $c->id = $curso['remoteid'];
             $c->fullname = $curso['fullname'];
-            $c->published_students = MailinglistHelper::courseListExists ($curso['remoteid'], 'course_students');
-            $c->published_teachers = MailinglistHelper::courseListExists ($curso['remoteid'], 'course_teachers');
+            $c->published_students = MailinglistHelper::courseListExists($curso['remoteid'], 'course_students');
+            $c->published_teachers = MailinglistHelper::courseListExists($curso['remoteid'], 'course_teachers');
 
             $cs[] = $c;
         }
@@ -50,16 +50,9 @@ class MailinglistHelper
         return $cs;
     }
 
-    public static function getCourseListId ($course_id, $type)
+    public static function getCourseListId($course_id, $type)
     {
         $db = Factory::getContainer()->get('DatabaseDriver');
-
-        /*
-        $query = 'SELECT list_id' .
-                ' FROM #__joomdle_mailinglists' .
-                ' WHERE course_id='.$db->Quote( $course_id ) .
-                ' AND type='.$db->Quote( $type );
-*/
 
         $query = $db->createQuery()
             ->select($db->quoteName('list_id'))
@@ -71,44 +64,32 @@ class MailinglistHelper
         $query->bind(':course_id', $course_id, ParameterType::STRING);
         $query->bind(':type', $type, ParameterType::STRING);
 
-        $db->setQuery( $query );
+        $db->setQuery($query);
         $id = $db->loadResult();
 
         return $id;
     }
 
-    public static function courseListExists ($course_id, $type)
+    public static function courseListExists($course_id, $type)
     {
-        $id = MailinglistHelper::getCourseListId ($course_id, $type);
+        $id = MailinglistHelper::getCourseListId($course_id, $type);
 
-        if ($id)
+        if ($id) {
             return 1;
-        else
+        } else {
             return 0;
+        }
     }
 
-    public static function getGeneralListId ($type)
+    public static function getGeneralListId($type)
     {
-      //  $db = Factory::getContainer()->get('DatabaseDriver');
-
         $course_id = 0;
         return MailinglistHelper::getCourseListId($course_id, $type);
-
-        /*
-        $query = 'SELECT list_id' .
-                ' FROM #__joomdle_mailinglists' .
-                ' WHERE course_id='.$db->Quote( $course_id ) .
-                ' AND type='.$db->Quote( $type );
-        $db->setQuery( $query );
-        $id = $db->loadResult();
-
-        return $id;
-        */
     }
 
-    public static function generalListExists ($type)
+    public static function generalListExists($type)
     {
-        $id = MailinglistHelper::getGeneralListId ($type);
+        $id = MailinglistHelper::getGeneralListId($type);
 
         return $id ? true : false;
         /*
@@ -119,15 +100,14 @@ class MailinglistHelper
         */
     }
 
-    public static function getTypeStr ($type)
+    public static function getTypeStr($type)
     {
-        switch ($type)
-        {
+        switch ($type) {
             case 'course_students':
-                $str = Text::_ ('COM_JOOMDLE_STUDENTS');
+                $str = Text::_('COM_JOOMDLE_STUDENTS');
                 break;
             case 'course_teachers':
-                $str = Text::_ ('COM_JOOMDLE_TEACHERS');
+                $str = Text::_('COM_JOOMDLE_TEACHERS');
                 break;
         }
 
@@ -136,20 +116,19 @@ class MailinglistHelper
         return $str;
     }
 
-    public static function saveMailingLists ($cid)
+    public static function saveMailingLists($cid)
     {
-        foreach ($cid as $id)
-        {
-            MailinglistHelper::saveCourseMailingList ($id);
+        foreach ($cid as $id) {
+            MailinglistHelper::saveCourseMailingList($id);
         }
     }
 
-    public static function saveCourseMailingList ($course_id, $type = 'course_students')
+    public static function saveCourseMailingList($course_id, $type = 'course_students')
     {
         $db = Factory::getContainer()->get('DatabaseDriver');
 
-        $type_str = MailinglistHelper::getTypeStr ($type);
-        $course_info = ContentHelper::getCourseInfo ($course_id);
+        $type_str = MailinglistHelper::getTypeStr($type);
+        $course_info = ContentHelper::getCourseInfo($course_id);
 
         // Add to mailing list component
         $data = array ();
@@ -167,27 +146,28 @@ class MailinglistHelper
                 break;
             }
         }
-        
-        if (!$list_id)
+
+        if (!$list_id) {
             return false;
+        }
 
         // Add to joomdle table
-        $mlist = new \stdClass ();
+        $mlist = new \stdClass();
         $mlist->course_id = $course_id;
         $mlist->list_id = $list_id;
         $mlist->type = $type;
 
-        $db->insertObject('#__joomdle_mailinglists',$mlist);
+        $db->insertObject('#__joomdle_mailinglists', $mlist);
 
         // Add all course members to list
-        MailinglistHelper::addListMembers ($course_id, $type);
+        MailinglistHelper::addListMembers($course_id, $type);
     }
 
-    public static function saveGeneralMailingList ($type = 'course_students')
+    public static function saveGeneralMailingList($type = 'course_students')
     {
         $db = Factory::getContainer()->get('DatabaseDriver');
 
-        $type_str = MailinglistHelper::getTypeStr ($type);
+        $type_str = MailinglistHelper::getTypeStr($type);
 
         $data = array ();
         $data['name'] = $type_str;
@@ -204,24 +184,25 @@ class MailinglistHelper
                 break;
             }
         }
-        
-        if (!$list_id)
+
+        if (!$list_id) {
             return false;
+        }
 
         // Add to joomdle table
-        $mlist = new \stdClass ();
+        $mlist = new \stdClass();
         $mlist->course_id = 0;
         $mlist->list_id = $list_id;
         $mlist->type = $type;
 
-        $db->insertObject('#__joomdle_mailinglists',$mlist);
+        $db->insertObject('#__joomdle_mailinglists', $mlist);
 
         // Add all course members to list
-        MailinglistHelper::addGeneralListMembers ($type);
+        MailinglistHelper::addGeneralListMembers($type);
     }
 
-    public static function addSub ($list_id, $user_id)
-    {                
+    public static function addSub($list_id, $user_id)
+    {
         $data = array ();
         $data['list_id'] = $list_id;
         $data['user_id'] = $user_id;
@@ -232,8 +213,8 @@ class MailinglistHelper
         $dispatcher->dispatch('onJoomdleAddListSub', $event);
     }
 
-    public static function removeSub ($list_id, $user_id)
-    {                
+    public static function removeSub($list_id, $user_id)
+    {
         $data = array ();
         $data['list_id'] = $list_id;
         $data['user_id'] = $user_id;
@@ -244,70 +225,70 @@ class MailinglistHelper
         $dispatcher->dispatch('onJoomdleRemoveListSub', $event);
     }
 
-    public static function addListMember ($username, $course_id, $type)
+    public static function addListMember($username, $course_id, $type)
     {
-        $list_id = MailinglistHelper::getCourseListId ($course_id, $type);
+        $list_id = MailinglistHelper::getCourseListId($course_id, $type);
         $user_id = UserHelper::getUserId($username);
 
-        if ($list_id)
-            MailinglistHelper::addSub ($list_id, $user_id);
+        if ($list_id) {
+            MailinglistHelper::addSub($list_id, $user_id);
+        }
         // Add to general list if necessary
-        $list_id = MailinglistHelper::getGeneralListId ($type);
-        if ($list_id)
-            MailinglistHelper::addSub ($list_id, $user_id);
+        $list_id = MailinglistHelper::getGeneralListId($type);
+        if ($list_id) {
+            MailinglistHelper::addSub($list_id, $user_id);
+        }
     }
 
-    public static function removeListMember ($username, $course_id, $type)
+    public static function removeListMember($username, $course_id, $type)
     {
-        $list_id = MailinglistHelper::getCourseListId ($course_id, $type);
+        $list_id = MailinglistHelper::getCourseListId($course_id, $type);
         $user_id = UserHelper::getUserId($username);
 
         // Remove from general list if necessary
         $remove = false;
-        $glist_id = MailinglistHelper::getGeneralListId ($type);
-        if ($glist_id)
-        {
+        $glist_id = MailinglistHelper::getGeneralListId($type);
+        if ($glist_id) {
             //Only remove if user has no more course enrolments of this type
-            switch ($type)
-            {
+            switch ($type) {
                 case 'course_students':
-                    $my_courses = ContentHelper::getMyCourses ($username);
-                    if (count ($my_courses) == 0)
+                    $my_courses = ContentHelper::getMyCourses($username);
+                    if (count($my_courses) == 0) {
                         $remove = true;
+                    }
                     break;
                 case 'course_teachers':
                     $my_courses = ContentHelper::getTeacherCourses($username);
-                    if (count ($my_courses) == 0)
+                    if (count($my_courses) == 0) {
                         $remove = true;
+                    }
                     break;
             }
         }
 
-        MailinglistHelper::removeSub ($list_id, $user_id);
-        if ($remove)
-            MailinglistHelper::removeSub ($glist_id, $user_id);
+        MailinglistHelper::removeSub($list_id, $user_id);
+        if ($remove) {
+            MailinglistHelper::removeSub($glist_id, $user_id);
+        }
     }
 
-    public static function addListMembers ($course_id, $type)
+    public static function addListMembers($course_id, $type)
     {
-        $list_id = MailinglistHelper::getCourseListId ($course_id, $type);
+        $list_id = MailinglistHelper::getCourseListId($course_id, $type);
 
-        switch ($type)
-        {
+        switch ($type) {
             case 'course_students':
-                $students = ContentHelper::getCourseStudents ($course_id, 0);
-                foreach ($students as $student)
-                {
+                $students = ContentHelper::getCourseStudents($course_id, 0);
+                foreach ($students as $student) {
                     $user_id = UserHelper::getUserId($student['username']);
-                    MailinglistHelper::addSub ($list_id, $user_id);
+                    MailinglistHelper::addSub($list_id, $user_id);
                 }
                 break;
             case 'course_teachers':
                 $teachers = ContentHelper::getCourseTeachers($course_id);
-                foreach ($teachers as $teacher)
-                {
+                foreach ($teachers as $teacher) {
                     $user_id = UserHelper::getUserId($teacher['username']);
-                    MailinglistHelper::addSub ($list_id, $user_id);
+                    MailinglistHelper::addSub($list_id, $user_id);
                 }
                 break;
             default:
@@ -315,37 +296,32 @@ class MailinglistHelper
         }
     }
 
-    public static function addGeneralListMembers ($type)
+    public static function addGeneralListMembers($type)
     {
-        $list_id = MailinglistHelper::getGeneralListId ($type);
+        $list_id = MailinglistHelper::getGeneralListId($type);
 
-        switch ($type)
-        {
+        switch ($type) {
             case 'course_students':
-                $courses = ContentHelper::getCourseList ();
-                foreach ($courses as $course)
-                {
+                $courses = ContentHelper::getCourseList();
+                foreach ($courses as $course) {
                     $teachers = array ();
                     $course_id = $course['remoteid'];
                     $students = ContentHelper::getCourseStudents($course_id, 0);
-                    foreach ($students as $student)
-                    {
+                    foreach ($students as $student) {
                         $user_id = UserHelper::getUserId($student['username']);
-                        MailinglistHelper::addSub ($list_id, $user_id);
+                        MailinglistHelper::addSub($list_id, $user_id);
                     }
                 }
                 break;
             case 'course_teachers':
-                $courses = ContentHelper::getCourseList ();
-                foreach ($courses as $course)
-                {
+                $courses = ContentHelper::getCourseList();
+                foreach ($courses as $course) {
                     $teachers = array ();
                     $course_id = $course['remoteid'];
                     $teachers = ContentHelper::getCourseTeachers($course_id);
-                    foreach ($teachers as $teacher)
-                    {
+                    foreach ($teachers as $teacher) {
                         $user_id = UserHelper::getUserId($teacher['username']);
-                        MailinglistHelper::addSub ($list_id, $user_id);
+                        MailinglistHelper::addSub($list_id, $user_id);
                     }
                 }
                 break;
@@ -354,27 +330,18 @@ class MailinglistHelper
         }
     }
 
-    public static function deleteMailingLists ($cid, $type = 'course_students')
+    public static function deleteMailingLists($cid, $type = 'course_students')
     {
-        foreach ($cid as $id)
-        {   
-            MailinglistHelper::deletCourseMailingList ($id, $type);
+        foreach ($cid as $id) {
+            MailinglistHelper::deletCourseMailingList($id, $type);
         }
     }
 
-    public static function deletCourseMailingList ($course_id, $type)
+    public static function deletCourseMailingList($course_id, $type)
     {
         $db = Factory::getContainer()->get('DatabaseDriver');
 
-        $list_id = MailinglistHelper::getCourseListId ($course_id, $type);
-
-        /*
-        $query = 'DELETE ' .
-                ' FROM #__joomdle_mailinglists' .
-                ' WHERE course_id='.$db->Quote( $course_id ).
-                ' AND type='.$db->Quote( $type );
-
-                */
+        $list_id = MailinglistHelper::getCourseListId($course_id, $type);
 
         //Delete from Joomdle table
         $query = $db->createQuery()
@@ -385,47 +352,46 @@ class MailinglistHelper
         $query->bind(':course_id', $course_id, ParameterType::STRING);
         $query->bind(':type', $type, ParameterType::STRING);
 
-        $db->setQuery( $query );
+        $db->setQuery($query);
         $db->execute();
 
         //Delete from mailing list component
         PluginHelper::importPlugin('joomdlemailinglist');
         $dispatcher = Factory::getApplication()->getDispatcher();
-        $event = new Event('onJoomdleDeleteList', ['data' => array($list_id)]);
+        $event = new Event('onJoomdleDeleteList', ['data' => array('list_id' => $list_id)]);
         $dispatcher->dispatch('onJoomdleDeleteList', $event);
     }
 
-    public static function saveListsStudents ($cid)
+    public static function saveListsStudents($cid)
     {
-        foreach ($cid as $id)
-        {
-            if ($id)
-                MailinglistHelper::saveCourseMailingList ($id, 'course_students');
-            else
-                MailinglistHelper::saveGeneralMailingList ('course_students');
+        foreach ($cid as $id) {
+            if ($id) {
+                MailinglistHelper::saveCourseMailingList($id, 'course_students');
+            } else {
+                MailinglistHelper::saveGeneralMailingList('course_students');
+            }
         }
     }
 
-    public static function saveListsTeachers ($cid)
+    public static function saveListsTeachers($cid)
     {
-        foreach ($cid as $id)
-        {
-            if ($id)
-                MailinglistHelper::saveCourseMailingList ($id, 'course_teachers');
-            else
-                MailinglistHelper::saveGeneralMailingList ('course_teachers');
+        foreach ($cid as $id) {
+            if ($id) {
+                MailinglistHelper::saveCourseMailingList($id, 'course_teachers');
+            } else {
+                MailinglistHelper::saveGeneralMailingList('course_teachers');
+            }
         }
     }
 
-    public static function getGeneralLists ()
+    public static function getGeneralLists()
     {
-        $c = new \stdClass ();
+        $c = new \stdClass();
         $c->id = 0;
         $c->fullname = Text::_('COM_JOOMDLE_GENERAL');
-        $c->published_students = MailinglistHelper::generalListExists ('course_students');
-        $c->published_teachers = MailinglistHelper::generalListExists ('course_teachers');
+        $c->published_students = MailinglistHelper::generalListExists('course_students');
+        $c->published_teachers = MailinglistHelper::generalListExists('course_teachers');
 
         return $c;
     }
-
 }

@@ -22,8 +22,11 @@ use Joomla\Application\Web\WebClient;
 use Joomla\CMS\Uri\Uri;
 use Joomdle\Component\Joomdle\Administrator\Helper\MappingsHelper;
 use Joomdle\Component\Joomdle\Administrator\Helper\ContentHelper;
+use Joomdle\Component\Joomdle\Administrator\Helper\JoomlagroupsHelper;
 use Joomdle\Component\Joomdle\Administrator\Helper\MailinglistHelper;
+use Joomdle\Component\Joomdle\Administrator\Helper\ShopHelper;
 use Joomla\CMS\User\UserFactoryInterface;
+use Joomla\Database\ParameterType;
 
 class WsController extends BaseController
 {
@@ -86,9 +89,17 @@ class WsController extends BaseController
         $token = $params['joomdle_auth_token'];
 
         $db = Factory::getContainer()->get('DatabaseDriver');
-        $query = 'SELECT session_id' .
-                ' FROM #__session' .
-                " WHERE username = " . $db->Quote($username) . " and  md5(session_id) = " . $db->Quote($token);
+
+        $query = $db->createQuery()
+            ->select($db->quoteName('session_id'))
+            ->from($db->quoteName('#__session'))
+            ->where($db->quoteName('username') . ' = :username')
+            ->where('MD5(' . $db->quoteName('session_id') . ') = :token');
+
+        // Bind parameters safely
+        $query->bind(':username', $username, ParameterType::STRING);
+        $query->bind(':token', $token, ParameterType::STRING);
+
         $db->setQuery($query);
         $session = $db->loadResult();
 
@@ -104,6 +115,7 @@ class WsController extends BaseController
         $username = $params['username'];
         $ua_string = $params['ua_string'];
 
+        /** @var CMSApplication $app */
         $app = Factory::getApplication('site');
 
         $id = UserHelper::getUserId($username);
@@ -145,7 +157,7 @@ class WsController extends BaseController
     {
         $username = $params['username'];
 
-        return JoomdleHelperUsers::activate_joomla_user($username);
+        return ContentHelper::activateJoomlaUser($username);
     }
 
     private function updateUser($params)
@@ -223,7 +235,7 @@ class WsController extends BaseController
         $course_id = $params['course_id'];
         $course_name = $params['course_name'];
 
-        return JoomdleHelperJoomlagroups::add_course_groups($course_id, $course_name);
+        return JoomlagroupsHelper::addCourseGroups($course_id, $course_name);
     }
 
     private function updateUserGroups($params)
@@ -231,14 +243,14 @@ class WsController extends BaseController
         $course_id = $params['course_id'];
         $course_name = $params['course_name'];
 
-        return JoomdleHelperJoomlagroups::update_course_groups($course_id, $course_name);
+        return JoomlagroupsHelper::updateCourseGroups($course_id, $course_name);
     }
 
     private function removeUserGroups($params)
     {
         $course_id = $params['course_id'];
 
-        return JoomdleHelperJoomlagroups::remove_course_groups($course_id);
+        return JoomlagroupsHelper::removeCourseGroups($course_id);
     }
 
     private function addGroupMember($params)
@@ -247,7 +259,7 @@ class WsController extends BaseController
         $username = $params['username'];
         $type = $params['type'];
 
-        return JoomdleHelperJoomlagroups::add_group_member($course_id, $username, $type);
+        return JoomlagroupsHelper::addGroupMember($course_id, $username, $type);
     }
 
     private function removeGroupMember($params)
@@ -256,7 +268,7 @@ class WsController extends BaseController
         $username = $params['username'];
         $type = $params['type'];
 
-        return JoomdleHelperJoomlagroups::remove_group_member($course_id, $username, $type);
+        return JoomlagroupsHelper::removeGroupMember($course_id, $username, $type);
     }
 
     // FIXME do when testing shop
@@ -264,18 +276,7 @@ class WsController extends BaseController
     {
         $course_id = $params['course_id'];
 
-        return JoomdleHelperShop::get_sell_url($course_id);
-    }
-
-    // FIXME rework for new event system
-    private function moodleEvent($params)
-    {
-        require_once(JPATH_ADMINISTRATOR . '/components/com_joomdle/helpers/events.php');
-
-        $event_name = 'onJoomdle' . $params['event'];
-        $event_params = $params['params'];
-
-        return JoomdleHelperEvents::trigger_event($event_name, $event_params);
+        return ShopHelper::getSellUrl($course_id);
     }
 
     private function checkJoomdleToken()

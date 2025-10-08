@@ -19,7 +19,6 @@ use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Installer\Installer;
-use Joomla\CMS\Router\Route;
 use Joomla\CMS\User\UserHelper;
 use Joomla\Utilities\ArrayHelper;
 use Joomla\CMS\Uri\Uri;
@@ -33,7 +32,7 @@ use Joomla\CMS\User\User;
  */
 class ContentHelper
 {
-    public const COM_JOOMDLE_ROLE_STUDENT = 0;
+    public const COM_JOOMDLE_ROLE_STUDENT = 5;
 
     public static function getCourseList($enrollable_only = 0, $orderby = 'fullname ASC', $guest = 0, $username = '')
     {
@@ -627,7 +626,9 @@ class ContentHelper
         $response = json_decode($file, true);
 
         // Save raw reply to log
-        $config = Factory::getApplication()->getConfig();
+        /** @var CMSApplication $app */
+        $app = Factory::getApplication();
+        $config = $app->getConfig();
         $log_path = $config->get('log_path');
         file_put_contents($log_path . '/' . 'joomdle_system_check.json', $file);
 
@@ -661,7 +662,9 @@ class ContentHelper
         curl_close($ch);
 
         // Save raw reply to log
-        $config = Factory::getApplication()->getConfig();
+        /** @var CMSApplication $app */
+        $app = Factory::getApplication();
+        $config = $app->getConfig();
         $log_path = $config->get('log_path');
         file_put_contents($log_path . '/' . 'joomdle_system_check.json', $response);
 
@@ -865,7 +868,9 @@ class ContentHelper
         // set url
         curl_setopt($ch, CURLOPT_URL, $land_file);
 
-        $config = Factory::getApplication()->getConfig();
+        /** @var CMSApplication $app */
+        $app = Factory::getApplication();
+        $config = $app->getConfig();
         $temppath = $config->get('tmp_path');
         $file = $temppath . "/" . UserHelper::genRandomPassword() . ".txt";
 
@@ -982,8 +987,6 @@ class ContentHelper
         // Get required system objects
         $user = Factory::getApplication()->getIdentity();
 
-        $usersConfig = ComponentHelper::getParams('com_users');
-
         $newUsertype = 'Registered';
 
         $moodle_user = array();
@@ -1025,6 +1028,19 @@ class ContentHelper
         // FIXME Esto ya no va, no es el mismo hash: poner password random y enviar?
         $user->password = $user_details['password'];
         $user->save();
+    }
+
+    public static function activateJoomlaUser($username)
+    {
+        $user_id = UserHelper::getUserId($username);
+        $user = Factory::getContainer()->get(UserFactoryInterface::class)->loadUserById($user_id);
+        $user->set('block', '0');
+        $user->set('activation', '');
+        if (!$user->save()) {
+            return false;
+        }
+
+        return true;
     }
 
     // Used by the web service call to sync a moodle user on registration

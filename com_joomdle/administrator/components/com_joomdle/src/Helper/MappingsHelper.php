@@ -21,6 +21,7 @@ use Joomla\CMS\User\UserHelper;
 use Joomla\CMS\User\UserFactoryInterface;
 use Joomla\Event\Event;
 use Joomdle\Component\Joomdle\Administrator\Helper\ContentHelper;
+use Joomla\Database\ParameterType;
 
 /**
  * Mappings helper.
@@ -30,12 +31,12 @@ use Joomdle\Component\Joomdle\Administrator\Helper\ContentHelper;
 class MappingsHelper
 {
 // FIXME usamos esto de la app ahora?
-    public static function getUserInfo($username, $app = '')
+    public static function getUserInfo($username, $additional_data_source = '')
     {
         $comp_params = ComponentHelper::getParams('com_joomdle');
 
-        if (!$app) {
-            $app = $comp_params->get('additional_data_source');
+        if (!$additional_data_source) {
+            $additional_data_source = $comp_params->get('additional_data_source');
         }
 
         $user_id = UserHelper::getUserId($username);
@@ -54,13 +55,12 @@ class MappingsHelper
         $user_info['suspended'] = $user->block;
 
         $more_info = array ();
-        switch ($app) {
+        switch ($additional_data_source) {
             case 'no':
                 $more_info = MappingsHelper::getUserInfoJoomla($username);
                 break;
             default:
                 PluginHelper::importPlugin('joomdleprofile');
-                $app = Factory::getApplication();
                 $dispatcher = Factory::getApplication()->getDispatcher();
                 $event = new Event('onJoomdleGetUserInfo', ['username' => $username]);
                 $dispatcher->dispatch('onJoomdleGetUserInfo', $event);
@@ -131,13 +131,13 @@ class MappingsHelper
     public static function getLoginUrl($course_id)
     {
         $comp_params = ComponentHelper::getParams('com_joomdle');
-        $app = $comp_params->get('additional_data_source');
+        $additional_data_source = $comp_params->get('additional_data_source');
         $itemid = $comp_params->get('joomdle_itemid');
 
         $url = '';
         // Note: return only seems to work with normal Joomla login page (not CB or Jomsocial)
         $return = base64_encode('index.php?option=com_joomdle&view=detail&course_id=' . $course_id . '&Itemid=' . $itemid);
-        switch ($app) {
+        switch ($additional_data_source) {
             case 'no':
                 $url = "index.php?option=com_users&view=login&return=$return";
                 break;
@@ -164,16 +164,12 @@ class MappingsHelper
         return $url;
     }
 
-    public static function getFieldName($app, $field)
+    public static function getFieldName($additional_data_source, $field)
     {
-        $params = ComponentHelper::getParams('com_joomdle');
-        $additional_data_source = $params->get('additional_data_source');
-
         $name = '';
-        switch ($app) {
+        switch ($additional_data_source) {
             case $additional_data_source:
                 PluginHelper::importPlugin('joomdleprofile');
-                $app = Factory::getApplication();
                 $dispatcher = Factory::getApplication()->getDispatcher();
                 $event = new Event('onJoomdleGetFieldName', ['field' => $field]);
                 $dispatcher->dispatch('onJoomdleGetFieldName', $event);
@@ -196,9 +192,9 @@ class MappingsHelper
     {
         static $fields;
 
-// XXX FIXME
-//        if (!$fields)
-//            $fields = JoomdleHelperContent::call_method ('user_custom_fields');
+        if (!$fields) {
+            $fields = ContentHelper::userCustomFields();
+        }
 
         if (!$fields) {
             return $field_id;
@@ -244,9 +240,14 @@ class MappingsHelper
     {
         $db = Factory::getContainer()->get('DatabaseDriver');
 
-        $query = 'SELECT *' .
-            ' FROM #__joomdle_field_mappings' .
-            " WHERE joomla_app = " . $db->Quote($app);
+        $query = $db->createQuery()
+            ->select('*')
+            ->from($db->quoteName('#__joomdle_field_mappings'))
+            ->where($db->quoteName('joomla_app') . ' = :app');
+
+        // Bind parameter safely
+        $query->bind(':app', $app, ParameterType::STRING);
+
         $db->setQuery($query);
         $mappings = $db->loadObjectList();
 

@@ -33,4 +33,16 @@ class ConfigController extends FormController
         $this->setRedirect('index.php?option=com_joomdle&view=config');
         return true;
     }
+
+    public function save($key = null, $urlVar = null)
+    {
+        $data = $this->input->post->get('jform', [], 'array');
+
+        $saved = $this->getModel()->save($data);
+
+        $this->setMessage(Text::_("Configuration saved."));
+        $this->setRedirect("index.php?option=com_joomdle&view=config");
+
+        return $saved;
+    }
 }

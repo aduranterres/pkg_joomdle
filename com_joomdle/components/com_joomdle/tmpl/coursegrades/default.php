@@ -20,20 +20,19 @@ $itemid = ContentHelper::getMenuItem();
 ?>
 <div class="joomdle-gradelist<?php echo $this->pageclass_sfx;?>">
     <h1>
-            <?php echo $this->course_info['fullname'] ; ?>
+            <?php echo $this->course['fullname'] ; ?>
     </h1>
 
 <?php
 /** @var CMSApplication $app */
 $app = Factory::getApplication();
 $params = $app->getParams();
-$jump_url = ContentHelper::getJumpURL();
 
 $use_pdf_integration = $params->get('use_pdf_integration');
 
 if ($use_pdf_integration) : ?>
 <P align="right">
-<a href="index.php?option=com_joomdle&view=coursegrades&course_id=<?php echo $this->course_info['remoteid']; ?>&format=pdf"><img src="<?php echo URI::root(); ?>/media/media/images/mime-icon-16/pdf.png" alt="PDF"></a>
+<a href="index.php?option=com_joomdle&view=coursegrades&course_id=<?php echo $this->course['remoteid']; ?>&format=pdf"><img src="<?php echo URI::root(); ?>/media/com_joomdle/images/filetypes/pdf-48.png" alt="PDF"></a>
 </P>
 <?php endif; ?>
 
@@ -54,7 +53,7 @@ if ($use_pdf_integration) : ?>
         <td width="5%" height="20" class="sectiontableheader<?php echo $this->params->get('pageclass_sfx'); ?>" style="text-align:center;" nowrap="nowrap">
                 <?php echo Text::_('COM_JOOMDLE_MARK'); ?>
         </td>
-<?php if ($this->gcats['config']['showlettergrade']) : ?>
+<?php if ($this->items['config']['showlettergrade']) : ?>
         <td width="5%" height="20" class="sectiontableheader<?php echo $this->params->get('pageclass_sfx'); ?>" style="text-align:center;" nowrap="nowrap">
                 <?php echo Text::_('COM_JOOMDLE_LETTER_GRADE'); ?>
         </td>
@@ -67,10 +66,10 @@ if ($use_pdf_integration) : ?>
 <?php
 $i = 0;
 $odd = 0;
-
-$total = array_shift($this->gcats['data']);
-if (is_array($this->gcats)) {
-    foreach ($this->gcats['data'] as $gcat) :
+//dd($this->items);
+$total = array_shift($this->items['data']);
+if (is_array($this->items)) {
+    foreach ($this->items['data'] as $gcat) :
         $n = count($gcat['items']);
         ?>
                 <?php
@@ -93,7 +92,6 @@ if (is_array($this->gcats)) {
                         <td width="30%">
                             <?php
                             if ($item['module']) {
-
                                 $data = [];
                                 $data['moodle_page_type'] = $item['module'];
                                 $data['id'] = ''; // Not needed here
@@ -114,7 +112,7 @@ if (is_array($this->gcats)) {
                             ?>      
                         </td>
                         <td width="5%"  style="text-align:center;">
-                            <?php printf("%d", $item['grademin']); ?> - <?php printf("%d", $item['grademax']); ?>
+                            <?php printf("%d", $item['grademax']); ?>
                         </td>
                         <td width="5%" style="text-align:center;">
                         <?php if ($item['finalgrade'] < 0) : ?>
@@ -123,7 +121,7 @@ if (is_array($this->gcats)) {
                             <?php echo $item['finalgrade']; ?>
                         <?php endif; ?>
                         </td>
-                        <?php if ($this->gcats['config']['showlettergrade']) : ?>
+                        <?php if ($this->items['config']['showlettergrade']) : ?>
                         <td width="5%" style="text-align:center;">
                             <?php echo $item['letter']; ?>
                         </td>
@@ -144,7 +142,7 @@ if (is_array($this->gcats)) {
                     <td>
                     </td>
                     <td align="center">
-                    <?php printf("%d", $gcat['grademin']); ?> - <?php printf("%d", $gcat['grademax']); ?>
+                    <?php printf("%d", $gcat['grademax']); ?>
                     </td>
                     <td align="center">
                     <?php if ($gcat['finalgrade'] < 0) : ?>
@@ -153,7 +151,7 @@ if (is_array($this->gcats)) {
                         <?php echo $gcat['finalgrade']; ?>
                     <?php endif; ?>
                     </td>
-                    <?php if ($this->gcats['config']['showlettergrade']) : ?>
+                    <?php if ($this->items['config']['showlettergrade']) : ?>
                     <td width="5%" style="text-align:center;">
                         <?php echo $gcat['letter']; ?>
                     </td>
@@ -177,7 +175,7 @@ if (is_array($this->gcats)) {
                     <td>
                     </td>
                     <td align="center">
-                    <?php printf("%d", $total['grademin']); ?> - <?php printf("%d", $total['grademax']); ?>
+                    <?php printf("%d", $total['grademax']); ?>
                     </td>
                     <td align="center">
                     <?php if ($total['finalgrade'] < 0) : ?>
@@ -186,7 +184,7 @@ if (is_array($this->gcats)) {
                         <?php echo $total['finalgrade']; ?>
                     <?php endif; ?>
                     </td>
-                    <?php if ($this->gcats['config']['showlettergrade']) : ?>
+                    <?php if ($this->items['config']['showlettergrade']) : ?>
                     <td width="5%" style="text-align:center;">
                         <?php echo $total['letter']; ?>
                     </td>

@@ -16,19 +16,24 @@ namespace Joomla\Plugin\User\Joomdle\Extension;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Component\ComponentHelper;
-use Joomla\CMS\Language\Text;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\Database\DatabaseAwareTrait;
 use Joomla\CMS\User\UserFactoryAwareTrait;
 use Joomla\CMS\User\UserHelper;
 use Joomla\Event\SubscriberInterface;
 use Joomla\CMS\Event\User;
-use Joomla\Database\ParameterType;
+use Joomla\CMS\Event\User\AfterDeleteEvent;
+use Joomla\CMS\Event\User\AfterLoginEvent;
+use Joomla\CMS\Event\User\AfterSaveEvent;
+use Joomla\CMS\Event\User\BeforeSaveEvent;
+use Joomla\CMS\Event\User\LoginEvent;
+use Joomla\CMS\Event\User\LogoutEvent;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Event\User\AfterLogoutEvent;
 use Joomdle\Component\Joomdle\Administrator\Helper\ContentHelper;
 use Joomdle\Component\Joomdle\Administrator\Helper\UsercheckHelper;
+use Joomla\CMS\Filter\InputFilter;
 
 /**
  * Joomdle user plugin.
@@ -60,7 +65,7 @@ final class Joomdle extends CMSPlugin implements SubscriberInterface
         ];
     }
 
-    public function onUserBeforeSave(User\BeforeSaveEvent $event): void
+    public function onUserBeforeSave(BeforeSaveEvent $event): void
     {
         $user = $event->getUser();
         $new  = $event->getData();
@@ -88,7 +93,7 @@ final class Joomdle extends CMSPlugin implements SubscriberInterface
      *
      * @return  void
      */
-    public function onUserAfterSave(User\AfterSaveEvent $event): void
+    public function onUserAfterSave(AfterSaveEvent $event): void
     {
         $user  = $event->getUser();
         $isnew = $event->getIsNew();
@@ -99,7 +104,7 @@ final class Joomdle extends CMSPlugin implements SubscriberInterface
         ContentHelper::syncUser($user, $isnew, $success, $msg);
     }
 
-    public function onUserAfterDelete(User\AfterDeleteEvent $event): void
+    public function onUserAfterDelete(AfterDeleteEvent $event): void
     {
         $comp_params = ComponentHelper::getParams('com_joomdle');
 
@@ -121,7 +126,7 @@ final class Joomdle extends CMSPlugin implements SubscriberInterface
      *
      * @since   3.9.0
      */
-    public function onUserAfterLogin(User\AfterLoginEvent $event): void
+    public function onUserAfterLogin(AfterLoginEvent $event): void
     {
         if ($this->params->get('login_event_to_hook', 'onUserLogin') != 'onUserAfterLogin') {
             return;
@@ -133,7 +138,7 @@ final class Joomdle extends CMSPlugin implements SubscriberInterface
         $this->doLogin($username, $options);
     }
 
-    public function onUserLogin($user, $options = array())
+    public function onUserLogin(LoginEvent $event)
     {
         if ($this->params->get('login_event_to_hook', 'onUserLogin') != 'onUserLogin') {
             return;
@@ -141,11 +146,14 @@ final class Joomdle extends CMSPlugin implements SubscriberInterface
 
         $user     = $event->getAuthenticationResponse();
         $username = $user['username'];
+        $options  = $event->getOptions();
+
         $this->doLogin($username, $options);
     }
 
     private function doLogin($username, $options = array())
     {
+        /** @var CMSApplication $app */
         $app = Factory::getApplication('site');
 
         if (array_key_exists('skip_joomdlehooks', $options)) {
@@ -167,7 +175,7 @@ final class Joomdle extends CMSPlugin implements SubscriberInterface
         $moodle_url = $comp_params->get('MOODLE_URL');
         $redirectless_sso = $comp_params->get('redirectless_sso');
 
-        $session = Factory::getSession();
+        $session = $app->getSession();
         $token = md5($session->getId());
 
         // Don't log in Moodle if user is blocked.
@@ -216,6 +224,7 @@ final class Joomdle extends CMSPlugin implements SubscriberInterface
      */
     public function onUserAfterLogout(AfterLogoutEvent $event): void
     {
+        /** @var CMSApplication $app */
         $app = $this->getApplication();
 
         $options  = $event->getOptions();
@@ -241,24 +250,25 @@ final class Joomdle extends CMSPlugin implements SubscriberInterface
                 $cookieArray = explode('.', $cookieValue);
 
                 // Filter series since we're going to use it in the query
-                $filter = new FilterInput();
+                $filter = new InputFilter();
                 $series = $filter->clean($cookieArray[1], 'ALNUM');
 
                 // Remove the record from the database
-                $query = $this->db->getQuery(true);
+                $db = $this->getDatabase();
+                $query = $db->createQuery();
                 $query
                     ->delete('#__user_keys')
-                    ->where($this->db->quoteName('series') . ' = ' . $this->db->quote($series));
+                    ->where($db->quoteName('series') . ' = ' . $db->quote($series));
 
-                $this->db->setQuery($query)->execute();
+                $db->setQuery($query)->execute();
 
                 // Destroy the cookie
                 $app->getInput()->cookie->set(
                     $cookieName,
                     false,
                     time() - 42000,
-                    $this->app->get('cookie_path', '/'),
-                    $this->app->get('cookie_domain')
+                    $app->get('cookie_path', '/'),
+                    $app->get('cookie_domain')
                 );
             }
 

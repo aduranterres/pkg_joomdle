@@ -57,7 +57,7 @@ class UserController extends BaseController
     {
         /** @var CMSApplication $app */
         $app = Factory::getApplication();
-        $app->redirect(URI::root() . 'index.php?option=com_joomdle&task=getoutlogout');
+        $app->redirect(URI::root() . 'index.php?option=com_joomdle&task=user.getoutlogout');
     }
 
     public function getout()
@@ -82,11 +82,19 @@ class UserController extends BaseController
 
     public function getoutlogout()
     {
-        $root = URI::root() . 'index.php?option=com_joomdle&task=do_logout';
+        $root = URI::root() . 'index.php?option=com_joomdle&task=user.dologout';
         ?>
         <script type="text/javascript">
         top.window.location = "<?php echo $root; ?>";
         </script>
         <?php
+    }
+
+    public function dologout()
+    {
+        /** @var CMSApplication $app */
+        $app = Factory::getApplication();
+        $app->logout();
+        $app->redirect(URI::root());
     }
 }

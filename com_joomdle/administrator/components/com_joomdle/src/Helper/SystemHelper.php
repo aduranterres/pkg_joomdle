@@ -61,7 +61,7 @@ class SystemHelper
                     </FORM>';
                 }
             }
-        } elseif (((!array_key_exists('cost', $course_info)) || (!$course_info['cost']))  &&  (!ShopHelper::isCourseOnSell ($course_id))) {
+        } elseif (((!array_key_exists('cost', $course_info)) || (!$course_info['cost'])) && (!ShopHelper::isCourseOnSell($course_id))) {
             if ($free_courses_button == 'goto') {
                 if (!$button_text) {
                     $button_text = Text::_('COM_JOOMDLE_GO_TO_COURSE');
@@ -103,7 +103,7 @@ class SystemHelper
                     if (!$button_text) {
                            $button_text = Text::_('COM_JOOMDLE_BUY_COURSE');
                     }
-                       $url = Route::_(ShopHelper::getSellUrl($course_info['remoteid']));
+                       $url = Route::_(Uri::root() . ltrim(ShopHelper::getSellUrl($course_info['remoteid']), '/'));
                        $can_enrol = $course_info['in_enrol_date'];
                     if ($can_enrol) {
                                    $html .= '

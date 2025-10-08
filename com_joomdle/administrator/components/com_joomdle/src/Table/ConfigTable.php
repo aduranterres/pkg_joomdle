@@ -32,6 +32,8 @@ class ConfigTable extends Table implements VersionableTableInterface, TaggableTa
 {
     use TaggableTableTrait;
 
+//    public $id;
+
     /**
      * Constructor
      *

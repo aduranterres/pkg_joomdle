@@ -57,18 +57,12 @@ class DisplayController extends BaseController
         $view = $this->input->getCmd('view', 'joomdle');
         $this->input->set('view', $view);
 
-        // Load com_users lang files, as we can reuse a lot of messages.
-        // FIXME ???
-        $lang = Factory::getApplication()->getLanguage();
-        $extension = 'com_users';
-        $base_dir = JPATH_SITE;
-        $language_tag = 'en-GB';
-        $reload = true;
-        $lang->load($extension, $base_dir, $language_tag, $reload);
-
-        // Load CSS
-        $wa = Factory::getApplication()->getDocument()->getWebAssetManager();
-        $wa->useStyle('com_joomdle.joomdle');
+        $format = $this->input->getCmd('format', '');
+        if ($format != 'pdf') {
+            // Load CSS
+            $wa = Factory::getApplication()->getDocument()->getWebAssetManager();
+            $wa->useStyle('com_joomdle.joomdle');
+        }
 
         parent::display($cachable, $urlparams);
         return $this;

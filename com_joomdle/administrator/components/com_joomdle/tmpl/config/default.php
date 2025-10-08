@@ -119,7 +119,8 @@ $xml = $this->form->getXml();
             <?php endif; ?>
         </div>
 
-        <input type="hidden" name="task" value="">
+        <input type="hidden" name="task" value="config.save">
+        <input type="hidden" name="option" value="com_joomdle">
         <?php echo HTMLHelper::_('form.token'); ?>
     </div>
 </form>

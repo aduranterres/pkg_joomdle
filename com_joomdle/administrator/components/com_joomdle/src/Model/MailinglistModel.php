@@ -101,7 +101,7 @@ class MailinglistModel extends ListModel
 
     public function getItems()
     {
-        $items = MailinglistHelper::getListCourses ();
+        $items = MailinglistHelper::getListCourses();
 
         return $items;
     }

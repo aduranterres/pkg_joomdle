@@ -18,8 +18,6 @@ use Joomdle\Component\Joomdle\Administrator\Helper\MailinglistHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Controller\BaseController;
-use Joomla\CMS\Component\ComponentHelper;
-use Joomdle\Component\Joomdle\Administrator\Helper\ShopHelper;
 
 /**
  * Mailinglist controller.
@@ -43,10 +41,10 @@ class MailinglistController extends BaseController
             return;
         }
 
-        MailinglistHelper::saveListsStudents ($cid);
+        MailinglistHelper::saveListsStudents($cid);
 
-        $this->setMessage(Text::_('COM_JOOMDLE_MAILING_LIST_PUBLISHED'));
-        $this->setRedirect( 'index.php?option=com_joomdle&view=mailinglist' );
+        $this->setMessage(Text::_('COM_JOOMDLE_MAILING_LIST_CREATED'));
+        $this->setRedirect('index.php?option=com_joomdle&view=mailinglist');
     }
 
     public function studentsunpublish()
@@ -63,10 +61,10 @@ class MailinglistController extends BaseController
             return;
         }
 
-        MailinglistHelper::deleteMailingLists ($cid, 'course_students');
+        MailinglistHelper::deleteMailingLists($cid, 'course_students');
 
-        $this->setMessage(Text::_('COM_JOOMDLE_MAILING_LIST_UNPUBLISHED'));
-        $this->setRedirect( 'index.php?option=com_joomdle&view=mailinglist' );
+        $this->setMessage(Text::_('COM_JOOMDLE_MAILING_LIST_DELETED'));
+        $this->setRedirect('index.php?option=com_joomdle&view=mailinglist');
     }
 
     public function teacherspublish()
@@ -83,10 +81,10 @@ class MailinglistController extends BaseController
             return;
         }
 
-        MailinglistHelper::saveListsTeachers ($cid);
+        MailinglistHelper::saveListsTeachers($cid);
 
-        $this->setMessage(Text::_('COM_JOOMDLE_MAILING_LIST_PUBLISHED'));
-        $this->setRedirect( 'index.php?option=com_joomdle&view=mailinglist' );
+        $this->setMessage(Text::_('COM_JOOMDLE_MAILING_LIST_CREATED'));
+        $this->setRedirect('index.php?option=com_joomdle&view=mailinglist');
     }
 
     public function teachersunpublish()
@@ -103,9 +101,9 @@ class MailinglistController extends BaseController
             return;
         }
 
-        MailinglistHelper::delete ($cid, 'course_teachers');
+        MailinglistHelper::deleteMailingLists($cid, 'course_teachers');
 
-        $this->setMessage(Text::_('COM_JOOMDLE_MAILING_LIST_UNPUBLISHED'));
-        $this->setRedirect( 'index.php?option=com_joomdle&view=mailinglist' );
+        $this->setMessage(Text::_('COM_JOOMDLE_MAILING_LIST_DELETED'));
+        $this->setRedirect('index.php?option=com_joomdle&view=mailinglist');
     }
 }

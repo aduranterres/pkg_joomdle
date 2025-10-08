@@ -151,9 +151,10 @@ class SendcertModel extends AdminModel
             $subject = $subject_default;
         }
 
-        $mailer = Factory::getContainer()->get(MailerFactoryInterface::class)->createMailer(); ;
+        $mailer = Factory::getContainer()->get(MailerFactoryInterface::class)->createMailer();
+        ;
 
-        $config = Factory::getApplication()->getConfig();  
+        $config = Factory::getApplication()->getConfig();
         $sender = array(
             $data['from'],
             $data['sender']

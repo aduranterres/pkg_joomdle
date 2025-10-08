@@ -86,20 +86,14 @@ class HtmlView extends BaseHtmlView
             $this->wrapper_url .= "&redirect=$redirect";
         }
 
-/*
-        // Moodle theme can be overriden by plugin
-        // FIXME ver si lo metemos al model....
-        JPluginHelper::importPlugin( 'joomdletheme' );
-        $result = JFactory::getApplication()->triggerEvent ('onGetMoodleTheme', array ());
-        $theme = array_shift ($result);
+        // Create a shortcut to the parameters.
+        $this->params = $this->state->params;
 
-        if (!$theme) // If no theme by plugin, check configuration
-            $theme = $params->get('theme');
-        if ($theme)
-            $this->wrapper->url .= "&theme=".$theme;
-*/
+        $theme = $this->params->get('theme');
+        if ($theme) {
+            $this->wrapper_url .= "&theme=" . $theme;
+        }
 
-// FIXME no se q era esto de getout
         $layout = $app->input->get('layout');
         if ($layout == 'getout') {
             $tpl = 'getout';
@@ -111,9 +105,6 @@ class HtmlView extends BaseHtmlView
         if (\count($errors = $this->get('Errors'))) {
             throw new GenericDataException(implode("\n", $errors), 500);
         }
-
-        // Create a shortcut to the parameters.
-        $this->params = $this->state->params;
 
         $this->prepareDocument();
 

@@ -86,7 +86,6 @@ class HtmlView extends BaseHtmlView
 
         if ($canDo->get('core.edit') || ($canDo->get('core.create'))) {
             ToolbarHelper::apply('config.apply', 'JTOOLBAR_APPLY');
-            ToolbarHelper::save('config.save', 'JTOOLBAR_SAVE');
             ToolbarHelper::cancel('config.cancel');
 
             $toolbar->standardButton('regeneratejoomlatoken')

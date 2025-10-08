@@ -207,7 +207,7 @@ class ShopHelper
         $fromname       = $app->getCfg('fromname');
 
         // Send the e-mail
-        $mailer = Factory::getContainer()->get(MailerFactoryInterface::class)->createMailer(); 
+        $mailer = Factory::getContainer()->get(MailerFactoryInterface::class)->createMailer();
         if (!$mailer->sendMail($from, $fromname, $email, $email_subject, $email_text, true)) {
                 return false;
         }
@@ -310,7 +310,7 @@ class ShopHelper
         $fromname       = $app->getCfg('fromname');
 
         // Send the e-mail
-        $mailer = Factory::getContainer()->get(MailerFactoryInterface::class)->createMailer(); 
+        $mailer = Factory::getContainer()->get(MailerFactoryInterface::class)->createMailer();
         if (!$mailer->sendMail($from, $fromname, $email, $email_subject, $email_text, true)) {
                 return false;
         }
@@ -318,9 +318,9 @@ class ShopHelper
         return true;
     }
 
-    static function getSellUrl ($course_id)
+    public static function getSellUrl($course_id)
     {
-        $params = ComponentHelper::getParams( 'com_joomdle' );
+        $params = ComponentHelper::getParams('com_joomdle');
 
         PluginHelper::importPlugin('joomdleshop');
         $dispatcher = Factory::getApplication()->getDispatcher();
@@ -328,16 +328,16 @@ class ShopHelper
         $dispatcher->dispatch('onJoomdleGetSellUrl', $event);
         $items = $event->getArgument('results') ?? null;
 
-        foreach ($items as $url)
-        {
-            if ($url != '')
+        foreach ($items as $url) {
+            if ($url != '') {
                 break;
+            }
         }
-        $shop_itemid = $params->get( 'shop_itemid' );
-        if ($shop_itemid)
+        $shop_itemid = $params->get('shop_itemid');
+        if ($shop_itemid) {
             $url .= "&Itemid=$shop_itemid";
+        }
 
-        return Uri::root() . $url;
+        return $url;
     }
-
 }

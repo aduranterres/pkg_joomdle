@@ -45,11 +45,7 @@ class HtmlView extends BaseHtmlView
      */
     public function display($tpl = null)
     {
-//        $this->state = $this->get('State');
         $this->items = $this->get('Items');
-//        $this->pagination = $this->get('Pagination');
- //       $this->filterForm = $this->get('FilterForm');
-  //      $this->activeFilters = $this->get('ActiveFilters');
 
         // Check for errors.
         if (count($errors = $this->get('Errors'))) {
@@ -87,25 +83,25 @@ class HtmlView extends BaseHtmlView
 
         $childBar->standardButton('studentspublish')
             ->text('COM_JOOMDLE_CREATE_STUDENT_LIST')
-            ->task('mailinglist.students_publish')
+            ->task('mailinglist.studentspublish')
             ->icon('fas fa-check')
             ->listCheck(true);
 
         $childBar->standardButton('studentsunpublish')
             ->text('COM_JOOMDLE_DELETE_STUDENT_LIST')
-            ->task('mailinglist.students_unpublish')
+            ->task('mailinglist.studentsunpublish')
             ->icon('fas fa-times')
             ->listCheck(true);
 
         $childBar->standardButton('teacherspublish')
             ->text('COM_JOOMDLE_CREATE_TEACHER_LIST')
-            ->task('mailinglist.teachers_publish')
+            ->task('mailinglist.teacherspublish')
             ->icon('fas fa-check')
             ->listCheck(true);
 
         $childBar->standardButton('teachersunpublish')
             ->text('COM_JOOMDLE_DELETE_TEACHER_LIST')
-            ->task('mailinglist.teachers_unpublish')
+            ->task('mailinglist.teachersunpublish')
             ->icon('fas fa-times')
             ->listCheck(true);
 
