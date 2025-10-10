@@ -245,7 +245,6 @@ class MappingsHelper
             ->from($db->quoteName('#__joomdle_field_mappings'))
             ->where($db->quoteName('joomla_app') . ' = :app');
 
-        // Bind parameter safely
         $query->bind(':app', $app, ParameterType::STRING);
 
         $db->setQuery($query);
@@ -265,6 +264,11 @@ class MappingsHelper
 
         $username = $user_info['username'];
         $user_id = UserHelper::getUserId($username);
+
+        if (!$user_id) {
+            return;
+        }
+
         $user = Factory::getContainer()->get(UserFactoryInterface::class)->loadUserById($user_id);
 
         // Save info to joomla user table.
@@ -278,7 +282,11 @@ class MappingsHelper
             $user->setParam('timezone', $user_info['timezone']);
         }
 
-        $user->block = (int) $user_info['block'];
+        if (array_key_exists('block', $user_info)) {
+            $user->block = (int) $user_info['block'];
+        } else {
+            $user->block = 0;
+        }
 
         switch ($app) {
             default:

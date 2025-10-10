@@ -12,6 +12,7 @@ namespace Joomdle\Component\Joomdle\Administrator\View\Mappings;
 
 use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
 use Joomdle\Component\Joomdle\Administrator\Helper\JoomdleHelper;
+use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Toolbar\ToolbarHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\Helpers\Sidebar;
@@ -34,6 +35,8 @@ class HtmlView extends BaseHtmlView
 
     protected $state;
 
+    protected $message;
+
     /**
      * Display the view
      *
@@ -45,6 +48,15 @@ class HtmlView extends BaseHtmlView
      */
     public function display($tpl = null)
     {
+        $this->message = '';
+        $params = ComponentHelper::getParams('com_joomdle');
+        if ($params->get('additional_data_source') == '') {
+            ToolbarHelper::title(Text::_('COM_JOOMDLE_TITLE_MAPPINGS'), 'mailinglist');
+            $this->message = Text::_('COM_JOOMDLE_NO_ADDITIONAL_DATA_SOURCE_SELECTED');
+            parent::display($tpl);
+            return;
+        }
+
         $this->state = $this->get('State');
         $this->items = $this->get('Items');
         $this->pagination = $this->get('Pagination');
@@ -72,7 +84,7 @@ class HtmlView extends BaseHtmlView
     {
         $canDo = JoomdleHelper::getActions();
 
-        ToolbarHelper::title(Text::_('COM_JOOMDLE_TITLE_MAPPINGS'), "generic");
+        ToolbarHelper::title(Text::_('COM_JOOMDLE_TITLE_MAPPINGS'), "folder");
 
         $toolbar    = $this->getDocument()->getToolbar();
 

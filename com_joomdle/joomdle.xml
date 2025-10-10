@@ -51,13 +51,13 @@
 
 	<menu>COM_JOOMDLE</menu>
     <submenu>
-        <menu link="option=com_joomdle" img="components/com_joomdle/assets/images/icon-16-cpanel.png">COM_JOOMDLE_CONTROL_PANEL</menu>
-        <menu link="option=com_joomdle&amp;view=config" img="components/com_joomdle/assets/images/icon-16-config.png">COM_JOOMDLE_CONFIGURATION</menu>
-        <menu link="option=com_joomdle&amp;view=users" img="components/com_joomdle/assets/images/icon-16-users.png">COM_JOOMDLE_USERS</menu>
-        <menu link="option=com_joomdle&amp;view=mappings" img="components/com_joomdle/assets/images/icon-16-mappings.png">COM_JOOMDLE_MAPPINGS</menu>
-        <menu link="option=com_joomdle&amp;view=shop" img="components/com_joomdle/assets/images/icon-16-vmart.png">COM_JOOMDLE_SHOP</menu>
-        <menu link="option=com_joomdle&amp;view=mailinglist" img="components/com_joomdle/assets/images/icon-16-lists.png">COM_JOOMDLE_MAILING_LIST</menu>
-        <menu link="option=com_joomdle&amp;view=check" img="components/com_joomdle/assets/images/icon-16-info.png">COM_JOOMDLE_SYSTEM_CHECK</menu>
+		<menu link="option=com_joomdle">COM_JOOMDLE_CONTROL_PANEL</menu>
+		<menu link="option=com_joomdle&amp;view=config">COM_JOOMDLE_CONFIGURATION</menu>
+		<menu link="option=com_joomdle&amp;view=users">COM_JOOMDLE_USERS</menu>
+		<menu link="option=com_joomdle&amp;view=mappings">COM_JOOMDLE_MAPPINGS</menu>
+		<menu link="option=com_joomdle&amp;view=shop">COM_JOOMDLE_SHOP</menu>
+		<menu link="option=com_joomdle&amp;view=mailinglist">COM_JOOMDLE_MAILING_LIST</menu>
+		<menu link="option=com_joomdle&amp;view=check">COM_JOOMDLE_SYSTEM_CHECK</menu>
     </submenu>
 
 

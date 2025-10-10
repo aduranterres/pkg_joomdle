@@ -80,7 +80,7 @@ class HtmlView extends BaseHtmlView
     {
         $canDo = JoomdleHelper::getActions();
 
-        ToolbarHelper::title(Text::_('COM_JOOMDLE_TITLE_CONFIG'), "generic");
+        ToolbarHelper::title(Text::_('COM_JOOMDLE_TITLE_CONFIG'), "cog config");
 
         $toolbar = $this->getDocument()->getToolbar();
 

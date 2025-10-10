@@ -14,6 +14,7 @@ namespace Joomdle\Component\Joomdle\Administrator\Helper;
 \defined('_JEXEC') or die;
 // phpcs:enable PSR1.Files.SideEffects
 
+use Exception;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Plugin\PluginHelper;
@@ -94,7 +95,7 @@ class ContentHelper
         return ContentHelper::callMethod('get_course_contents', $params);
     }
 
-    public static function getCourseEvents($id)
+    public static function getCourseEvents($id, $username = '')
     {
         $params = [
             'id' => (int) $id,
@@ -374,6 +375,16 @@ class ContentHelper
         ];
 
         return ContentHelper::callMethod('multiple_suspend_enrolment', $params);
+    }
+
+    public static function coursesAbc($chars, $username)
+    {
+        $params = [
+            'start_chars' => $chars,
+            'username' => $username,
+        ];
+
+        return ContentHelper::callMethod('courses_abc', $params);
     }
 
     public static function checkJoomdleSystem()
@@ -985,7 +996,7 @@ class ContentHelper
         $db = Factory::getContainer()->get('DatabaseDriver');
 
         // Get required system objects
-        $user = Factory::getApplication()->getIdentity();
+        $user = new User();
 
         $newUsertype = 'Registered';
 
@@ -1000,42 +1011,47 @@ class ContentHelper
         $moodle_user['sendEmail'] = 0;
 
         // Bind the post array to the user object
-        if (!$user->bind($moodle_user, 'usertype')) {
-            Factory::getApplication()->enqueueMessage($user->getError(), 'error');
+        try {
+            if (!$user->bind($moodle_user, 'usertype')) {
+                return false;
+            }     
+        } catch (Exception) {
             return false;
-        }
+        } 
 
         // Set some initial user values
-        $user->set('id', 0);
-        $user->set('usertype', $newUsertype);
+        $user->id = 0;
+        $user->usertype =$newUsertype;
 
         $system = 2; // ID of Registered
         $user->groups = array ();
         $user->groups[] = $system;
 
         $date = Factory::getDate();
-        $user->set('registerDate', $date->toSql());
+        $user->registerDate = $date->toSql();
 
-        $user->set('lastvisitDate', $db->getNullDate());
-
-        if (!$user->save()) {
-            $error = Text::_($user->getError());
-            Factory::getApplication()->enqueueMessage($error, 'error');
+        $user->lastvisitDate = $db->getNullDate();
+        try {
+            if (!$user->save()) {
+                return false;
+            }    
+        } catch (Exception) {
             return false;
         }
 
         // Manually store password from Moodle
-        // FIXME Esto ya no va, no es el mismo hash: poner password random y enviar?
-        $user->password = $user_details['password'];
-        $user->save();
+        // Note: this is not working anymore because Joomla and Moodle have different hash algorithms
+    //    $user->password = $user_details['password'];
+    //    $user->save();
+        return true;
     }
 
     public static function activateJoomlaUser($username)
     {
         $user_id = UserHelper::getUserId($username);
         $user = Factory::getContainer()->get(UserFactoryInterface::class)->loadUserById($user_id);
-        $user->set('block', '0');
-        $user->set('activation', '');
+        $user->block = 0;
+        $user->activation = '';
         if (!$user->save()) {
             return false;
         }
@@ -1065,32 +1081,35 @@ class ContentHelper
         // Password comes in cleartext. On bind, Joomla hashes it again: Only for user registrations, not valid for admin user add/upload
 
         // Bind the user_info array to the user object
-        if (!$user->bind($user_info)) {
-            $error = Text::_($user->getError());
-            Factory::getApplication()->enqueueMessage($error, 'error');
+        try {
+            if (!$user->bind($user_info, 'usertype')) {
+                return false;
+            }     
+        } catch (Exception) {
             return false;
-        }
+        } 
 
         // Set some initial user values
-        $user->set('id', 0);
+        $user->id = 0;
         $user->groups = array ();
         $user->groups[] = $newUsertype;
 
         $date = Factory::getDate();
-        $user->set('registerDate', $date->toSql());
+        $user->registerDate = $date->toSql();
 
         if ($user_info['block']) {
-            $user->set('block', '1');
+            $user->block = 1;
         }
 
         if (!$user_info['confirmed']) {
-            $user->set('activation', bin2hex(random_bytes(10)));
+            $user->activation = bin2hex(random_bytes(10));
         }
 
-        // If there was an error with registration
-        if (!$user->save()) {
-            $error = Text::_($user->getError());
-            Factory::getApplication()->enqueueMessage($error, 'error');
+        try {
+            if (!$user->save()) {
+                return false;
+            }    
+        } catch (Exception) {
             return false;
         }
 

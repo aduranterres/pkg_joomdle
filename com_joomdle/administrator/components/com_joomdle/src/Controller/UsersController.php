@@ -60,9 +60,10 @@ class UsersController extends BaseController
             Factory::getApplication()->enqueueMessage($error, 'error');
             return;
         }
-        $this->getModel()->addJoomlaUsers($cid);
-
-        $this->setMessage(Text::_('COM_JOOMDLE_USERS_ADDED_TO_JOOMLA'));
+        if ($this->getModel()->addJoomlaUsers($cid)) {
+            $this->setMessage(Text::_('COM_JOOMDLE_USERS_ADDED_TO_JOOMLA'));
+        }
+        
         $this->setRedirect('index.php?option=com_joomdle&view=users');
     }
 

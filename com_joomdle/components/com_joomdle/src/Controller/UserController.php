@@ -43,7 +43,7 @@ class UserController extends BaseController
         $credentials['username'] = $fields[0];
         $credentials['password'] = $fields[1];
 
-        $options = array ('skip_joomdlehooks' => '1');
+        $options = array ('skip_joomdleuserplugin' => '1');
 
         $app->login($credentials, $options);
 

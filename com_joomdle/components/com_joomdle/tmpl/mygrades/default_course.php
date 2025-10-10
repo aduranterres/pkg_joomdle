@@ -31,7 +31,7 @@ $use_pdf_integration = $params->get('use_pdf_integration');
 
 if ($use_pdf_integration) : ?>
 <P align="right">
-<a href="index.php?option=com_joomdle&view=coursegrades&course_id=<?php echo $this->course['remoteid']; ?>&format=pdf"><img src="<?php echo URI::root(); ?>/media/media/images/mime-icon-16/pdf.png" alt="PDF"></a>
+<a href="index.php?option=com_joomdle&view=coursegrades&course_id=<?php echo $this->course['remoteid']; ?>&format=pdf"><img src="<?php echo URI::root(); ?>/media/com_joomdle/images/pdf-48.png" alt="PDF"></a>
 </P>
 <?php endif; ?>
 <?php

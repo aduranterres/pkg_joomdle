@@ -46,7 +46,7 @@ class HtmlView extends BaseHtmlView
      */
     public function display($tpl = null)
     {
-        ToolbarHelper::title(Text::_('COM_JOOMDLE_TITLE_CHECK'), "generic");
+        ToolbarHelper::title(Text::_('COM_JOOMDLE_TITLE_CHECK'), "info");
 
         $params = ComponentHelper::getParams('com_joomdle');
         if ($params->get('MOODLE_URL') == "") {

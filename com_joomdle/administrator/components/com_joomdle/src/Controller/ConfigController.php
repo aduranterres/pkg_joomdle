@@ -45,4 +45,11 @@ class ConfigController extends FormController
 
         return $saved;
     }
+
+    public function cancel($key = null)
+    {
+        $this->setRedirect('index.php?option=com_joomdle&view=default');
+
+        return true;
+    }
 }

@@ -71,11 +71,13 @@ class ShopcurrencyField extends ListField
 
         if (is_array($more_items)) {
             foreach ($more_items as $item) {
+                /*
                 $keys = array_keys($item);
                 $key = $keys[0];
                 $item_name = array_shift($item);
-                $option['value'] = $key;
-                $option['text'] = $item_name;
+                */
+                $option['value'] = $item->code;
+                $option['text'] = $item->name;
 
                 $options[] = $option;
             }

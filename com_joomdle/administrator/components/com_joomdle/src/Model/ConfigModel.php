@@ -17,6 +17,7 @@ use Joomla\Database\ParameterType;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\User\UserHelper;
 use Joomla\Component\Config\Administrator\Model\ComponentModel;
+use Joomla\Registry\Registry;
 
 // phpcs:disable PSR1.Files.SideEffects
 \defined('_JEXEC') or die;
@@ -138,7 +139,6 @@ class ConfigModel extends AdminModel
     public function save($data)
     {
         $params = json_encode($data);
-//      dd($params);
 
         //Get joomdle extension id
         $db = $this->getDatabase();
@@ -147,13 +147,11 @@ class ConfigModel extends AdminModel
             ->from($db->quoteName('#__extensions'))
             ->where($db->quoteName('name') . ' = :name');
 
-        // Bind parameter safely
-        $query->bind(':name', 'com_joomdle', ParameterType::STRING);
+        $extension = 'com_joomdle';
+        $query->bind(':name', $extension, ParameterType::STRING);
 
         $db->setQuery($query);
         $extension_id = $db->loadResult();
-
-        $option = 'com_joomdle';
 
         // Generate auth token if needed
         if ($data['joomla_auth_token'] == '') {
@@ -169,28 +167,16 @@ class ConfigModel extends AdminModel
         // Token cannot have spaces
         $data['auth_token'] = trim($data['auth_token']);
 
-//        $data['id'] = $extension_id;
+        $registry = new Registry($params);
+        $json = $registry->toString('JSON');
 
-      //  Factory::getApplication()->getInput()->set('id', 253);
+        $ext = new \stdClass();
+        $ext->extension_id = $extension_id;
+        $ext->params = $json;
 
+        $db->updateObject('#__extensions', $ext, 'extension_id');
 
-        $data = array(
-            'params'    => $data,
-            'id'        => $extension_id,
-            'option'    => $option
-        );
-
-    //unset ($data['params']['id']);
-        unset($data['params']['tags']);
-
-    // dd($data);
-        // Save config using the com_config component.
-        $model = Factory::getApplication()->bootComponent('com_config')
-            ->getMVCFactory()
-            ->createModel('Component', 'Administrator');
-        $return = $model->save($data, 'extension_id');
-
-        return $return;
+        return true;
     }
 
     public function regenerateJoomlaToken()
@@ -228,8 +214,6 @@ class ConfigModel extends AdminModel
 
         $data   = array(
                     'params'    => $data,
-                    'id'        => $extension_id,
-                    'option'    => $option
                     );
         $return = $model->save($data);
 

@@ -16,6 +16,12 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Layout\LayoutHelper;
 use Joomla\CMS\Router\Route;
 
+// Show message if not configured
+if ($this->message) {
+    echo $this->message;
+    return;
+}
+
 $i = 0;
 ?>
 

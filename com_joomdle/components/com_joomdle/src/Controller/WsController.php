@@ -67,7 +67,7 @@ class WsController extends BaseController
             return false;
         }
 
-        $options = array ( 'skip_joomdlehooks' => '1', 'silent' => 1);
+        $options = array ('skip_joomdleuserplugin' => '1', 'silent' => 1);
         $credentials = array ( 'username' => $username, 'password' => $password);
         if ($app->login($credentials, $options)) {
             return true;
@@ -96,7 +96,6 @@ class WsController extends BaseController
             ->where($db->quoteName('username') . ' = :username')
             ->where('MD5(' . $db->quoteName('session_id') . ') = :token');
 
-        // Bind parameters safely
         $query->bind(':username', $username, ParameterType::STRING);
         $query->bind(':token', $token, ParameterType::STRING);
 
@@ -120,7 +119,7 @@ class WsController extends BaseController
 
         $id = UserHelper::getUserId($username);
 
-        $error = $app->logout($id, array ( 'clientid' => 0, 'skip_joomdlehooks' => 1));
+        $error = $app->logout($id, array ( 'clientid' => 0, 'skip_joomdleuserplugin' => 1));
 
         // Return "remember me" cookie name so it  can be deleted
         $ua = new WebClient($ua_string);

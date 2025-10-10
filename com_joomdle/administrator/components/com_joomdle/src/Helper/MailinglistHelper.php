@@ -30,19 +30,19 @@ class MailinglistHelper
 {
     public static function getListCourses()
     {
-        $cursos = ContentHelper::getCourseList(0);
+        $courses = ContentHelper::getCourseList(0);
 
         $cs = array ();
-        if (!is_array($cursos)) {
+        if (!is_array($courses)) {
             return $cs;
         }
 
-        foreach ($cursos as $curso) {
+        foreach ($courses as $course) {
             $c = new \stdClass();
-            $c->id = $curso['remoteid'];
-            $c->fullname = $curso['fullname'];
-            $c->published_students = MailinglistHelper::courseListExists($curso['remoteid'], 'course_students');
-            $c->published_teachers = MailinglistHelper::courseListExists($curso['remoteid'], 'course_teachers');
+            $c->id = $course['remoteid'];
+            $c->fullname = $course['fullname'];
+            $c->published_students = MailinglistHelper::courseListExists($course['remoteid'], 'course_students');
+            $c->published_teachers = MailinglistHelper::courseListExists($course['remoteid'], 'course_teachers');
 
             $cs[] = $c;
         }

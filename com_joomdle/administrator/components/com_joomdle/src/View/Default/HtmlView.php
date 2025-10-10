@@ -14,6 +14,7 @@ use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Installer\Installer;
+use Joomla\CMS\Toolbar\ToolbarHelper;
 
 // phpcs:disable PSR1.Files.SideEffects
 \defined('_JEXEC') or die;
@@ -43,6 +44,8 @@ class HtmlView extends BaseHtmlView
      */
     public function display($tpl = null)
     {
+        ToolbarHelper::title("Joomdle", "generic");
+
         parent::display($tpl);
     }
 

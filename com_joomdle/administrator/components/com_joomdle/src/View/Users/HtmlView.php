@@ -72,7 +72,7 @@ class HtmlView extends BaseHtmlView
     {
         $canDo = JoomdleHelper::getActions();
 
-        ToolbarHelper::title(Text::_('COM_JOOMDLE_TITLE_USERS'), "generic");
+        ToolbarHelper::title(Text::_('COM_JOOMDLE_TITLE_USERS'), "user");
 
         $toolbar    = $this->getDocument()->getToolbar();
 

@@ -27,7 +27,6 @@ use Joomla\CMS\Event\User\AfterLoginEvent;
 use Joomla\CMS\Event\User\AfterSaveEvent;
 use Joomla\CMS\Event\User\BeforeSaveEvent;
 use Joomla\CMS\Event\User\LoginEvent;
-use Joomla\CMS\Event\User\LogoutEvent;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Event\User\AfterLogoutEvent;
@@ -156,7 +155,7 @@ final class Joomdle extends CMSPlugin implements SubscriberInterface
         /** @var CMSApplication $app */
         $app = Factory::getApplication('site');
 
-        if (array_key_exists('skip_joomdlehooks', $options)) {
+        if (array_key_exists('skip_joomdleuserplugin', $options)) {
             return;
         }
 
@@ -229,7 +228,7 @@ final class Joomdle extends CMSPlugin implements SubscriberInterface
 
         $options  = $event->getOptions();
 
-        if (array_key_exists('skip_joomdlehooks', $options)) {
+        if (array_key_exists('skip_joomdleuserplugin', $options)) {
             return;
         }
 

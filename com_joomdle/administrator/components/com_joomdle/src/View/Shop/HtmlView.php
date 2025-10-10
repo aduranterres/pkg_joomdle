@@ -12,6 +12,7 @@ namespace Joomdle\Component\Joomdle\Administrator\View\Shop;
 
 use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
 use Joomdle\Component\Joomdle\Administrator\Helper\JoomdleHelper;
+use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Toolbar\ToolbarHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\Helpers\Sidebar;
@@ -34,6 +35,8 @@ class HtmlView extends BaseHtmlView
 
     protected $state;
 
+    protected $message;
+
     /**
      * Display the view
      *
@@ -45,6 +48,14 @@ class HtmlView extends BaseHtmlView
      */
     public function display($tpl = null)
     {
+        $params = ComponentHelper::getParams('com_joomdle');
+        if ($params->get('shop_integration') == 'no') {
+            ToolbarHelper::title(Text::_('COM_JOOMDLE_TITLE_SHOP'), 'mailinglist');
+            $this->message = Text::_('COM_JOOMDLE_SHOP_INTEGRATION_NOT_ENABLED');
+            parent::display($tpl);
+            return;
+        }
+
         $this->state = $this->get('State');
         $this->items = $this->get('Items');
         $this->pagination = $this->get('Pagination');
@@ -72,7 +83,7 @@ class HtmlView extends BaseHtmlView
     {
         $canDo = JoomdleHelper::getActions();
 
-        ToolbarHelper::title(Text::_('COM_JOOMDLE_TITLE_SHOP'), "generic");
+        ToolbarHelper::title(Text::_('COM_JOOMDLE_TITLE_SHOP'), "cart");
 
         $toolbar    = $this->getDocument()->getToolbar();
 

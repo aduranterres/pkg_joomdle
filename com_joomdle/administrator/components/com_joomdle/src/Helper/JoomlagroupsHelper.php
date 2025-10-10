@@ -258,7 +258,6 @@ class JoomlagroupsHelper
             ->where($db->quoteName('course_id') . ' = :course_id')
             ->where($db->quoteName('type') . ' = :type');
 
-        // Bind parameters safely
         $query->bind(':course_id', $course_id, ParameterType::INTEGER);
         $query->bind(':type', $type, ParameterType::STRING);
 
