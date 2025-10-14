@@ -37,7 +37,9 @@ use Joomla\CMS\Router\Route;
                 </div>
                     <?php if ($cat['description']) : ?>
                 <div class=" joomdle_course_list_item_description">
+                    <p>
                         <?php echo $cat['description']; ?>
+                    </p>
                 </div>
                     <?php endif; ?>
             </div>

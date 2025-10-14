@@ -86,6 +86,11 @@ class MappingsHelper
     public static function getUserInfoJoomla($username)
     {
         $user_id = UserHelper::getUserId($username);
+
+        if (!$user_id) {
+            return array();
+        }
+
         $user = Factory::getContainer()->get(UserFactoryInterface::class)->loadUserById($user_id);
 
         $user_info = array();

@@ -66,7 +66,6 @@
         <filename>config.xml</filename>
         <filename>joomdle.xml</filename>
         <filename>index.html</filename>
-        <folder>assets</folder>
         <folder>forms</folder>
         <folder>presets</folder>
         <folder>services</folder>

@@ -28,9 +28,9 @@ use Joomdle\Component\Joomdle\Administrator\Helper\ContentHelper;
 $lang = ContentHelper::getLang();
 foreach ($this->items as $item) : ?>
     <div class="joomdle_item_list_item">
-        <div class="joomdle_item_title joomdle_item_list_item_date">
-          <?php
-
+        <div class="">
+            <div class="">
+            <?php
             $linkstarget = $this->params->get('linkstarget');
             if ($linkstarget == "new") {
                      $target = " target='_blank'";
@@ -51,9 +51,12 @@ foreach ($this->items as $item) : ?>
             echo "<a $target href=\"$link\">" . HTMLHelper::_('date', $item['timestart'], Text::_('DATE_FORMAT_LC2')) . "</a>";
 
             ?>
-        </div>
-        <div class="joomdle_item_content joomdle_item_list_item_name">
+            </div>
+            <div class="">
+                <p>
                 <?php echo $item['name']; ?>
+                </p>
+            </div>
         </div>
     </div>
 <?php endforeach; ?>

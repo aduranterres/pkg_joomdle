@@ -1014,14 +1014,14 @@ class ContentHelper
         try {
             if (!$user->bind($moodle_user, 'usertype')) {
                 return false;
-            }     
+            }
         } catch (Exception) {
             return false;
-        } 
+        }
 
         // Set some initial user values
         $user->id = 0;
-        $user->usertype =$newUsertype;
+        $user->usertype = $newUsertype;
 
         $system = 2; // ID of Registered
         $user->groups = array ();
@@ -1034,7 +1034,7 @@ class ContentHelper
         try {
             if (!$user->save()) {
                 return false;
-            }    
+            }
         } catch (Exception) {
             return false;
         }
@@ -1084,10 +1084,10 @@ class ContentHelper
         try {
             if (!$user->bind($user_info, 'usertype')) {
                 return false;
-            }     
+            }
         } catch (Exception) {
             return false;
-        } 
+        }
 
         // Set some initial user values
         $user->id = 0;
@@ -1108,7 +1108,7 @@ class ContentHelper
         try {
             if (!$user->save()) {
                 return false;
-            }    
+            }
         } catch (Exception) {
             return false;
         }

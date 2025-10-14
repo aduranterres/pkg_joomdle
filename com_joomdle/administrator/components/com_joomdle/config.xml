@@ -520,7 +520,6 @@
             description="COM_JOOMDLE_ENROL_EMAIL_SUBJECT_DESCRIPTION"
             label="COM_JOOMDLE_ENROL_EMAIL_SUBJECT"
             class="input-xlarge"
-            default="Welcome to COURSE_NAME"
         />
 
         <field name="enrol_email_text" type="editor"
@@ -528,7 +527,6 @@
             label="COM_JOOMDLE_ENROL_EMAIL_TEXT"
             rows="5" cols="70"
             filter="safehtml">
-            <![CDATA[<p>To enter the course, go to:</p><p><a href='COURSE_URL'>COURSE_URL</a></p>]]>
         </field>
 
         <field name="send_bundle_emails" type="list" label="COM_JOOMDLE_SEND_BUNDLE_EMAILS"

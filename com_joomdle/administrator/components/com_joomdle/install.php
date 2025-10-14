@@ -45,22 +45,16 @@ return new class () implements ServiceProviderInterface {
 
                 public function install(InstallerAdapter $parent): bool
                 {
-                    $this->app->enqueueMessage('Successful installed.');
-
                     return true;
                 }
 
                 public function update(InstallerAdapter $parent): bool
                 {
-                    $this->app->enqueueMessage('Successful updated.');
-
                     return true;
                 }
 
                 public function uninstall(InstallerAdapter $parent): bool
                 {
-                    $this->app->enqueueMessage('Successful uninstalled.');
-
                     return true;
                 }
 
@@ -90,6 +84,17 @@ return new class () implements ServiceProviderInterface {
 
                 public function postflight(string $type, InstallerAdapter $parent): bool
                 {
+                    // Set Joomdle user plugin ordering to execute last
+					// Set plugin ordering
+					$this->db->setQuery(
+						"UPDATE #__extensions
+						SET ordering=100
+						WHERE element = 'joomdle' 
+						AND folder = 'user'"
+					);
+
+					$this->db->execute();
+
                     return true;
                 }
 

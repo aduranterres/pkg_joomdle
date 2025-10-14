@@ -40,33 +40,39 @@ if (is_array($this->items)) {
 
         ?>
     <div class="joomdle_course_list_item">
-        <div class="joomdle_item_title joomdle_course_list_item_title">
-        <?php $url = Route::_("index.php?option=com_joomdle&view=detail&cat_id=$cat_id-$cat_slug&course_id=$course_id-$course_slug&Itemid=$itemid"); ?>
-        <?php  echo "<a href=\"$url\">" . $course['fullname'] . "</a>"; ?>
-        </div>
-        <?php if ($course['summary']) : ?>
-        <div class="joomdle_item_content joomdle_course_list_item_description">
+        <div class="joomdle_card">
+            <div class="joomdle_course_info">
+                <div class="joomdle_course_title">
+                <?php $url = Route::_("index.php?option=com_joomdle&view=detail&cat_id=$cat_id-$cat_slug&course_id=$course_id-$course_slug&Itemid=$itemid"); ?>
+                <?php  echo "<a href=\"$url\">" . $course['fullname'] . "</a>"; ?>
+                </div>
+                <?php if ($course['summary']) : ?>
                 <div class="joomdle_course_description">
-                <?php
-                if (count($course['summary_files'])) {
-                    foreach ($course['summary_files'] as $file) :
-                        ?>
-                            <img hspace="5" vspace="5" align="left" src="<?php echo $file['url']; ?>">
-                        <?php
-                    endforeach;
-                }
-                ?>
-                <?php echo $course['summary']; ?>
+                    <div class="joomdle_course_description">
+                    <?php
+                    if (count($course['summary_files'])) {
+                        foreach ($course['summary_files'] as $file) :
+                            ?>
+                            <div class="joomdle_course_image">
+                                <img hspace="5" vspace="5" align="left" src="<?php echo $file['url']; ?>">
+                            </div>
+                            <?php
+                        endforeach;
+                    }
+                    ?>
+                    <?php echo $course['summary']; ?>
+                    </div>
+                     <?php if ($show_buttons) : ?>
+                    <div class="joomdle_course_buttons">
+                            <?php
+                            echo SystemHelper::actionbutton($course, $free_courses_button, $paid_courses_button);
+                            ?>
+                    </div>
+                     <?php endif; ?>
                 </div>
-                 <?php if ($show_buttons) : ?>
-                <div class="joomdle_course_buttons">
-                        <?php
-                        echo SystemHelper::actionbutton($course, $free_courses_button, $paid_courses_button);
-                        ?>
-                </div>
-                 <?php endif; ?>
+                <?php endif; ?>
+            </div>
         </div>
-        <?php endif; ?>
     </div>
     <?php endforeach;
 };  ?>

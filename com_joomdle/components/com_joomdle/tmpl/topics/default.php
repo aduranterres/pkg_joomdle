@@ -28,9 +28,11 @@ $show_topics_numbers = $this->params->get('topics_show_numbers');
 if (is_array($this->items)) {
     foreach ($this->items as $item) : ?>
         <?php if (($item['summary']) || ($item['name'])) : ?>
-    <div class="joomdle_course_topic">
+    <div class="joomdle_course_list_item">
+        <div class="joomdle_card">
+            <div class="joomdle_course_info">
             <?php if ($show_topics_numbers) : ?>
-        <div class="joomdle_item_title joomdle_topic_number">
+                <div class="joomdle_course_title">
                 <?php
                 $title = '';
                 if ($item['name']) {
@@ -43,14 +45,17 @@ if (is_array($this->items)) {
                         $title =  Text::_('COM_JOOMDLE_INTRO');
                     }
                 }
-                echo $title;
+                echo "<b>$title</b>";
                 ?>
-        </div>
+                </div>
             <?php endif; ?>
-        <div class="joomdle_item_content joomdle_topic_name">
-            <?php       echo $item['summary'];       ?>
+                <div class="joomdle_course_description">
+                    <?php echo $item['summary']; ?>
+                </div>
+            </div>
         </div>
     </div>
+    <br>
         <?php endif; ?>
     <?php endforeach;
 }; ?>
