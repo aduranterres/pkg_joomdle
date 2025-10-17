@@ -170,23 +170,6 @@
                 value="1">JYES</option>
         </field>
 
-        <field
-            name="crossdomain_autoheight_calculation_method"
-            type="list"
-            class="btn-group"
-            default="bodyOffset"
-            label="COM_JOOMDLE_WRAPPER_CROSSDOMAIN_AUTOHEIGHT_CALCULATION_METHOD"
-            description="COM_JOOMDLE_WRAPPER_CROSSDOMAIN_AUTOHEIGHT_CALCULATION_METHOD_DESCRIPTION">
-            <option value="bodyOffset">bodyOffset</option>
-            <option value="lowestElement">lowestElement</option>
-            <option value="taggedElement">taggedElement</option>
-            <option value="bodyScroll">bodyScroll</option>
-            <option value="documentElementOffset">documentElementOffset</option>
-            <option value="documentElementScroll">documentElementScroll</option>
-            <option value="max">max</option>
-            <option value="min">min</option>
-            <option value="grow">grow</option>
-        </field>
         <field name="theme" type="theme"
             description="COM_JOOMDLE_MOODLE_THEME"
             label="COM_JOOMDLE_MOODLE_THEME"

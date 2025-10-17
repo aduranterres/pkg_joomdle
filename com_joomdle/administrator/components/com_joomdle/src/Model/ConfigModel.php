@@ -138,8 +138,6 @@ class ConfigModel extends AdminModel
 
     public function save($data)
     {
-        $params = json_encode($data);
-
         //Get joomdle extension id
         $db = $this->getDatabase();
         $query = $db->createQuery()
@@ -166,6 +164,8 @@ class ConfigModel extends AdminModel
 
         // Token cannot have spaces
         $data['auth_token'] = trim($data['auth_token']);
+
+        $params = json_encode($data);
 
         $registry = new Registry($params);
         $json = $registry->toString('JSON');
@@ -210,13 +210,18 @@ class ConfigModel extends AdminModel
         // Generate auth token
         $token = UserHelper::genRandomPassword(32);
         $token = preg_replace('/[\x00-\x1F\x7F]/', '', $token);
-        $data['joomla_auth_token'] = $token;
+        $data_o->joomla_auth_token = $token;
 
-        $data   = array(
-                    'params'    => $data,
-                    );
-        $return = $model->save($data);
+        $ext = new \stdClass();
+        $ext->extension_id = $extension_id;
 
-        return $return;
+        $registry = new Registry($data_o);
+        $json = $registry->toString('JSON');
+
+        $ext->params = $json;
+
+        $db->updateObject('#__extensions', $ext, 'extension_id');
+
+        return true;
     }
 }
