@@ -2,7 +2,7 @@
 <extension type="component" version="5.0.0" method="upgrade" client="site">
     <name>com_joomdle</name>
     <author>Antonio Duran Terres</author>
-    <authorEmail>development@qontori.com</authorEmail>
+    <authorEmail>antonio@joomdle.com</authorEmail>
     <creationDate>04/02/2010</creationDate>
 	<copyright>Copyright (C) 2014 Antonio Duran Terres</copyright>
 	<license>http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL</license>
