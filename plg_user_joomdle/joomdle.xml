@@ -7,7 +7,7 @@
     <version>3.0.0</version>
     <description>PLG_USER_JOOMDLE_XML_DESCRIPTION</description>
     <namespace path="src">Joomla\Plugin\User\Joomdle</namespace>
-   
+
     <files>
         <folder plugin="joomdle">services</folder>
         <folder>src</folder>
@@ -26,7 +26,17 @@
                     <option value="onUserAfterLogin">onUserAfterLogin</option>
                 </field>
 
-				<field name="extendedusernamechars" type="radio"
+                <field name="checkmoodleduplicates" type="radio"
+                    class="btn-group btn-group-yesno"
+                    default="1"
+                    description="COM_JOOMDLE_CHECK_MOODLE_DUPLICATES_DESCRIPTION"
+                    label="COM_JOOMDLE_CHECK_MOODLE_DUPLICATES_LABEL"
+                >
+                    <option value="1">JYES</option>
+                    <option value="0">JNO</option>
+                </field>
+
+                <field name="extendedusernamechars" type="radio"
                     class="btn-group btn-group-yesno"
                     default="0"
                     description="COM_JOOMDLE_ALLOW_EXTENDED_CHARS_IN_USERNAME_DESCRIPTION"

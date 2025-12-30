@@ -18,4 +18,9 @@
         <file type="plugin" group="system" id="joomdlesession">plg_system_joomdlesession.zip</file>
         <file type="plugin" group="user" id="joomdle">plg_user_joomdle.zip</file>
     </files>
+
+    <updateservers>
+        <server type="extension" priority="1" name="Joomdle">https://www.joomdle.com/index.php?option=com_ars&amp;view=update&amp;task=stream&amp;format=xml&amp;id=43</server>
+    </updateservers>
+
 </extension>

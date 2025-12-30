@@ -35,12 +35,12 @@ class ShopHelper
 {
     public static function getShopCourses()
     {
-        $courses = array ();
+        $courses = array();
         PluginHelper::importPlugin('joomdleshop');
         $dispatcher = Factory::getApplication()->getDispatcher();
         $event = new Event('onJoomdleGetShopCourses', []);
         $dispatcher->dispatch('onJoomdleGetShopCourses', $event);
-        $items = $event->getArgument('results') ?? null;
+        $items = $event->getArgument('results') ?? [];
 
         foreach ($items as $courses) {
             if (count($courses)) {
@@ -63,11 +63,11 @@ class ShopHelper
         $data = $db->loadAssocList();
 
         if (!$data) {
-            $data = array ();
+            $data = array();
         }
 
         $i = 0;
-        $c = array ();
+        $c = array();
         foreach ($data as $bundle) {
             $c[$i] = new \stdClass();
             $c[$i]->id = $bundle['id'];
@@ -87,7 +87,7 @@ class ShopHelper
     public static function publishCourses($courses)
     {
         foreach ($courses as $course_id) {
-            $course_array = array ($course_id);
+            $course_array = array($course_id);
             if (ShopHelper::isCourseOnSell($course_id)) {
                 ShopHelper::dontSellCourses($course_array);
             } else {
@@ -110,7 +110,7 @@ class ShopHelper
         $dispatcher = Factory::getApplication()->getDispatcher();
         $event = new Event('onJoomdleIsCourseOnSell', ['course_id' => $course_id]);
         $dispatcher->dispatch('onJoomdleIsCourseOnSell', $event);
-        $items = $event->getArgument('results') ?? null;
+        $items = $event->getArgument('results') ?? [];
 
         foreach ($items as $on_sell) {
             if ($on_sell !== false) { // We check for FALSE, as returned by non configured plugins
@@ -209,7 +209,7 @@ class ShopHelper
         // Send the e-mail
         $mailer = Factory::getContainer()->get(MailerFactoryInterface::class)->createMailer();
         if (!$mailer->sendMail($from, $fromname, $email, $email_subject, $email_text, true)) {
-                return false;
+            return false;
         }
 
         return true;
@@ -243,7 +243,7 @@ class ShopHelper
 
         $comp_params = ComponentHelper::getParams('com_joomdle');
         $send_bundle_emails = $comp_params->get('send_bundle_emails');
-        $c = array ();
+        $c = array();
         foreach ($courses as $course_id) {
             if ($send_bundle_emails != 0) {
                 if ($send_bundle_emails == 1) { // Send one email per course
@@ -312,7 +312,7 @@ class ShopHelper
         // Send the e-mail
         $mailer = Factory::getContainer()->get(MailerFactoryInterface::class)->createMailer();
         if (!$mailer->sendMail($from, $fromname, $email, $email_subject, $email_text, true)) {
-                return false;
+            return false;
         }
 
         return true;

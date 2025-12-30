@@ -73,8 +73,11 @@ final class Joomdle extends CMSPlugin implements SubscriberInterface
         $application = Factory::getApplication();
         $input = $application->getInput();
 
+        $checkmoodleduplicates = $this->params->get('checkmoodleduplicates', 1);
         // Don't run on Joomdle user view and web service url, so we can sync users
-        if (($input->get('option') != 'com_joomdle') || (($input->get('view') != 'users') && ($input->get('task') != 'server'))) {
+        if (($checkmoodleduplicates) &&
+            (($input->get('option') != 'com_joomdle') || (($input->get('view') != 'users') && ($input->get('task') != 'server')))
+        ) {
             // Check that data is valid for user creation/modification in Moodle
             UsercheckHelper::checkUser($user, $isnew, $new);
         }

@@ -30,7 +30,6 @@ use Joomla\Database\ParameterType;
  */
 class MappingsHelper
 {
-// FIXME usamos esto de la app ahora?
     public static function getUserInfo($username, $additional_data_source = '')
     {
         $comp_params = ComponentHelper::getParams('com_joomdle');
@@ -40,6 +39,11 @@ class MappingsHelper
         }
 
         $user_id = UserHelper::getUserId($username);
+
+        if (!$user_id) {
+            return [];
+        }
+
         $user = Factory::getContainer()->get(UserFactoryInterface::class)->loadUserById($user_id);
 
         $user_info['email'] = $user->email;
@@ -54,7 +58,7 @@ class MappingsHelper
         $user_info['password'] = $user->password;
         $user_info['suspended'] = $user->block;
 
-        $more_info = array ();
+        $more_info = array();
         switch ($additional_data_source) {
             case 'no':
                 $more_info = MappingsHelper::getUserInfoJoomla($username);
@@ -66,10 +70,12 @@ class MappingsHelper
                 $dispatcher->dispatch('onJoomdleGetUserInfo', $event);
                 $result = $event->getArgument('results') ?? null;
 
-                foreach ($result as $info) {
-                    if (count($info)) {
-                        // Allow for more than one plugin to return user info
-                        $more_info = array_merge($more_info, $info);
+                if ($result) {
+                    foreach ($result as $info) {
+                        if (count($info)) {
+                            // Allow for more than one plugin to return user info
+                            $more_info = array_merge($more_info, $info);
+                        }
                     }
                 }
                 break;
@@ -216,7 +222,7 @@ class MappingsHelper
 
     public static function getFields($app)
     {
-        $fields = array ();
+        $fields = array();
         switch ($app) {
             default:
                 PluginHelper::importPlugin('joomdleprofile');
@@ -256,7 +262,7 @@ class MappingsHelper
         $mappings = $db->loadObjectList();
 
         if (!$mappings) {
-            return array ();
+            return array();
         }
 
         return $mappings;
