@@ -32,21 +32,25 @@ use Joomdle\Component\Joomdle\Administrator\Helper\ArrayHelper;
 class UsersModel extends ListModel
 {
     /**
-    * Constructor.
-    *
-    * @param   array  $config  An optional associative array of configuration settings.
-    *
-    * @see        JController
-    * @since      1.6
-    */
+     * Constructor.
+     *
+     * @param   array  $config  An optional associative array of configuration settings.
+     *
+     * @see        JController
+     * @since      1.6
+     */
     public function __construct($config = array())
     {
         if (empty($config['filter_fields'])) {
             $config['filter_fields'] = array(
-                'id', 'a.id',
-                'name', 'a.name',
-                'email', 'a.email',
-                'username', 'a.username',
+                'id',
+                'a.id',
+                'name',
+                'a.name',
+                'email',
+                'a.email',
+                'username',
+                'a.username',
             );
         }
 
@@ -72,6 +76,22 @@ class UsersModel extends ListModel
 
         $context = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
         $this->setState('filter.search', $context);
+        $search = $context;
+
+        $state = $this->getUserStateFromRequest($this->context . '.filter.state', 'filter_state', '');
+        if ($state == '') {
+            // Check for sites with lots of users: this may hang this page until timeout if we show all users
+            // so we use a safe filter instead
+            $total_moodle = ContentHelper::getMoodleUsersNumber($search);
+            $group_id = $this->getUserStateFromRequest($this->context . '.filter.group_id', 'filter_group_id', '');
+            $total_joomla = $this->getJoomlaUsersNumber($search, $group_id);
+
+            $max_users = 1000;
+            if (($total_joomla > $max_users) || ($total_moodle > $max_users)) {
+                $state = 'joomla';
+                $this->setState('filter.state', $state);
+            }
+        }
 
         // Split context into component and optional section
         if (!empty($context)) {
@@ -221,7 +241,7 @@ class UsersModel extends ListModel
         $db->setQuery($query);
         $jusers = $db->loadObjectList();
 
-        $ju_by_usernames = array ();
+        $ju_by_usernames = array();
         foreach ($jusers as $user) {
             $ju_by_usernames[$user->username] = $user;
         }
@@ -230,7 +250,7 @@ class UsersModel extends ListModel
         $moodle_order = str_replace('a.', '', $order);
 
         $musers = ContentHelper::getMoodleUsers(0, 0, $moodle_order, $order_dir, $search);
-        $mu_by_usernames = array ();
+        $mu_by_usernames = array();
         if (is_array($musers)) {
             foreach ($musers as $user) {
                 $mu_by_usernames[$user['username']] = $user;
@@ -278,10 +298,10 @@ class UsersModel extends ListModel
         // If there is a Joomla group selected in filter, we don't show Moodle only users
         if (!$group_id) {
             // Get Moodle only users: those without a Joomla account
-            $rdo2 =  array ();
+            $rdo2 =  array();
             if (is_array($musers)) {
                 foreach ($musers as $user) {
-                    $item = array ();
+                    $item = array();
                     $item = $user;
                     $item['m_account'] = 1;
                     if (!array_key_exists($user['username'], $ju_by_usernames)) {
@@ -290,14 +310,11 @@ class UsersModel extends ListModel
                         $item['m_account'] = 1;
 
                         // Note: We set a negative ID for Moodle only users
-                        $item['id'] = - $user['id'];
+                        $item['id'] = -$user['id'];
 
                         $item['name_lower'] = strtolower($item['name']);
-                        ;
                         $item['username_lower'] = strtolower($item['username']);
-                        ;
                         $item['email_lower'] = strtolower($item['email']);
-                        ;
 
                         $rdo2[] = $item;
                     }
@@ -363,7 +380,7 @@ class UsersModel extends ListModel
 
         $searchEscaped = $db->Quote('%' . $db->escape($search, true) . '%', false);
         if ($search) {
-            $query->andWhere(array ('a.username LIKE ' . $searchEscaped, 'a.email LIKE ' . $searchEscaped, 'a.name LIKE ' . $searchEscaped), 'OR');
+            $query->andWhere(array('a.username LIKE ' . $searchEscaped, 'a.email LIKE ' . $searchEscaped, 'a.name LIKE ' . $searchEscaped), 'OR');
         }
 
         $searchEscaped = $db->Quote('%' . $db->escape($search, true) . '%', false);
@@ -377,16 +394,20 @@ class UsersModel extends ListModel
         $db->setQuery($query);
         $jusers = $db->loadObjectList();
 
-        $musers = ContentHelper::getMoodleUsers(0, 0, $order, $order_dir, $search);
-        $mu_by_usernames = array ();
+        $moodle_order = $order;
+        if (str_contains($moodle_order, '.')) {
+            $moodle_order = substr($moodle_order, strrpos($moodle_order, '.') + 1);
+        }
+
+        $musers = ContentHelper::getMoodleUsers(0, 0, $moodle_order, $order_dir, $search);
+        $mu_by_usernames = array();
         foreach ($musers as $user) {
             $mu_by_usernames[$user['username']] = $user;
         }
 
         $rdo = array();
-        $i = 0;
         foreach ($jusers as $user) {
-            $item = array ();
+            $item = array();
             $item = get_object_vars($user);
             $item['j_account'] = 1;
             if (!array_key_exists($user->username, $mu_by_usernames)) {
@@ -437,7 +458,7 @@ class UsersModel extends ListModel
 
         $searchEscaped = $db->Quote('%' . $db->escape($search, true) . '%', false);
         if ($search) {
-            $query->andWhere(array ('a.username LIKE ' . $searchEscaped, 'a.email LIKE ' . $searchEscaped, 'a.name LIKE ' . $searchEscaped), 'OR');
+            $query->andWhere(array('a.username LIKE ' . $searchEscaped, 'a.email LIKE ' . $searchEscaped, 'a.name LIKE ' . $searchEscaped), 'OR');
         }
 
         $db->setQuery($query);
@@ -459,7 +480,7 @@ class UsersModel extends ListModel
             return array();
         }
 
-        $u = array ();
+        $u = array();
         foreach ($users as $user) {
             /* We set ID negative for Moodle only users */
             $user['id'] = -$user['id'];
@@ -471,7 +492,7 @@ class UsersModel extends ListModel
 
                 // If a group is selected, skip all users not in group
                 if (($group_id) && (!in_array($group_id, $user_obj->groups))) {
-                        continue;
+                    continue;
                 }
 
                 if (!$user['admin']) {
@@ -488,7 +509,7 @@ class UsersModel extends ListModel
             } else {
                 // If Joomla group selected, and user has no Joomla account, don't show
                 if ($group_id) {
-                        continue;
+                    continue;
                 }
                 $user['j_account'] = 0;
             }
@@ -521,7 +542,7 @@ class UsersModel extends ListModel
 
         $searchEscaped = $db->Quote('%' . $db->escape($search, true) . '%', false);
         if ($search) {
-            $query->andWhere(array ('a.username LIKE ' . $searchEscaped, 'a.email LIKE ' . $searchEscaped, 'a.name LIKE ' . $searchEscaped), 'OR');
+            $query->andWhere(array('a.username LIKE ' . $searchEscaped, 'a.email LIKE ' . $searchEscaped, 'a.name LIKE ' . $searchEscaped), 'OR');
         }
 
         $query->order($db->qn($db->escape($this->getState('list.ordering', 'a.name'))) . ' ' . $db->escape($this->getState('list.direction', 'ASC')));
@@ -534,7 +555,7 @@ class UsersModel extends ListModel
         $jusers = $db->loadObjectList();
 
         $musers = ContentHelper::getMoodleUsers(0, 0, $order, $order_dir, $search);
-        $mu_by_usernames = array ();
+        $mu_by_usernames = array();
         foreach ($musers as $user) {
             $mu_by_usernames[$user['username']] = $user;
         }
@@ -542,7 +563,7 @@ class UsersModel extends ListModel
         $rdo = array();
         $i = 0;
         foreach ($jusers as $user) {
-            $item = array ();
+            $item = array();
             $item = get_object_vars($user);
             $item['j_account'] = 1;
 
@@ -594,7 +615,7 @@ class UsersModel extends ListModel
 
         $searchEscaped = $db->Quote('%' . $db->escape($search, true) . '%', false);
         if ($search) {
-            $query->andWhere(array ('a.username LIKE ' . $searchEscaped, 'a.email LIKE ' . $searchEscaped, 'a.name LIKE ' . $searchEscaped), 'OR');
+            $query->andWhere(array('a.username LIKE ' . $searchEscaped, 'a.email LIKE ' . $searchEscaped, 'a.name LIKE ' . $searchEscaped), 'OR');
         }
 
         $query->order($db->qn($db->escape($this->getState('list.ordering', 'a.name'))) . ' ' . $db->escape($this->getState('list.direction', 'ASC')));
@@ -603,20 +624,20 @@ class UsersModel extends ListModel
 
         $jusers = $db->loadObjectList();
 
-        $ju_by_usernames = array ();
+        $ju_by_usernames = array();
         foreach ($jusers as $user) {
             $ju_by_usernames[$user->username] = $user;
         }
 
         $musers = ContentHelper::getMoodleUsers(0, 0, $order, $order_dir, $search);
-        $mu_by_usernames = array ();
+        $mu_by_usernames = array();
         foreach ($musers as $user) {
             $mu_by_usernames[$user['username']] = $user;
         }
 
-        $rdo = array ();
+        $rdo = array();
         foreach ($jusers as $user) {
-            $item = array ();
+            $item = array();
             $item = get_object_vars($user);
             $item['j_account'] = 1;
             if (!array_key_exists($user->username, $mu_by_usernames)) {
@@ -655,9 +676,9 @@ class UsersModel extends ListModel
         }
 
         // Get Moodle only users: those without a Joomla account
-        $rdo2 =  array ();
+        $rdo2 =  array();
         foreach ($musers as $user) {
-            $item = array ();
+            $item = array();
             $item = $user;
             $item['m_account'] = 1;
             if (!array_key_exists($user['username'], $ju_by_usernames)) {

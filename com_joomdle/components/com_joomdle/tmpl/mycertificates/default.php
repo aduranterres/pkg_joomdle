@@ -32,7 +32,7 @@ if (!count($this->items)) {
         <ul>
             <?php
             if (is_array($this->items)) {
-                foreach ($this->items as $cert) :  ?>
+                foreach ($this->items as $cert) { ?>
                     <li>
                         <?php
                         $id = $cert['id'];
@@ -59,8 +59,8 @@ if (!count($this->items)) {
                             <?php endif; ?>
                         </span>
                     </li>
-            <?php endforeach;
-            }; ?>
+            <?php }
+            } ?>
         </ul>
     </div>
 </div>

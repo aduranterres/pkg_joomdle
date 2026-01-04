@@ -75,7 +75,8 @@ final class Joomdle extends CMSPlugin implements SubscriberInterface
 
         $checkmoodleduplicates = $this->params->get('checkmoodleduplicates', 1);
         // Don't run on Joomdle user view and web service url, so we can sync users
-        if (($checkmoodleduplicates) &&
+        if (
+            ($checkmoodleduplicates) &&
             (($input->get('option') != 'com_joomdle') || (($input->get('view') != 'users') && ($input->get('task') != 'server')))
         ) {
             // Check that data is valid for user creation/modification in Moodle
