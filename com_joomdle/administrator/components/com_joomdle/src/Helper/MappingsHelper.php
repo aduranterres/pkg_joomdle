@@ -60,7 +60,7 @@ class MappingsHelper
 
         $more_info = array();
         switch ($additional_data_source) {
-            case 'no':
+            case '':
                 $more_info = MappingsHelper::getUserInfoJoomla($username);
                 break;
             default:
@@ -312,8 +312,24 @@ class MappingsHelper
         $user->save();
     }
 
+    public static function hasMoodleCustomField($user_info, $field_id)
+    {
+        if (!isset($user_info['custom_fields']) || !is_array($user_info['custom_fields'])) {
+            return false;
+        }
+
+        foreach ($user_info['custom_fields'] as $field) {
+            if ('cf_' . $field['id'] == $field_id) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public static function getMoodleCustomFieldValue($user_info, $field_id)
     {
+
         foreach ($user_info['custom_fields'] as $field) {
             if ('cf_' . $field['id'] == $field_id) {
                 $data = $field['data'];

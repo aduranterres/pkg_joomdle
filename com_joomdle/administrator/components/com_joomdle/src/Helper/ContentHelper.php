@@ -230,8 +230,7 @@ class ContentHelper
 
     public static function userCustomFields()
     {
-        $params = [
-        ];
+        $params = [];
 
         return ContentHelper::callMethod('user_custom_fields', $params);
     }
@@ -387,6 +386,29 @@ class ContentHelper
         return ContentHelper::callMethod('courses_abc', $params);
     }
 
+    public static function searchCourses($text, $phrase, $ordering, $limit, $lang)
+    {
+        $params = [
+            'text' => $text,
+            'phrase' => $phrase,
+            'ordering' => $ordering,
+            'limit' => $limit,
+            'lang' => $lang,
+        ];
+
+        return ContentHelper::callMethod('search_courses', $params);
+    }
+
+    public static function getMyCompletedCourses($username, $order_by_cat = false)
+    {
+        $params = [
+            'username' => $username,
+            'order_by_cat' => $order_by_cat,
+        ];
+
+        return ContentHelper::callMethod('my_completed_courses', $params);
+    }
+
     public static function checkJoomdleSystem()
     {
         $comp_params = ComponentHelper::getParams('com_joomdle');
@@ -479,7 +501,7 @@ class ContentHelper
                 $system[3]['error'] .= ' ' . $response['debuginfo'];
             }
         } else {
-            if ($response ['joomdle_auth'] != 1) {
+            if ($response['joomdle_auth'] != 1) {
                 $system[3]['value'] = 0;
                 $system[3]['error'] =  Text::_('COM_JOOMDLE_JOOMDLE_AUTH_NOT_ENABLED');
             } elseif ($response['joomdle_configured'] == 0) {
@@ -494,8 +516,8 @@ class ContentHelper
                     $system[3]['error'] = $response['test_data'];
                 }
             } elseif ($response['release'] != $joomdle_release_joomla) {
-                    $system[3]['value'] = 0;
-                    $system[3]['error'] =  Text::_('COM_JOOMDLE_JOOMDLE_VERSION_MISMATCH');
+                $system[3]['value'] = 0;
+                $system[3]['error'] =  Text::_('COM_JOOMDLE_JOOMDLE_VERSION_MISMATCH');
             } else {
                 $system[3]['value'] = 1;
                 $system[3]['error'] = '';
@@ -525,11 +547,11 @@ class ContentHelper
         if ($response == '') {
             return false;
         } else {
-            if ((!array_key_exists('joomdle_auth', $response)) || ($response ['joomdle_auth'] != 1)) {
+            if ((!array_key_exists('joomdle_auth', $response)) || ($response['joomdle_auth'] != 1)) {
                 return false;
-            } elseif ((!array_key_exists('joomdle_configured', $response)) || ($response ['joomdle_configured'] == 0)) {
+            } elseif ((!array_key_exists('joomdle_configured', $response)) || ($response['joomdle_configured'] == 0)) {
                 return false;
-            } elseif ((!array_key_exists('test_data', $response)) || ($response ['test_data'] != 'It works')) {
+            } elseif ((!array_key_exists('test_data', $response)) || ($response['test_data'] != 'It works')) {
                 return false;
             }
         }
@@ -858,7 +880,7 @@ class ContentHelper
 
         // If user doesn't exist in Moodle, and it is not a new user, nothing to do.
         if ((!$moodle_user) && (!$isnew)) {
-                return;
+            return;
         }
 
         // If we reach here, user has to be created.
@@ -916,11 +938,11 @@ class ContentHelper
         }
 
         while (!feof($f)) {
-                $line = fgets($f);
+            $line = fgets($f);
             if (($line == '\n') || ((is_array($line)) && ($line[0] == '#'))) {
-                    continue;
+                continue;
             }
-                $parts = explode("\t", $line);
+            $parts = explode("\t", $line);
             if (array_key_exists(5, $parts)) {
                 $name = $parts[5];
                 $value = trim($parts[6]);
@@ -947,7 +969,7 @@ class ContentHelper
     {
         $params = ComponentHelper::getParams('com_joomdle');
 
-         $linkstarget = $params->get('linkstarget');
+        $linkstarget = $params->get('linkstarget');
         if ($linkstarget == 'wrapper') {
             $use_wrapper = 1;
         } else {
@@ -964,12 +986,12 @@ class ContentHelper
         } else {
             $url = $params->get('MOODLE_URL') . "/course/view.php?id=" . $data['id'];
 
-            if ($data['lang']) {
+            if ((array_key_exists('lang', $data)) && ($data['lang'])) {
                 $url .= "&lang=" . $data['lang'];
             }
         }
 
-         return $url;
+        return $url;
     }
 
     public static function isJoomlaAdmin($userid)
@@ -1024,7 +1046,7 @@ class ContentHelper
         $user->usertype = $newUsertype;
 
         $system = 2; // ID of Registered
-        $user->groups = array ();
+        $user->groups = array();
         $user->groups[] = $system;
 
         $date = Factory::getDate();
@@ -1041,8 +1063,8 @@ class ContentHelper
 
         // Manually store password from Moodle
         // Note: this is not working anymore because Joomla and Moodle have different hash algorithms
-    //    $user->password = $user_details['password'];
-    //    $user->save();
+        //    $user->password = $user_details['password'];
+        //    $user->save();
         return true;
     }
 
@@ -1075,7 +1097,7 @@ class ContentHelper
         // Initialize new usertype setting
         $newUsertype = $usersConfig->get('new_usertype');
         if (!$newUsertype) {
-                $newUsertype = 2;
+            $newUsertype = 2;
         }
 
         // Password comes in cleartext. On bind, Joomla hashes it again: Only for user registrations, not valid for admin user add/upload
@@ -1091,7 +1113,7 @@ class ContentHelper
 
         // Set some initial user values
         $user->id = 0;
-        $user->groups = array ();
+        $user->groups = array();
         $user->groups[] = $newUsertype;
 
         $date = Factory::getDate();
@@ -1120,8 +1142,8 @@ class ContentHelper
 
     public static function filterByValue($array, $index, $value)
     {
-        $newarray = array ();
-        $temp = array ();
+        $newarray = array();
+        $temp = array();
         if (is_array($array) && count($array) > 0) {
             foreach (array_keys($array) as $key) {
                 if (array_key_exists($index, $array[$key])) {
@@ -1140,8 +1162,8 @@ class ContentHelper
 
     public static function excludeByValue($array, $index, $value)
     {
-        $newarray = array ();
-        $temp = array ();
+        $newarray = array();
+        $temp = array();
         if (is_array($array) && count($array) > 0) {
             foreach (array_keys($array) as $key) {
                 if (array_key_exists($index, $array[$key])) {

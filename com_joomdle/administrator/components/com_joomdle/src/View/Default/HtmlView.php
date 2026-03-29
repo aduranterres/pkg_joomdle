@@ -49,15 +49,12 @@ class HtmlView extends BaseHtmlView
         parent::display($tpl);
     }
 
-    public function showButton($link, $image, $text)
+    public function showButton($link, $icon, $text)
     {
         ?>
         <a href="<?php echo $link; ?>">
-            <button  type="button" class="panel_btn btn-default" style="width:140px;height:120px"> 
-                <?php echo HTMLHelper::_('image', "com_joomdle/" . $image, '', null, true); ?>
-                <br>
-                <span><?php echo $text; ?></span>
-            </button>
+            <span class="<?php echo $icon; ?> icon-fw" aria-hidden="true"></span>
+            <span><?php echo $text; ?></span>
         </a>
         <?php
     }

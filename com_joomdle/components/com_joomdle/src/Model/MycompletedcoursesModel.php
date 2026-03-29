@@ -19,9 +19,9 @@ use Joomdle\Component\Joomdle\Administrator\Helper\ContentHelper;
 // phpcs:enable PSR1.Files.SideEffects
 
 /**
- * Mycourses model.
+ * Mycompletedcourses model.
  */
-class MycoursesModel extends ListModel
+class MycompletedcoursesModel extends ListModel
 {
     /**
      * Constructor.
@@ -98,7 +98,7 @@ class MycoursesModel extends ListModel
             $data['group_by_category'] = 0;
         }
 
-        $items = ContentHelper::getMyCourses($username, $data['group_by_category']);
+        $items = ContentHelper::getMyCompletedCourses($username, $data['group_by_category']);
 
         if ((array_key_exists('courses_shown', $data)) && ($data['courses_shown'])) {
             $items = ContentHelper::filterByValue($items, 'id', $data['courses_shown']);

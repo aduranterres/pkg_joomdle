@@ -25,18 +25,19 @@ use Joomdle\Component\Joomdle\Administrator\Helper\ContentHelper;
 class WrapperModel extends ListModel
 {
     /**
-    * Constructor.
-    *
-    * @param   array  $config  An optional associative array of configuration settings.
-    *
-    * @see        JController
-    * @since      1.6
-    */
+     * Constructor.
+     *
+     * @param   array  $config  An optional associative array of configuration settings.
+     *
+     * @see        JController
+     * @since      1.6
+     */
     public function __construct($config = array())
     {
         if (empty($config['filter_fields'])) {
             $config['filter_fields'] = array(
-                'id', 'a.id',
+                'id',
+                'a.id',
             );
         }
 
@@ -156,7 +157,7 @@ class WrapperModel extends ListModel
                 break;
             case "badge":
                 $path = '/badges/badge.php?hash=';
-                $url = $params->get('MOODLE_URL') . $path . $data['id'];
+                $url = $params->get('MOODLE_URL') . $path . $data['hash'];
                 break;
             case "moodle":
                 $path = '/?a=1';
