@@ -18,5 +18,5 @@ Author: Antonio Duran Terres (antonio@joomdle.com)
 
 Joomdle is provided freely as open source software, under version 3 of the GNU General Public License.
 
-[1]: https://www.joomdle.com/wiki/Main_Page
+[1]: https://www.joomdle.com/docs
 [2]: https://www.joomdle.com/support/forum
