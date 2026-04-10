@@ -1,3 +1,14 @@
+Joomdle 3.0.1 for Joomla 5 and 6
+-------------------------------
+- Fix name sync problem when no additional data source is set
+- Add mycompletedcourses view
+- Change backend panel icons and documentation link
+- Show all categories, including subcategories, in views config options
+
+Joomdle 3.0.0 for Joomla 5 and 6
+-------------------------------
+- Full rewrite of the Joomla side to use new APIs
+
 Joomdle 2.4 for Joomla 3, 4 and 5
 ------------------------------------
 - Added config options to set User agent for web service calls
@@ -124,7 +135,7 @@ Joomdle 2.0.0-beta1 for Joomla 3 and 4
 - Use menu item for children registration, if set up
 - Fixed direct login form to add auth token
 
-Joomdle 1.3.0 for Joomla 3.x  
+Joomdle 1.3.0 for Joomla 3.x
 -----------------------------
 - Added support for more mailing list integrations via plugins
 - Fixed error on user_update when forward events is enabled
@@ -135,7 +146,7 @@ Joomdle 1.3.0 for Joomla 3.x
 - Fixed warning in get_course_students
 - Joomdlehooks plugin: use SEF in return URL
 
-Joomdle 1.2.7 for Joomla 3.x  
+Joomdle 1.2.7 for Joomla 3.x
 -----------------------------
 - Fixed problems with search returning non visible items (ncy)
 - Fixed profile fields locking
@@ -149,11 +160,11 @@ Joomdle 1.2.7 for Joomla 3.x
 - Fixed issue with redirect-less SSO and Admin Tools
 - Fixed problem in course search with persian chars (saman)
 
-Joomdle 1.2.6 for Joomla 3.x  
+Joomdle 1.2.6 for Joomla 3.x
 -----------------------------
 - Fixed problem in my grades view
 
-Joomdle 1.2.5 for Joomla 3.x  
+Joomdle 1.2.5 for Joomla 3.x
 -----------------------------
 - Improved profile image sync
 - Fixed problem when enroling user with more than one role
@@ -171,7 +182,7 @@ Joomdle 1.2.5 for Joomla 3.x
 - My certificates view adapted for latest version of Custom certificate module
 - Added new option in Moodle auth plugin to disable single log out
 
-Joomdle 1.2.4 for Joomla 3.x  
+Joomdle 1.2.4 for Joomla 3.x
 -----------------------------
 - Added Joomla User Group filter in Joomdle users view
 - Added shortnames to Moodle custom fields in mappings form
@@ -289,8 +300,8 @@ Joomdle 1.1.0 for Joomla 3.x
 Joomdle 1.0.9 for Joomla 3.x
 -----------------------------
 - Added support for Joomla Update System
-- Backend users view updated to use "Search Tools" and show limit box   		
-- Added suport for username changing in Joomla              
+- Backend users view updated to use "Search Tools" and show limit box
+- Added suport for username changing in Joomla
 - Added new view to show user certificates
 - Added support for Moodle custom certificate module
 - Fixed warning on user logout form Moodle on Joomdla < 3.6
@@ -501,7 +512,7 @@ Joomdle 0.91 for Joomla 3.x
 - Added support for mailing lists for parents
 - Added support for PDF export of course grades
 - Added support for multi-language filter (Ivan)
-- Added support for multimedia filter 
+- Added support for multimedia filter
 - Added support for images in categories description
 - Added support for Moodle 2.4 in jsgroup Moodle block
 - Hidden sections not shown in course view
