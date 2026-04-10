@@ -54,7 +54,7 @@ class CoursecategorylistField extends ListField
      */
     protected function getOptions()
     {
-        $cats = ContentHelper::getCourseCategories();
+        $cats = ContentHelper::getCourseCategories(-1);
 
         $options = array();
 
