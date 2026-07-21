@@ -33,6 +33,7 @@ use Joomla\CMS\Event\User\AfterLogoutEvent;
 use Joomdle\Component\Joomdle\Administrator\Helper\ContentHelper;
 use Joomdle\Component\Joomdle\Administrator\Helper\UsercheckHelper;
 use Joomla\CMS\Filter\InputFilter;
+use Joomla\Component\Users\Administrator\Helper\Mfa as MfaHelper;
 
 /**
  * Joomdle user plugin.
@@ -131,7 +132,7 @@ final class Joomdle extends CMSPlugin implements SubscriberInterface
      */
     public function onUserAfterLogin(AfterLoginEvent $event): void
     {
-        if ($this->params->get('login_event_to_hook', 'onUserLogin') != 'onUserAfterLogin') {
+        if ($this->params->get('login_event_to_hook', 'onUserAfterLogin') != 'onUserAfterLogin') {
             return;
         }
 
@@ -143,7 +144,7 @@ final class Joomdle extends CMSPlugin implements SubscriberInterface
 
     public function onUserLogin(LoginEvent $event)
     {
-        if ($this->params->get('login_event_to_hook', 'onUserLogin') != 'onUserLogin') {
+        if ($this->params->get('login_event_to_hook', 'onUserAfterLogin') != 'onUserLogin') {
             return;
         }
 
@@ -185,6 +186,11 @@ final class Joomdle extends CMSPlugin implements SubscriberInterface
         $user_id = UserHelper::getUserId($username);
         $user_obj = $this->getUserFactory()->loadUserById($user_id);
         if ($user_obj->block) {
+            return;
+        }
+
+        // Don't do SSO if user has MFA active — let Joomla handle the MFA flow first.
+        if (!empty(MfaHelper::getUserMfaRecords($user_id))) {
             return;
         }
 

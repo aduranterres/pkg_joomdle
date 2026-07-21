@@ -23,6 +23,8 @@ class SendcertController extends FormController
 {
     public function sendcertificate()
     {
+        $this->checkToken('post');
+
         /** @var CMSApplication $app */
         $app = Factory::getApplication();
         $params = $app->getParams();
@@ -37,16 +39,16 @@ class SendcertController extends FormController
             $app->enqueueMessage($error, 'notice');
         } else {
             ?>
-        <div style="padding: 10px;">
-            <div style="text-align:right">
-                <a href="javascript: void window.close()">
-                    <?php echo Text::_('COM_JOOMDLE_CLOSE_WINDOW'); ?> <?php echo HTMLHelper::_('image', 'mailto/close-x.png', null, null, true); ?></a>
-            </div>
+            <div style="padding: 10px;">
+                <div style="text-align:right">
+                    <a href="javascript: void window.close()">
+                        <?php echo Text::_('COM_JOOMDLE_CLOSE_WINDOW'); ?> <?php echo HTMLHelper::_('image', 'mailto/close-x.png', null, null, true); ?></a>
+                </div>
 
-            <h2>
-                <?php echo Text::_('COM_JOOMDLE_EMAIL_SENT'); ?>
-            </h2>
-        </div>
+                <h2>
+                    <?php echo Text::_('COM_JOOMDLE_EMAIL_SENT'); ?>
+                </h2>
+            </div>
             <?php
         }
     }

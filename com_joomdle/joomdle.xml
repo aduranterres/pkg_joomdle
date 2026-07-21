@@ -6,12 +6,12 @@
     <creationDate>2026-01</creationDate>
     <copyright>Copyright (C) 2014 Antonio Duran Terres</copyright>
     <license>http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL</license>
-    <version>3.0.1</version>
+    <version>3.1.0</version>
     <description>Tools for Joomla - Moodle integration</description>
     <namespace path="src">Joomdle\Component\Joomdle</namespace>
     <scriptfile>install.php</scriptfile>
 
-    <requiresMoodleVersion>2018120300</requiresMoodleVersion>
+    <requiresMoodleVersion>2024100712</requiresMoodleVersion>
 
     <!-- installation part -->
     <install folder="com_joomdle/administrator/components/com_joomdle">

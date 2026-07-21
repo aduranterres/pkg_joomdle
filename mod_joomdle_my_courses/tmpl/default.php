@@ -10,12 +10,17 @@
 
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Filter\OutputFilter;
 use Joomdle\Component\Joomdle\Administrator\Helper\ContentHelper;
 
 // no direct access
 defined('_JEXEC') or die('Restricted access');
+
+Factory::getApplication()->getDocument()->getWebAssetManager()
+    ->registerAndUseStyle('mod_joomdle_my_courses.joomdle', 'media/com_joomdle/css/joomdle.css');
 
 // Show message and return if there are no courses to show
 if ((!is_array($courses)) || (!count($courses))) {
@@ -80,6 +85,8 @@ if (is_array($courses)) {
             endif;
         }
 
+        $course_link = '';
+
         if ($linkto == 'moodle') {
             // Link to Moodle (wrapper or not)
             $id = $course['id'];
@@ -89,19 +96,29 @@ if (is_array($courses)) {
             }
             $url = ContentHelper::getJumpURL($data);
 
-            echo "<li><a $target href=\"" . $url . "\">" . $course['fullname'] . "</a></li>";
+            $course_link = "<a $target href=\"" . $url . "\">" . $course['fullname'] . "</a>";
         } elseif ($linkto == 'detail') {
             // Link to detail view
             $redirect_url = Route::_("index.php?option=com_joomdle&view=detail&course_id=" . $course['id'] . ':' . OutputFilter::stringURLSafe($course['fullname']) . "&Itemid=$itemid");
-            echo "<li><a href=\"" . $redirect_url . "\">" . $course['fullname'] . "</a></li>";
+            $course_link = "<a href=\"" . $redirect_url . "\">" . $course['fullname'] . "</a>";
         }
+
+        echo '<li>' . $course_link;
 
         if ($show_unenrol_link) {
             if ($course['can_unenrol']) {
-                $redirect_url = "index.php?option=com_joomdle&view=course&task=course.unenrol&course_id=" . $course['id'];
-                echo "<a href=\"" . $redirect_url . "\"> (" . Text::_('COM_JOOMDLE_UNENROL') . ")</a>";
+                ?>
+                <form action="<?php echo Route::_('index.php?option=com_joomdle'); ?>" method="post" class="joomdle_unenrol_form">
+                    <input type="hidden" name="task" value="course.unenrol">
+                    <input type="hidden" name="course_id" value="<?php echo (int) $course['id']; ?>">
+                    <?php echo HTMLHelper::_('form.token'); ?>
+                    <button type="submit" class="joomdle_unenrol_link">(<?php echo Text::_('COM_JOOMDLE_UNENROL'); ?>)</button>
+                </form>
+                <?php
             }
         }
+
+        echo '</li>';
     }
 }
 ?>

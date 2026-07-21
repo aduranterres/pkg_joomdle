@@ -27,18 +27,19 @@ use Joomdle\Component\Joomdle\Administrator\Helper\ContentHelper;
 class CoursesabcModel extends ListModel
 {
     /**
-    * Constructor.
-    *
-    * @param   array  $config  An optional associative array of configuration settings.
-    *
-    * @see        JController
-    * @since      1.6
-    */
+     * Constructor.
+     *
+     * @param   array  $config  An optional associative array of configuration settings.
+     *
+     * @see        JController
+     * @since      1.6
+     */
     public function __construct($config = array())
     {
         if (empty($config['filter_fields'])) {
             $config['filter_fields'] = array(
-                'id', 'a.id',
+                'id',
+                'a.id',
             );
         }
 
@@ -99,7 +100,7 @@ class CoursesabcModel extends ListModel
 
     public function getItems()
     {
-        $params = ComponentHelper::getParams('com_joomdle');
+        $params = $this->getState('params');
 
         $chars = $this->getState("start_chars");
         if (!$chars) {

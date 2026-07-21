@@ -3,22 +3,23 @@
     <name>com_joomdle</name>
     <author>Antonio Duran Terres</author>
     <authorEmail>antonio@joomdle.com</authorEmail>
-    <creationDate>04/02/2010</creationDate>
-	<copyright>Copyright (C) 2014 Antonio Duran Terres</copyright>
-	<license>http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL</license>
-    <version>3.0.0</version>
+    <creationDate>2026-01</creationDate>
+    <copyright>Copyright (C) 2014 Antonio Duran Terres</copyright>
+    <license>http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL</license>
+    <version>3.1.0</version>
     <description>Tools for Joomla - Moodle integration</description>
-    <requiresMoodleVersion>2018120300</requiresMoodleVersion>
     <namespace path="src">Joomdle\Component\Joomdle</namespace>
+    <scriptfile>install.php</scriptfile>
 
-	<scriptfile>install.php</scriptfile>
+    <requiresMoodleVersion>2024100712</requiresMoodleVersion>
+
     <!-- installation part -->
-	<install folder="com_joomdle/administrator/components/com_joomdle">
-		<sql>
-			<file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file>
-			<file driver="postgresql" charset="utf8">sql/install.postgresql.utf8.sql</file>
-		</sql>
-	</install>
+    <install folder="com_joomdle/administrator/components/com_joomdle">
+        <sql>
+            <file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file>
+            <file driver="postgresql" charset="utf8">sql/install.postgresql.utf8.sql</file>
+        </sql>
+    </install>
     <update>
         <schemas>
             <schemapath type="mysql">sql/updates/mysql</schemapath>
@@ -26,43 +27,58 @@
     </update>
 
     <!-- user part -->
-    <files folder="site">
-		<folder>forms</folder>
-		<folder>src</folder>
-		<folder>tmpl</folder>
+    <files folder="components/com_joomdle">
+        <filename>index.html</filename>
+        <filename>connection_test.php</filename>
+        <folder>forms</folder>
+        <folder>src</folder>
+        <folder>tmpl</folder>
     </files>
 
-    <languages folder="site">
-		<language tag="en-GB">language/en-GB/com_joomdle.ini</language>
+    <languages>
+        <language tag="en-GB">language/en-GB/com_joomdle.ini</language>
     </languages>
 
-	<media destination="joomdle" folder="media">
-		<folder>images</folder>
-		<folder>css</folder>
-	</media>
+    <media destination="com_joomdle" folder="/administrator/components/com_joomdle/assets">
+        <folder>images</folder>
+        <folder>css</folder>
+        <folder>js</folder>
+        <filename>joomla.asset.json</filename>
+    </media>
 
+    <!--  task="default" administration part -->
     <administration>
 
-    <files folder="administrator">
-		<filename>access.xml</filename>
-		<filename>config.xml</filename>
-		<folder>forms</folder>
-		<folder>src</folder>
-		<folder>tmpl</folder>
-		<folder>services</folder>
-		<folder>sql</folder>
-        <folder>assets</folder>
+    <menu>COM_JOOMDLE</menu>
+    <submenu>
+        <menu link="option=com_joomdle">COM_JOOMDLE_CONTROL_PANEL</menu>
+        <menu link="option=com_joomdle&amp;view=config">COM_JOOMDLE_CONFIGURATION</menu>
+        <menu link="option=com_joomdle&amp;view=users">COM_JOOMDLE_USERS</menu>
+        <menu link="option=com_joomdle&amp;view=mappings">COM_JOOMDLE_MAPPINGS</menu>
+        <menu link="option=com_joomdle&amp;view=shop">COM_JOOMDLE_SHOP</menu>
+        <menu link="option=com_joomdle&amp;view=mailinglist">COM_JOOMDLE_MAILING_LIST</menu>
+        <menu link="option=com_joomdle&amp;view=check">COM_JOOMDLE_SYSTEM_CHECK</menu>
+    </submenu>
+
+
+    <files folder="administrator/components/com_joomdle">
+        <filename>access.xml</filename>
+        <filename>config.xml</filename>
+        <filename>joomdle.xml</filename>
+        <filename>index.html</filename>
+        <folder>forms</folder>
+        <folder>presets</folder>
+        <folder>services</folder>
+        <folder>sql</folder>
+        <folder>src</folder>
+        <folder>tmpl</folder>
     </files>
 
-    <languages folder="administrator">
-		<language tag="en-GB">language/en-GB/com_joomdle.sys.ini</language>
-		<language tag="en-GB">language/en-GB/com_joomdle.ini</language>
+    <languages>
+        <language tag="en-GB">administrator/language/en-GB/com_joomdle.sys.ini</language>
+        <language tag="en-GB">administrator/language/en-GB/com_joomdle.ini</language>
     </languages>
 
     </administration>
-
-<updateservers>
-    <server type="extension" priority="1" name="Joomdle">http://www.joomdle.com/index.php?option=com_ars&amp;view=update&amp;task=stream&amp;format=xml&amp;id=1</server>
-</updateservers>
 
 </extension>

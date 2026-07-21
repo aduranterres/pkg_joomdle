@@ -15,6 +15,7 @@ namespace Joomdle\Component\Joomdle\Administrator\Helper;
 // phpcs:enable PSR1.Files.SideEffects
 
 use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Router\Route;
@@ -88,13 +89,14 @@ class SystemHelper
                 if (!$button_text) {
                     $button_text = Text::_('COM_JOOMDLE_ENROL_INTO_COURSE');
                 }
-                $url = (URI::root() . "index.php?option=com_joomdle&task=course.enrol&course_id=$course_id");
                 $can_enrol = $course_info['self_enrolment'] && $course_info['in_enrol_date'];
                 if ($can_enrol) {
-                           $html .= '<FORM>
-           <INPUT TYPE="BUTTON" VALUE="' . $button_text . '"
-            ONCLICK="window.location.href=\'' . $url . '\'">
-           </FORM>';
+                    $html .= '<form action="' . Route::_('index.php?option=com_joomdle') . '" method="post">
+                        <input type="hidden" name="task" value="course.enrol">
+                        <input type="hidden" name="course_id" value="' . (int) $course_id . '">
+                        ' . HTMLHelper::_('form.token') . '
+                        <input type="submit" value="' . htmlspecialchars($button_text, ENT_COMPAT, 'UTF-8') . '">
+                    </form>';
                 }
             }
         } else { //courses in shop

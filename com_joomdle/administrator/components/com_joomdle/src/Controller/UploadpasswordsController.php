@@ -29,16 +29,16 @@ class UploadpasswordsController extends FormController
 
     public function uploadpasswordfile()
     {
-        if (!Factory::getApplication()->getSession()->checkToken()) {
-            exit(Text::_('JINVALID_TOKEN'));
-        }
+        $this->checkToken();
 
         $this->setRedirect('index.php?option=com_joomdle&view=uploadpasswords&layout=edit');
     }
 
     public function upload()
     {
-        $file = $this->input->files->get('jform', array ());
+        $this->checkToken();
+
+        $file = $this->input->files->get('jform', array());
 
         if (!$this->getModel()->checkFields($file)) {
             $this->setMessage(Text::_('COM_JOOMDLE_USERNAME_AND_PASSSWORD_FIELDS_REQUIRED'), 'error');

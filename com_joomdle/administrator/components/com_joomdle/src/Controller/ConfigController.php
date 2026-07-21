@@ -28,6 +28,8 @@ class ConfigController extends FormController
 
     public function regeneratejoomlatoken()
     {
+        $this->checkToken();
+
         $this->getModel()->regenerateJoomlaToken();
         $this->setMessage(Text::_('COM_JOOMDLE_NEW_TOKEN_GENERATED'));
         $this->setRedirect('index.php?option=com_joomdle&view=config');
@@ -36,6 +38,8 @@ class ConfigController extends FormController
 
     public function save($key = null, $urlVar = null)
     {
+        $this->checkToken();
+
         $data = $this->input->post->get('jform', [], 'array');
 
         $saved = $this->getModel()->save($data);

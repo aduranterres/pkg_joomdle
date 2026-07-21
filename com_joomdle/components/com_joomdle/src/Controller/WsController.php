@@ -30,6 +30,30 @@ use Joomla\Database\ParameterType;
 
 class WsController extends BaseController
 {
+    private const ALLOWED_WS_FUNCTIONS = [
+        'getUserInfo',
+        'test',
+        'login',
+        'getJoomdleDefaultItemid',
+        'confirmJoomlaSession',
+        'logout',
+        'deleteUserKey',
+        'createUser',
+        'activateUser',
+        'updateUser',
+        'changePassword',
+        'changeUsername',
+        'deleteUser',
+        'addMailingSub',
+        'removeMailingSub',
+        'addUserGroups',
+        'updateUserGroups',
+        'removeUserGroups',
+        'addGroupMember',
+        'removeGroupMember',
+        'getSellUrl',
+    ];
+
     private function getUserInfo($params)
     {
         $username = $params['username'];
@@ -67,16 +91,15 @@ class WsController extends BaseController
             return false;
         }
 
-        $options = array ('skip_joomdleuserplugin' => '1', 'silent' => 1);
-        $credentials = array ( 'username' => $username, 'password' => $password);
+        $options = array('skip_joomdleuserplugin' => '1', 'silent' => 1);
+        $credentials = array('username' => $username, 'password' => $password);
         if ($app->login($credentials, $options)) {
             return true;
         }
         return false;
     }
 
-    // FIXME, camel case si nlo quitamos...
-    private function joomdle_getDefaultItemid()
+    private function getJoomdleDefaultItemid()
     {
         $comp_params = ComponentHelper::getParams('com_joomdle');
         $default_itemid = $comp_params->get('default_itemid');
@@ -119,7 +142,7 @@ class WsController extends BaseController
 
         $id = UserHelper::getUserId($username);
 
-        $error = $app->logout($id, array ( 'clientid' => 0, 'skip_joomdleuserplugin' => 1));
+        $error = $app->logout($id, array('clientid' => 0, 'skip_joomdleuserplugin' => 1));
 
         // Return "remember me" cookie name so it  can be deleted
         $ua = new WebClient($ua_string);
@@ -210,7 +233,7 @@ class WsController extends BaseController
         $user->delete();
     }
 
-    // FIXME rework using generic events, remove all specific events from Moodle side
+    // FIXME: rework using generic events, remove all specific events from Moodle side
     private function addMailingSub($params)
     {
         $username = $params['username'];
@@ -285,7 +308,7 @@ class WsController extends BaseController
 
         $joomla_token = $comp_params->get('joomla_auth_token');
 
-        return  ($token == $joomla_token);
+        return hash_equals($joomla_token, (string) $token);
     }
 
     public function server()
@@ -300,10 +323,10 @@ class WsController extends BaseController
 
         $wsfunction = $this->input->get('wsfunction');
 
-        // Name change because of conflict
-        // FIXME change this in Moodle if still needed, remove otherwise
-        if ($wsfunction == 'getDefaultItemid') {
-            $wsfunction = 'joomdle_getDefaultItemid';
+        if (!in_array($wsfunction, self::ALLOWED_WS_FUNCTIONS, true)) {
+            http_response_code(400);
+            echo json_encode('Invalid web service function');
+            exit();
         }
 
         echo json_encode($this->$wsfunction($methodvariables));

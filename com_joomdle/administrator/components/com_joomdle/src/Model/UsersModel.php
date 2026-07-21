@@ -561,7 +561,6 @@ class UsersModel extends ListModel
         }
 
         $rdo = array();
-        $i = 0;
         foreach ($jusers as $user) {
             $item = array();
             $item = get_object_vars($user);
@@ -712,7 +711,7 @@ class UsersModel extends ListModel
                 continue;
             }
             $user = Factory::getContainer()->get(UserFactoryInterface::class)->loadUserById($id);
-            /* If user already in Moodle, warn user and continue to next item */
+            /* If user already in Moodle, warn and continue to next item */
             if (ContentHelper::userExists($user->username)) {
                 $error = Text::_('COM_JOOMDLE_USER_ALREADY_EXISTS_IN_MOODLE') . ": " . $user->username;
                 Factory::getApplication()->enqueueMessage($error, 'error');

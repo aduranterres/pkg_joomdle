@@ -11,6 +11,7 @@
 \defined('_JEXEC') or die;
 
 use Joomla\CMS\Application\ApplicationHelper;
+use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomdle\Component\Joomdle\Administrator\Helper\ContentHelper;
 use Joomla\CMS\Router\Route;
@@ -123,8 +124,14 @@ if (is_array($this->items)) {
 
                 if ($show_unenrol_link) {
                     if ($course['can_unenrol']) {
-                        $redirect_url = "index.php?option=com_joomdle&task=course.unenrol&course_id=" . $course['id'];
-                        echo "<a href=\"" . $redirect_url . "\"> (" . Text::_('COM_JOOMDLE_UNENROL') . ")</a>";
+                        ?>
+                        <form action="<?php echo Route::_('index.php?option=com_joomdle'); ?>" method="post" class="joomdle_unenrol_form">
+                            <input type="hidden" name="task" value="course.unenrol">
+                            <input type="hidden" name="course_id" value="<?php echo (int) $course['id']; ?>">
+                            <?php echo HTMLHelper::_('form.token'); ?>
+                            <button type="submit" class="joomdle_unenrol_link">(<?php echo Text::_('COM_JOOMDLE_UNENROL'); ?>)</button>
+                        </form>
+                        <?php
                     }
                 }
 

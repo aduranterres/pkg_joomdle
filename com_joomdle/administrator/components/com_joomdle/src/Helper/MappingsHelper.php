@@ -46,6 +46,7 @@ class MappingsHelper
 
         $user = Factory::getContainer()->get(UserFactoryInterface::class)->loadUserById($user_id);
 
+        $user_info = [];
         $user_info['email'] = $user->email;
         $user_info['lang'] = MappingsHelper::getMoodleLang($user->getParam('language'));
         if ($user->getParam('timezone')) {
@@ -57,6 +58,12 @@ class MappingsHelper
         }
         $user_info['password'] = $user->password;
         $user_info['suspended'] = $user->block;
+
+        if ($user->activation) {
+            $user_info['confirmed'] = 0;
+        } else {
+            $user_info['confirmed'] = 1;
+        }
 
         $more_info = array();
         switch ($additional_data_source) {

@@ -35,13 +35,14 @@ class ContentHelper
 {
     public const COM_JOOMDLE_ROLE_STUDENT = 5;
 
-    public static function getCourseList($enrollable_only = 0, $orderby = 'fullname ASC', $guest = 0, $username = '')
+    public static function getCourseList($enrollable_only = 0, $orderby = 'fullname ASC', $guest = 0, $username = '', $include_hidden = 0)
     {
         $params = [
             'enrollable_only' => $enrollable_only,
             'sortby' => $orderby,
             'guest' => (int) $guest,
-            'username' => $username
+            'username' => $username,
+            'include_hidden' => (int) $include_hidden,
         ];
 
         return ContentHelper::callMethod('list_courses', $params);
@@ -95,7 +96,7 @@ class ContentHelper
         return ContentHelper::callMethod('get_course_contents', $params);
     }
 
-    public static function getCourseEvents($id, $username = '')
+    public static function getCourseEvents($id)
     {
         $params = [
             'id' => (int) $id,
@@ -409,6 +410,17 @@ class ContentHelper
         return ContentHelper::callMethod('my_completed_courses', $params);
     }
 
+    public static function getCertificate($username, $type, $id)
+    {
+        $params = [
+            'username' => $username,
+            'type' => $type,
+            'id' => $id,
+        ];
+
+        return ContentHelper::callMethod('get_certificate', $params);
+    }
+
     public static function checkJoomdleSystem()
     {
         $comp_params = ComponentHelper::getParams('com_joomdle');
@@ -717,6 +729,15 @@ class ContentHelper
             $response = ContentHelper::callMethodCurl($method, $params);
         }
 
+        if ((is_array($response)) && (array_key_exists('exception', $response))) {
+            // If debug system is enabled, show exception message
+            if (Factory::getApplication()->get('debug')) {
+                echo 'Joomdle error: ' . $response['message'];
+            }
+            // Return empty string to avoid errors when trying to parse response
+            $response = '';
+        }
+
         return $response;
     }
 
@@ -838,11 +859,8 @@ class ContentHelper
 
     public static function getLanguageStr($lang)
     {
-        require_once(dirname(__FILE__) . '/' . 'languages.php');
-        $l = explode("_", $lang);
-        $index = $l[0];
-
-        return $LANGUAGES["$index"];
+        $locale = str_replace('_', '-', $lang);
+        return \Locale::getDisplayLanguage($locale, 'en');
     }
 
     public static function getLang()
@@ -917,9 +935,6 @@ class ContentHelper
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_COOKIEJAR, $file);
         curl_setopt($ch, CURLOPT_HEADER, 1);
-
-        // Accept certificate
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 
         // Set user agent
         $user_agent = $comp_params->get('user_agent', 'Joomdle');
@@ -997,19 +1012,8 @@ class ContentHelper
     public static function isJoomlaAdmin($userid)
     {
         $user = Factory::getContainer()->get(UserFactoryInterface::class)->loadUserById($userid);
-        $groups = UserHelper::getUserGroups($user->id);
 
-        $admin_groups = array();
-        $admin_groups[] = "Super Users";
-        $admin_groups[] = "Administrator";
-
-        foreach ($admin_groups as $temp) {
-            if (!empty($groups[$temp])) {
-                return true;
-            }
-        }
-
-        return false;
+        return ($user->authorise('core.login.admin'));
     }
 
     // Used in Joomdle->Users in backend to sync users from Moodle to Joomla
@@ -1061,10 +1065,9 @@ class ContentHelper
             return false;
         }
 
-        // Manually store password from Moodle
-        // Note: this is not working anymore because Joomla and Moodle have different hash algorithms
-        //    $user->password = $user_details['password'];
-        //    $user->save();
+        // Note: we used to manually store hashed password from Moodle.
+        // This is not working anymore because Joomla and Moodle have different hash algorithms now
+
         return true;
     }
 

@@ -167,6 +167,16 @@ class UploadpasswordsModel extends AdminModel
 
                 while (($data = fgetcsv($handle, 0, ",")) !== false) {
                     $user = Factory::getContainer()->get(UserFactoryInterface::class)->loadUserByUsername($data[$username_index]);
+
+                    if (!$user) {
+                        continue;
+                    }
+
+                    // Disable password change for admin users
+                    if ($user->authorise('core.login.admin')) {
+                        continue;
+                    }
+
                     $password = UserHelper::hashPassword($data[$password_index]);
                     $user->password = $password;
                     $user->save();

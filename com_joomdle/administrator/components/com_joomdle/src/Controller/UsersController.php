@@ -28,11 +28,9 @@ class UsersController extends BaseController
 {
     public function addtomoodle()
     {
-        if (!Factory::getApplication()->getSession()->checkToken()) {
-            exit(Text::_('JINVALID_TOKEN'));
-        }
+        $this->checkToken();
 
-        $cid   = $this->input->get('cid', array ());
+        $cid   = $this->input->get('cid', array());
         ArrayHelper::toInteger($cid);
 
         if (count($cid) < 1) {
@@ -48,11 +46,9 @@ class UsersController extends BaseController
 
     public function addtojoomla()
     {
-        if (!Factory::getApplication()->getSession()->checkToken()) {
-            exit(Text::_('JINVALID_TOKEN'));
-        }
+        $this->checkToken();
 
-        $cid   = $this->input->get('cid', array ());
+        $cid   = $this->input->get('cid', array());
         ArrayHelper::toInteger($cid);
 
         if (count($cid) < 1) {
@@ -69,11 +65,9 @@ class UsersController extends BaseController
 
     public function migratetojoomdle()
     {
-        if (!Factory::getApplication()->getSession()->checkToken()) {
-            exit(Text::_('JINVALID_TOKEN'));
-        }
+        $this->checkToken();
 
-        $cid   = $this->input->get('cid', array ());
+        $cid   = $this->input->get('cid', array());
         ArrayHelper::toInteger($cid);
 
         if (count($cid) < 1) {
@@ -89,11 +83,9 @@ class UsersController extends BaseController
 
     public function syncprofiletomoodle()
     {
-        if (!Factory::getApplication()->getSession()->checkToken()) {
-            exit(Text::_('JINVALID_TOKEN'));
-        }
+        $this->checkToken();
 
-        $cid   = $this->input->get('cid', array ());
+        $cid   = $this->input->get('cid', array());
         ArrayHelper::toInteger($cid);
 
         if (count($cid) < 1) {
@@ -109,11 +101,9 @@ class UsersController extends BaseController
 
     public function syncprofiletojoomla()
     {
-        if (!Factory::getApplication()->getSession()->checkToken()) {
-            exit(Text::_('JINVALID_TOKEN'));
-        }
+        $this->checkToken();
 
-        $cid   = $this->input->get('cid', array ());
+        $cid   = $this->input->get('cid', array());
         ArrayHelper::toInteger($cid);
 
         if (count($cid) < 1) {

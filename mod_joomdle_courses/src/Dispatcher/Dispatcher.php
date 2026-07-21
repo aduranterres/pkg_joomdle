@@ -68,7 +68,7 @@ class Dispatcher extends AbstractModuleDispatcher // implements HelperFactoryAwa
             if (is_array($params->get('courses_shown'))) {
                 $courses_shown = $params->get('courses_shown');
             } else {
-                $courses_shown = array ($params->get('courses_shown'));
+                $courses_shown = array($params->get('courses_shown'));
             }
 
             $courses = ContentHelper::filterByValue($courses, 'remoteid', $courses_shown);
@@ -77,13 +77,13 @@ class Dispatcher extends AbstractModuleDispatcher // implements HelperFactoryAwa
             if (is_array($params->get('categories_shown'))) {
                 $cats_shown = $params->get('categories_shown');
             } else {
-                $cats_shown = array ( $params->get('categories_shown'));
+                $cats_shown = array($params->get('categories_shown'));
             }
 
             $courses = ContentHelper::filterByValue($courses, 'cat_id', $cats_shown);
         }
         if ($params->get('free courses only')) {
-            $courses = ContentHelper::filterByValue($courses, 'cost', array (0));
+            $courses = ContentHelper::filterByValue($courses, 'cost', array(0));
         }
 
         $data['courses'] = $courses;

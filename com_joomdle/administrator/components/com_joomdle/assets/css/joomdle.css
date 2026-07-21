@@ -122,6 +122,25 @@ table.simpletable {
     text-align: justify;
 }
 
+.joomdle_unenrol_form {
+    display: inline;
+}
+
+.joomdle_unenrol_link {
+    background: none;
+    border: 0;
+    color: inherit;
+    cursor: pointer;
+    display: inline;
+    font: inherit;
+    padding: 0;
+}
+
+.joomdle_unenrol_link:hover,
+.joomdle_unenrol_link:focus {
+    text-decoration: underline;
+}
+
 .joomdle_nocourses_message {
 }
 

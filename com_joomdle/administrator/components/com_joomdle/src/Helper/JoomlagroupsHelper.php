@@ -269,15 +269,11 @@ class JoomlagroupsHelper
 
     public static function syncGroupMembers($course_id)
     {
-     //   $group_id = JoomlagroupsHelper::getCourseGroupId ($course_id, 'students');
-
         // Fetch students
         $students = ContentHelper::getCourseStudents($course_id, 0);
         foreach ($students as $student) {
             JoomlagroupsHelper::addGroupMember($course_id, $student['username'], 'students');
         }
-
-     //   $group_id = JoomlagroupsHelper::getCourseGroupId ($course_id, 'teachers');
 
         // Fetch teachers
         $teachers = ContentHelper::getCourseTeachers($course_id);

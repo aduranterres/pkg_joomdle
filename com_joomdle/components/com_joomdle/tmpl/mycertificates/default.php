@@ -47,9 +47,6 @@ if (!count($this->items)) {
                             case 'coursecertificate':
                                 $redirect_url = $this->moodle_url . "/admin/tool/certificate/view.php?code=" . $cert['code'];
                                 break;
-                            default:
-                                $redirect_url = $this->moodle_url . "/mod/certificate/view.php?id=$id&certificate=1&action=review";
-                                break;
                         }
                         ?>
                         <span>

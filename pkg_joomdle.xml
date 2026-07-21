@@ -2,20 +2,21 @@
 <extension type="package" version="5.0" method="upgrade">
     <name>PKG_Joomdle</name>
     <packagename>joomdle</packagename>
-    <version>3.0.1</version>
+    <version>3.1.0</version>
     <description>Joomdle Package</description>
     <author>Antonio Duran Terres</author>
     <creationDate>2026-01</creationDate>
     <license>GNU General Public License version 3 or later</license>
     <scriptfile>install.php</scriptfile>
 
-    <requiresMoodleVersion>2018120300</requiresMoodleVersion>
+    <requiresMoodleVersion>2024100712</requiresMoodleVersion>
 
     <files>
         <file type="component" id="com_joomdle">com_joomdle.zip</file>
         <file type="module" id="mod_joomdle_courses" client="site">mod_joomdle_courses.zip</file>
         <file type="module" id="mod_joomdle_my_courses" client="site">mod_joomdle_my_courses.zip</file>
         <file type="plugin" group="system" id="joomdlesession">plg_system_joomdlesession.zip</file>
+        <file type="plugin" group="system" id="joomdlemfa">plg_system_joomdlemfa.zip</file>
         <file type="plugin" group="user" id="joomdle">plg_user_joomdle.zip</file>
     </files>
 
