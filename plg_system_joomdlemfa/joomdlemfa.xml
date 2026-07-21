@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="plugin" group="system" method="upgrade" version="5.0">
+    <name>plg_system_joomdlemfa</name>
+    <author>Antonio Duran</author>
+    <creationDate>2026-04</creationDate>
+    <license>GNU General Public License version 3 or later; see LICENSE.txt</license>
+    <version>1.0.0</version>
+    <description>PLG_SYSTEM_JOOMDLEMFA_XML_DESCRIPTION</description>
+    <namespace path="src">Joomla\Plugin\System\Joomdlemfa</namespace>
+
+    <files>
+        <folder plugin="joomdlemfa">services</folder>
+        <folder>src</folder>
+    </files>
+
+    <languages>
+        <language tag="en-GB">language/en-GB/plg_system_joomdlemfa.ini</language>
+        <language tag="en-GB">language/en-GB/plg_system_joomdlemfa.sys.ini</language>
+    </languages>
+
+    <config>
+        <fields name="params">
+            <fieldset name="basic">
+            </fieldset>
+        </fields>
+    </config>
+</extension>
