@@ -16,15 +16,15 @@ use Joomla\CMS\Uri\Uri;
 ?>
 
 <style>
-iframe {
-    width: 100%;
-    height: 100vh;
-  }
+    iframe {
+        width: 100%;
+        height: 100vh;
+    }
 </style>
 <iframe id="myIframe" src="<?php echo $this->wrapper_url; ?>" scrolling="no"></iframe>
-<script src="https://cdn.jsdelivr.net/npm/@iframe-resizer/parent@5.5.7"></script>
+<script src="media/com_joomdle/js/parent.umd.js"></script>
 <script>
-  iframeResize({
-    license: 'GPLv3',
-  }, '#myIframe' )
+    iframeResize({
+        license: 'GPLv3',
+    }, '#myIframe')
 </script>

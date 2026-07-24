@@ -308,6 +308,10 @@ class WsController extends BaseController
 
         $joomla_token = $comp_params->get('joomla_auth_token');
 
+        if (!$joomla_token) {
+            return false;
+        }
+
         return hash_equals($joomla_token, (string) $token);
     }
 

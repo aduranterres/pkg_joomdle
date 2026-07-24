@@ -56,7 +56,6 @@ class MappingsHelper
             $config = Factory::getApplication()->getConfig();
             $user_info['timezone'] = $config->get('offset');
         }
-        $user_info['password'] = $user->password;
         $user_info['suspended'] = $user->block;
 
         if ($user->activation) {
