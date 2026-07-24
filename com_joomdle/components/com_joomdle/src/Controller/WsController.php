@@ -196,6 +196,11 @@ class WsController extends BaseController
         $user_id = UserHelper::getUserId($username);
         $user = Factory::getContainer()->get(UserFactoryInterface::class)->loadUserById($user_id);
 
+        // Don't allow password change if user is an administrator
+        if ($user->authorise('core.login.admin')) {
+            return false;
+        }
+
         // Password comes hashed from Moodle, just store it
         // NOT anymore: hash algo is different in Joomla and Moodle
         $user->password = UserHelper::hashPassword($password);
