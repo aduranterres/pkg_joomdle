@@ -29,7 +29,6 @@ class UsersController extends BaseController
     public function addtomoodle()
     {
         $this->checkToken();
-
         $cid   = $this->input->get('cid', array());
         ArrayHelper::toInteger($cid);
 
@@ -47,7 +46,6 @@ class UsersController extends BaseController
     public function addtojoomla()
     {
         $this->checkToken();
-
         $cid   = $this->input->get('cid', array());
         ArrayHelper::toInteger($cid);
 
@@ -66,7 +64,6 @@ class UsersController extends BaseController
     public function migratetojoomdle()
     {
         $this->checkToken();
-
         $cid   = $this->input->get('cid', array());
         ArrayHelper::toInteger($cid);
 
@@ -84,7 +81,6 @@ class UsersController extends BaseController
     public function syncprofiletomoodle()
     {
         $this->checkToken();
-
         $cid   = $this->input->get('cid', array());
         ArrayHelper::toInteger($cid);
 
@@ -102,7 +98,6 @@ class UsersController extends BaseController
     public function syncprofiletojoomla()
     {
         $this->checkToken();
-
         $cid   = $this->input->get('cid', array());
         ArrayHelper::toInteger($cid);
 

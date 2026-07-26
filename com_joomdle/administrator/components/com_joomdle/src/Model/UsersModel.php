@@ -809,7 +809,6 @@ class UsersModel extends ListModel
 
                 continue;
             }
-
             MappingsHelper::syncUserToJoomla($user->username);
         }
     }
