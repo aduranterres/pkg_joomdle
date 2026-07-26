@@ -81,6 +81,11 @@ class WsController extends BaseController
         $app = Factory::getApplication('site');
 
         $user_id = UserHelper::getUserId($username);
+
+        if (!$user_id) {
+            return false;
+        }
+
         $user = Factory::getContainer()->get(UserFactoryInterface::class)->loadUserById($user_id);
 
         if (!$user) {
@@ -216,7 +221,17 @@ class WsController extends BaseController
         $new_username = $params['new_username'];
 
         $user_id = UserHelper::getUserId($old_username);
+
+        if (!$user_id) {
+            return false;
+        }
+
         $user = Factory::getContainer()->get(UserFactoryInterface::class)->loadUserById($user_id);
+
+        // Don't allow username change if user is an administrator
+        if ($user->authorise('core.login.admin')) {
+            return false;
+        }
 
         $user->username = $new_username;
         @$user->save();
@@ -235,6 +250,12 @@ class WsController extends BaseController
         }
 
         $user = Factory::getContainer()->get(UserFactoryInterface::class)->loadUserById($user_id);
+
+        // Don't allow delete if user is an administrator
+        if ($user->authorise('core.login.admin')) {
+            return false;
+        }
+
         $user->delete();
     }
 

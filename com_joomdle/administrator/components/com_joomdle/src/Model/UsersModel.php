@@ -717,6 +717,12 @@ class UsersModel extends ListModel
                 Factory::getApplication()->enqueueMessage($error, 'error');
                 continue;
             }
+
+            // Don't allow ministrators
+            if ($user->authorise('core.login.admin')) {
+                continue;
+            }
+
             ContentHelper::createJoomdleUser($user->username);
 
             // Save user to trigger user events

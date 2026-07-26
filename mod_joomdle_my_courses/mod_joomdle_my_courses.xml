@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later; see LICENSE.txt</license>
     <authorEmail>antonio@joomdle.com</authorEmail>
     <authorUrl>www.joomdle.com</authorUrl>
-	<version>3.0.0</version>
+	<version>3.1.0</version>
 	<description>MOD_JOOMDLE_MY_COURSES_XML_DESCRIPTION</description>
 	<namespace path="src">Joomla\Module\JoomdleMyCourses</namespace>
 	<files>
@@ -23,7 +23,7 @@
 		<fields name="params">
 			<fieldset name="basic" addfieldprefix="Joomdle\Component\Joomdle\Administrator\Field">
 
-			   <field name="group_by_category" type="radio" default="0" 
+			   <field name="group_by_category" type="radio" default="0"
 					label="COM_JOOMDLE_GROUP_BY_CATEGORY" description="COM_JOOMDLE_GROUP_BY_CATEGORY_DESCRIPTION"
 					class="btn-group">
                         <option value="0">JNO</option>
@@ -34,7 +34,7 @@
 					<option value="detail">Joomdle course details view</option>
 				</field>
 				<field name="nocourses_text" type="textarea" default="" label="COM_JOOMDLE_NOCOURSES_TEXT" rows="3" cols="30" description="COM_JOOMDLE_NOCOURSES_TEXT_DESCRIPTION" />
-				<field name="show_unenrol_link" type="radio" default="0" 
+				<field name="show_unenrol_link" type="radio" default="0"
 					label="COM_JOOMDLE_SHOW_UNENROL_LINK" description="COM_JOOMDLE_SHOW_UNENROL_LINK_DESCRIPTION"
 					class="btn-group">
 						<option value="0">JNO</option>

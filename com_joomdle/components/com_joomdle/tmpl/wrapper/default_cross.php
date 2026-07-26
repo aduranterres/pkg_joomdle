@@ -13,6 +13,12 @@
 
 use Joomla\CMS\Uri\Uri;
 
+$wrapperUrl = htmlspecialchars(
+    (string) $this->wrapper_url,
+    ENT_QUOTES | ENT_SUBSTITUTE,
+    'UTF-8'
+);
+
 ?>
 
 <style>
@@ -21,7 +27,7 @@ use Joomla\CMS\Uri\Uri;
         height: 100vh;
     }
 </style>
-<iframe id="myIframe" src="<?php echo $this->wrapper_url; ?>" scrolling="no"></iframe>
+<iframe id="myIframe" src="<?php echo $wrapperUrl; ?>" scrolling="no"></iframe>
 <script src="media/com_joomdle/js/parent.umd.js"></script>
 <script>
     iframeResize({

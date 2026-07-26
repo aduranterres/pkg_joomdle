@@ -168,8 +168,12 @@ class WrapperModel extends ListModel
                 $url = $params->get('MOODLE_URL') . $path;
                 break;
             case "fullurl":
-                $gotourl = $data['gotourl'];
-                $url = $gotourl;
+                $url = trim((string) ($data['gotourl'] ?? ''));
+                $moodleUrl = trim((string) $params->get('MOODLE_URL'));
+
+                if (!$this->isSameHttpOrigin($url, $moodleUrl)) {
+                    throw new \InvalidArgumentException('Invalid Moodle wrapper URL.', 400);
+                }
                 break;
             default:
                 if ($data['mtype']) {
@@ -184,5 +188,61 @@ class WrapperModel extends ListModel
         }
 
         return $url;
+    }
+
+    /**
+     * Checks that a URL uses HTTP(S) and has the same origin as Moodle.
+     *
+     * @param   string  $url        URL to validate.
+     * @param   string  $moodleUrl  Configured Moodle URL.
+     *
+     * @return  boolean
+     */
+    private function isSameHttpOrigin(string $url, string $moodleUrl): bool
+    {
+        if (
+            $url === ''
+            || $moodleUrl === ''
+            || preg_match('/[\x00-\x20\x7f]/', $url)
+            || filter_var($url, FILTER_VALIDATE_URL) === false
+            || filter_var($moodleUrl, FILTER_VALIDATE_URL) === false
+        ) {
+            return false;
+        }
+
+        $urlParts = parse_url($url);
+        $moodleParts = parse_url($moodleUrl);
+
+        if (!is_array($urlParts) || !is_array($moodleParts)) {
+            return false;
+        }
+
+        if (
+            isset($urlParts['user'])
+            || isset($urlParts['pass'])
+            || isset($moodleParts['user'])
+            || isset($moodleParts['pass'])
+        ) {
+            return false;
+        }
+
+        $urlScheme = strtolower($urlParts['scheme'] ?? '');
+        $moodleScheme = strtolower($moodleParts['scheme'] ?? '');
+
+        if (
+            !in_array($urlScheme, ['http', 'https'], true)
+            || !in_array($moodleScheme, ['http', 'https'], true)
+            || empty($urlParts['host'])
+            || empty($moodleParts['host'])
+        ) {
+            return false;
+        }
+
+        $urlPort = $urlParts['port'] ?? ($urlScheme === 'https' ? 443 : 80);
+        $moodlePort = $moodleParts['port'] ?? ($moodleScheme === 'https' ? 443 : 80);
+
+        return $urlScheme === $moodleScheme
+            && strtolower($urlParts['host']) === strtolower($moodleParts['host'])
+            && $urlPort === $moodlePort;
     }
 }

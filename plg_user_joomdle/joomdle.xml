@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="plugin" group="user" method="upgrade" version="5.0" order="100">
     <name>Joomdle - User plugin</name>
-    <author>Antonio Duran</author>
+    <author>Antonio Duran Terres</author>
     <creationDate>2025-06</creationDate>
     <license>GNU General Public License version 3 or later; see LICENSE.txt</license>
-    <version>3.0.0</version>
+    <version>3.1.0</version>
     <description>PLG_USER_JOOMDLE_XML_DESCRIPTION</description>
     <namespace path="src">Joomla\Plugin\User\Joomdle</namespace>
 
