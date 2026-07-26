@@ -2,7 +2,7 @@
 <extension type="package" version="5.0" method="upgrade">
     <name>PKG_Joomdle</name>
     <packagename>joomdle</packagename>
-    <version>3.1.0</version>
+    <version>3.1.1</version>
     <description>Joomdle Package</description>
     <author>Antonio Duran Terres</author>
     <creationDate>2026-01</creationDate>

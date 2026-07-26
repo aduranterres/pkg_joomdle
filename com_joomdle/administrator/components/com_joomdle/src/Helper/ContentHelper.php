@@ -912,12 +912,19 @@ class ContentHelper
         $moodle_url = $comp_params->get('MOODLE_URL');
         $cookie_path = $comp_params->get('cookie_path', "/");
 
-        $username = str_replace(' ', '%20', $username);
-        $land_file = $moodle_url . "/auth/joomdle/land.php?username=$username&token=$token&use_wrapper=0&create_user=1";
+        $land_file = $moodle_url . '/auth/joomdle/land.php';
+        $post_data = [
+            'username' => $username,
+            'token' => $token,
+            'use_wrapper' => 0,
+            'create_user' => 1,
+        ];
 
         $ch = curl_init();
         // set url
         curl_setopt($ch, CURLOPT_URL, $land_file);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($post_data));
 
         /** @var CMSApplication $app */
         $app = Factory::getApplication();
@@ -965,6 +972,50 @@ class ContentHelper
             }
         }
         unlink($file);
+    }
+
+    /**
+     * Redirect the browser to Moodle by submitting an HTML form via POST.
+     *
+     * HTTP redirects cannot change the following request to POST, so this
+     * method renders and automatically submits a form instead.
+     *
+     * @param   string  $moodle_url  Moodle endpoint receiving the request.
+     * @param   array   $post_data   Fields to send in the POST body.
+     *
+     * @return  void
+     */
+    public static function redirectToMoodleWithPost($moodle_url, array $post_data)
+    {
+        /** @var CMSApplication $app */
+        $app = Factory::getApplication();
+
+        $form_action = htmlspecialchars($moodle_url, ENT_QUOTES, 'UTF-8');
+        $form_fields = '';
+
+        foreach ($post_data as $field_name => $field_value) {
+            $field_name = htmlspecialchars((string) $field_name, ENT_QUOTES, 'UTF-8');
+            $field_value = htmlspecialchars((string) $field_value, ENT_QUOTES, 'UTF-8');
+            $form_fields .= '<input type="hidden" name="' . $field_name . '" value="' . $field_value . '">';
+        }
+
+        $html = '<!DOCTYPE html>'
+            . '<html lang="en">'
+            . '<head><meta charset="utf-8"><title>Redirecting to Moodle</title></head>'
+            . '<body>'
+            . '<form id="joomdle-post-redirect" action="' . $form_action . '" method="post">'
+            . $form_fields
+            . '<noscript><button type="submit">Continue to Moodle</button></noscript>'
+            . '</form>'
+            . '<script>document.getElementById("joomdle-post-redirect").submit();</script>'
+            . '</body>'
+            . '</html>';
+
+        $app->setHeader('Content-Type', 'text/html; charset=utf-8', true);
+        $app->setBody($html);
+        $app->sendHeaders();
+        echo $app->getBody();
+        $app->close();
     }
 
     public static function deleteMoodleUser($user)

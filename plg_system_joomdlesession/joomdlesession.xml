@@ -4,7 +4,7 @@
     <author>Antonio Duran</author>
     <creationDate>2010-01</creationDate>
     <license>GNU General Public License version 3 or later; see LICENSE.txt</license>
-    <version>3.1.0</version>
+    <version>3.1.1</version>
     <description>PLG_SYSTEM_JOOMDLESESSION_XML_DESCRIPTION</description>
     <namespace path="src">Joomla\Plugin\System\Joomdlesession</namespace>
 

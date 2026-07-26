@@ -32,6 +32,7 @@ use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Event\User\AfterLogoutEvent;
 use Joomdle\Component\Joomdle\Administrator\Helper\ContentHelper;
 use Joomdle\Component\Joomdle\Administrator\Helper\UsercheckHelper;
+use Joomdle\Component\Joomdle\Administrator\Helper\SsoHelper;
 use Joomla\CMS\Filter\InputFilter;
 use Joomla\Component\Users\Administrator\Helper\Mfa as MfaHelper;
 
@@ -179,11 +180,16 @@ final class Joomdle extends CMSPlugin implements SubscriberInterface
         $moodle_url = $comp_params->get('MOODLE_URL');
         $redirectless_sso = $comp_params->get('redirectless_sso');
 
-        $session = $app->getSession();
-        $token = md5($session->getId());
+        //        $session = $app->getSession();
+        //        $token = md5($session->getId());
+
+        $user_id = UserHelper::getUserId($username);
+
+        if (!$user_id) {
+            return;
+        }
 
         // Don't log in Moodle if user is blocked.
-        $user_id = UserHelper::getUserId($username);
         $user_obj = $this->getUserFactory()->loadUserById($user_id);
         if ($user_obj->block) {
             return;
@@ -194,31 +200,40 @@ final class Joomdle extends CMSPlugin implements SubscriberInterface
             return;
         }
 
+        $token = SsoHelper::createTicket($user_id);
+
         $return = $app->getInput()->get('return', '', 'string');
 
         if ($return) {
             if (!strncmp($return, 'B:', 2)) {
                 // CB login module.
-                $login_url = urlencode(base64_decode(substr($return, 2)));
+                $login_url = base64_decode(substr($return, 2));
             } else {
                 // Normal login.
                 $login_url = Route::_(base64_decode($return));
-                $login_url = urlencode($login_url);
             }
         } elseif (array_key_exists('url', $options)) {
-            $login_url = urlencode($options['url']);
+            $login_url = $options['url'];
         } else {
             $uri = Uri::getInstance();
-            $login_url = urlencode($uri->toString(array('path', 'query')));
+            $login_url = $uri->toString(array('path', 'query'));
         }
 
-        $username = urlencode($username);
         if ($redirectless_sso) {
             // Use redirect-less SSO
             ContentHelper::logIntoMoodle($username, $token);
         } else {
-            // Use SSO with redirect
-            $app->redirect($moodle_url . "/auth/joomdle/land.php?username=$username&token=$token&use_wrapper=0&create_user=0&wantsurl=$login_url");
+            // Use SSO with POST redirect
+            ContentHelper::redirectToMoodleWithPost(
+                $moodle_url . '/auth/joomdle/land.php',
+                [
+                    'username' => $username,
+                    'token' => $token,
+                    'use_wrapper' => 0,
+                    'create_user' => 0,
+                    'wantsurl' => $login_url,
+                ]
+            );
         }
     }
 

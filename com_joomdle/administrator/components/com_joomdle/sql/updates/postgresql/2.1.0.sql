@@ -13,8 +13,8 @@ CREATE TABLE IF NOT EXISTS "#__joomdle_course_applications" (
   "user_id" int NOT NULL,
   "course_id" int NOT NULL,
   "state" int NOT NULL,
-  "application_date" timestamp without time zone DEFAULT '1970-01-01 00:00:00' NOT NULL,
-  "confirmation_date" timestamp without time zone DEFAULT '1970-01-01 00:00:00' NOT NULL,
+  "application_date" timestamp without time zone DEFAULT NULL,
+  "confirmation_date" timestamp without time zone DEFAULT NULL,
   "motivation" text NOT NULL,
   "experience" text NOT NULL,
   PRIMARY KEY ("id")
@@ -71,7 +71,8 @@ CREATE TABLE IF NOT EXISTS "#__joomdle_purchased_courses" (
 CREATE TABLE IF NOT EXISTS "#__joomdle_products" (
   "id" serial,
   "extension" varchar(255) NOT NULL,
-  "product_i"` int NOT NULL,
+  "product_id" int NOT NULL,
   "course_id" int DEFAULT NULL,
-  "bundle_id" int DEFAULT NULL
+  "bundle_id" int DEFAULT NULL,
+  PRIMARY KEY ("id")
 );

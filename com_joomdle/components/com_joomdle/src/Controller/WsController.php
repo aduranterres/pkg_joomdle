@@ -25,8 +25,8 @@ use Joomdle\Component\Joomdle\Administrator\Helper\ContentHelper;
 use Joomdle\Component\Joomdle\Administrator\Helper\JoomlagroupsHelper;
 use Joomdle\Component\Joomdle\Administrator\Helper\MailinglistHelper;
 use Joomdle\Component\Joomdle\Administrator\Helper\ShopHelper;
+use Joomdle\Component\Joomdle\Administrator\Helper\SsoHelper;
 use Joomla\CMS\User\UserFactoryInterface;
-use Joomla\Database\ParameterType;
 
 class WsController extends BaseController
 {
@@ -116,25 +116,13 @@ class WsController extends BaseController
         $username = $params['username'];
         $token = $params['joomdle_auth_token'];
 
-        $db = Factory::getContainer()->get('DatabaseDriver');
+        $user_id = UserHelper::getUserId($username);
 
-        $query = $db->createQuery()
-            ->select($db->quoteName('session_id'))
-            ->from($db->quoteName('#__session'))
-            ->where($db->quoteName('username') . ' = :username')
-            ->where('MD5(' . $db->quoteName('session_id') . ') = :token');
-
-        $query->bind(':username', $username, ParameterType::STRING);
-        $query->bind(':token', $token, ParameterType::STRING);
-
-        $db->setQuery($query);
-        $session = $db->loadResult();
-
-        if ($session) {
-            return true;
-        } else {
+        if (!$user_id) {
             return false;
         }
+
+        return SsoHelper::consumeValidTicket($token, $user_id);
     }
 
     private function logout($params)
@@ -319,7 +307,6 @@ class WsController extends BaseController
         return JoomlagroupsHelper::removeGroupMember($course_id, $username, $type);
     }
 
-    // FIXME do when testing shop
     private function getSellUrl($params)
     {
         $course_id = $params['course_id'];

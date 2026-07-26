@@ -6,7 +6,7 @@
     <creationDate>2026-01</creationDate>
     <copyright>Copyright (C) 2014 Antonio Duran Terres</copyright>
     <license>http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL</license>
-    <version>3.1.0</version>
+    <version>3.1.1</version>
     <description>Tools for Joomla - Moodle integration</description>
     <namespace path="src">Joomdle\Component\Joomdle</namespace>
     <scriptfile>install.php</scriptfile>
@@ -23,6 +23,7 @@
     <update>
         <schemas>
             <schemapath type="mysql">sql/updates/mysql</schemapath>
+            <schemapath type="postgresql">sql/updates/postgresql</schemapath>
         </schemas>
     </update>
 
