@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="plugin" group="task" method="upgrade" version="5.0">
+    <name>plg_task_joomdle</name>
+    <author>Antonio Duran Terres</author>
+    <creationDate>2026-07</creationDate>
+    <copyright>Copyright (C) 2014 Antonio Duran Terres</copyright>
+    <license>GNU General Public License version 3 or later; see LICENSE.txt</license>
+    <version>3.1.1</version>
+    <description>PLG_TASK_JOOMDLE_XML_DESCRIPTION</description>
+    <namespace path="src">Joomla\Plugin\Task\Joomdle</namespace>
+
+    <files>
+        <folder plugin="joomdle">services</folder>
+        <folder>src</folder>
+    </files>
+
+    <languages>
+        <language tag="en-GB">language/en-GB/plg_task_joomdle.ini</language>
+        <language tag="en-GB">language/en-GB/plg_task_joomdle.sys.ini</language>
+    </languages>
+</extension>
