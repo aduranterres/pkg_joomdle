@@ -18,6 +18,7 @@
         <file type="plugin" group="system" id="joomdlesession">plg_system_joomdlesession.zip</file>
         <file type="plugin" group="system" id="joomdlemfa">plg_system_joomdlemfa.zip</file>
         <file type="plugin" group="user" id="joomdle">plg_user_joomdle.zip</file>
+        <file type="plugin" group="task" id="joomdle">plg_task_joomdle.zip</file>
     </files>
 
     <updateservers>

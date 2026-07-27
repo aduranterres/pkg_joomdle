@@ -20,6 +20,7 @@ use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\Application\Web\WebClient;
 use Joomla\CMS\Uri\Uri;
+use Joomla\Utilities\IpHelper;
 use Joomdle\Component\Joomdle\Administrator\Helper\MappingsHelper;
 use Joomdle\Component\Joomdle\Administrator\Helper\ContentHelper;
 use Joomdle\Component\Joomdle\Administrator\Helper\JoomlagroupsHelper;
@@ -328,12 +329,31 @@ class WsController extends BaseController
         return hash_equals($joomla_token, (string) $token);
     }
 
+    private function checkIpRestriction()
+    {
+        $comp_params = ComponentHelper::getParams('com_joomdle');
+        $ip_restriction = trim((string) $comp_params->get('ip_restriction', ''));
+
+        if ($ip_restriction === '') {
+            return true;
+        }
+
+        $client_ip = IpHelper::getIp();
+
+        return IpHelper::IPinList($client_ip, $ip_restriction);
+    }
+
     public function server()
     {
+        if (!$this->checkIpRestriction()) {
+            echo json_encode('Access denied IP address:' . IpHelper::getIp());
+            exit();
+        }
+
         if (!$this->checkJoomdleToken()) {
             $token = $this->input->get('token');
-            print_r(json_encode("Invalid token:" . $token));
-            return;
+            echo json_encode('Invalid token:' . $token);
+            exit();
         }
 
         $methodvariables = array_merge($_GET, $_POST);

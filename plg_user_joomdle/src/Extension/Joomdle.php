@@ -103,7 +103,6 @@ final class Joomdle extends CMSPlugin implements SubscriberInterface
         $user  = $event->getUser();
         $isnew = $event->getIsNew();
 
-        // FIXME he puesto el msg='' u ssucess=''; Ver q es esto ... parece q no lo usamos ahora, mirar codigo antiguo
         $msg = '';
         $success = '';
         ContentHelper::syncUser($user, $isnew, $success, $msg);
@@ -179,9 +178,6 @@ final class Joomdle extends CMSPlugin implements SubscriberInterface
 
         $moodle_url = $comp_params->get('MOODLE_URL');
         $redirectless_sso = $comp_params->get('redirectless_sso');
-
-        //        $session = $app->getSession();
-        //        $token = md5($session->getId());
 
         $user_id = UserHelper::getUserId($username);
 

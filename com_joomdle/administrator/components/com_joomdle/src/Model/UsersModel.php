@@ -762,6 +762,12 @@ class UsersModel extends ListModel
                 continue;
             }
             $user = Factory::getContainer()->get(UserFactoryInterface::class)->loadUserById($id);
+
+            // Don't allow ministrators
+            if ($user->authorise('core.login.admin')) {
+                continue;
+            }
+
             /* If user not already in Moodle, warn user and continue to next item */
             if (!ContentHelper::userExists($user->username)) {
                 $error = Text::_('COM_JOOMDLE_USER_ID_DOES_NOT_EXIT_IN_MOODLE') . ": " . $user->username;

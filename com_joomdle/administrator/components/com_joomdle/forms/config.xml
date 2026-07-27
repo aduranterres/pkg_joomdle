@@ -14,7 +14,7 @@
         />
 
         <field name="connection_method" type="list" label="COM_JOOMDLE_CONNECTION_METHOD"
-            description="COM_JOOMDLE_CONNECTION_METHOD_DESCRIPTION" 
+            description="COM_JOOMDLE_CONNECTION_METHOD_DESCRIPTION"
             size="1" default="fgc"
         >
             <option value="fgc">
@@ -28,6 +28,12 @@
             label="COM_JOOMDLE_JOOMLA_AUTH_TOKEN"
             class="input-xlarge"
             readonly="true"
+        />
+
+        <field name="ip_restriction" type="text"
+            description="COM_JOOMDLE_IP_RESTRICTION_DESCRIPTION"
+            label="COM_JOOMDLE_IP_RESTRICTION"
+            class="input-xlarge"
         />
 
         <field
@@ -102,7 +108,7 @@
 
     <fieldset name="links" label="COM_JOOMDLE_CONFIG_LINKS_BEHAVIOUR" addfieldpath="/administrator/components/com_joomdle/models/fields">
         <field name="linkstarget" type="list" label="COM_JOOMDLE_OPEN_MOODLE_LINKS"
-            description="COM_JOOMDLE_OPEN_MOODLE_LINKS_DESCRIPTION" 
+            description="COM_JOOMDLE_OPEN_MOODLE_LINKS_DESCRIPTION"
             size="1" default="wrapper"
         >
             <option value="wrapper">
@@ -114,7 +120,7 @@
         </field>
 
         <field name="scrolling" type="list" label="COM_JOOMDLE_WRAPPER_SCROLL_BARS"
-            description="COM_JOOMDLE_WRAPPER_SCROLL_BARS_DESCRIPTION" 
+            description="COM_JOOMDLE_WRAPPER_SCROLL_BARS_DESCRIPTION"
             size="1" default="auto"
         >
             <option value="auto">
@@ -200,7 +206,7 @@
         <fieldset name="actionbuttons" label="COM_JOOMDLE_CONFIG_ACTION_BUTTONS">
 
             <field name="free_courses_button" type="list" label="COM_JOOMDLE_SHOW_FREE_COURSES_BUTTON"
-                description="COM_JOOMDLE_SHOW_FREE_COURSES_BUTTON_DESCRIPTION" 
+                description="COM_JOOMDLE_SHOW_FREE_COURSES_BUTTON_DESCRIPTION"
                 size="1" default="enrol"
             >
                 <option value="0">
@@ -212,7 +218,7 @@
             </field>
 
             <field name="paid_courses_button" type="list" label="COM_JOOMDLE_SHOW_PAID_COURSES_BUTTON"
-                description="COM_JOOMDLE_SHOW_PAID_COURSES_BUTTON_DESCRIPTION" 
+                description="COM_JOOMDLE_SHOW_PAID_COURSES_BUTTON_DESCRIPTION"
                 size="1" default="buy"
             >
                 <option value="0">
@@ -222,7 +228,7 @@
             </field>
 
             <field name="goto_course_button" type="list" label="COM_JOOMDLE_GOTO_COURSE_BUTTON"
-                description="COM_JOOMDLE_GOTO_COURSE_BUTTON_DESCRIPTION" 
+                description="COM_JOOMDLE_GOTO_COURSE_BUTTON_DESCRIPTION"
                 size="1" default="moodle"
             >
                 <option value="0">
@@ -348,7 +354,7 @@
             </field>
 
             <field
-                name="show_topìcs_link"
+                name="show_topics_link"
                 type="radio"
                 default="1"
                 label="COM_JOOMDLE_SHOW_TOPICS_LINKS"
@@ -511,7 +517,7 @@
         />
 
         <field name="send_bundle_emails" type="list" label="COM_JOOMDLE_SEND_BUNDLE_EMAILS"
-            description="COM_JOOMDLE_SEND_BUNDLE_EMAILS_DESCRIPTION" 
+            description="COM_JOOMDLE_SEND_BUNDLE_EMAILS_DESCRIPTION"
             size="1" default="0"
         >
             <option value="0">
@@ -565,7 +571,7 @@
 
         <fieldset name="mailinglist" label="COM_JOOMDLE_CONFIG_MAILING_LISTS">
             <field name="mailing_list_integration" type="mailinglist" label="COM_JOOMDLE_MAILING_LIST_INTEGRATION"
-                description="COM_JOOMDLE_MAILING_LIST_INTEGRATION_DESCRIPTION" 
+                description="COM_JOOMDLE_MAILING_LIST_INTEGRATION_DESCRIPTION"
                 default="no"
             >
             </field>

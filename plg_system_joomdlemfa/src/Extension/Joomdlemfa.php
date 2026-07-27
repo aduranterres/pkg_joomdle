@@ -24,6 +24,7 @@ use Joomla\CMS\User\UserFactoryInterface;
 use Joomla\CMS\User\UserHelper;
 use Joomla\Event\SubscriberInterface;
 use Joomdle\Component\Joomdle\Administrator\Helper\ContentHelper;
+use Joomdle\Component\Joomdle\Administrator\Helper\SsoHelper;
 use Joomla\Component\Users\Administrator\Helper\Mfa as MfaHelper;
 
 /**
@@ -61,43 +62,55 @@ final class Joomdlemfa extends CMSPlugin implements SubscriberInterface
         }
 
         // Do nothing if the user is blocked.
-        $userId  = UserHelper::getUserId($username);
-        $userObj = Factory::getContainer()->get(UserFactoryInterface::class)->loadUserById($userId);
+        $user_id = UserHelper::getUserId($username);
 
-        if ($userObj->block) {
+        if (!$user_id) {
+            return;
+        }
+
+        $user_obj = Factory::getContainer()->get(UserFactoryInterface::class)->loadUserById($user_id);
+
+        if ($user_obj->block) {
             return;
         }
 
         // Nothing to do if the user has no MFA records (this should not happen).
-        if (empty(MfaHelper::getUserMfaRecords($userId))) {
+        if (empty(MfaHelper::getUserMfaRecords($user_id))) {
             return;
         }
 
-        $compParams      = ComponentHelper::getParams('com_joomdle');
-        $moodleUrl       = $compParams->get('MOODLE_URL');
-        $redirectlessSso = $compParams->get('redirectless_sso');
+        $comp_params      = ComponentHelper::getParams('com_joomdle');
+        $moodle_url       = $comp_params->get('MOODLE_URL');
+        $redirectless_sso = $comp_params->get('redirectless_sso');
 
         $session = $app->getSession();
-        $token   = md5($session->getId());
+        //        $token   = md5($session->getId());
 
-        if ($redirectlessSso) {
+        $token = SsoHelper::createTicket($user_id);
+
+        if ($redirectless_sso) {
             ContentHelper::logIntoMoodle($username, $token);
-
             return;
         }
 
         // Build the wantsurl: prefer the captive return URL stored in session.
-        $returnUrl = (string) $session->get('com_users.return_url', '');
+        $return_url = (string) $session->get('com_users.return_url', '');
 
-        if ($returnUrl === '' || !Uri::isInternal($returnUrl)) {
-            $returnUrl = Uri::base();
+        if ($return_url === '' || !Uri::isInternal($return_url)) {
+            $return_url = Uri::base();
         }
 
-        $loginUrl = urlencode(Route::_($returnUrl));
-        $username = urlencode($username);
+        $login_url = Route::_($return_url);
 
-        $app->redirect(
-            $moodleUrl . "/auth/joomdle/land.php?username=$username&token=$token&use_wrapper=0&create_user=0&wantsurl=$loginUrl"
+        ContentHelper::redirectToMoodleWithPost(
+            $moodle_url . '/auth/joomdle/land.php',
+            [
+                'username' => $username,
+                'token' => $token,
+                'use_wrapper' => 0,
+                'create_user' => 0,
+                'wantsurl' => $login_url,
+            ]
         );
     }
 }

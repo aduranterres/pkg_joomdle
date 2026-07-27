@@ -12,6 +12,7 @@ namespace Joomdle\Component\Joomdle\Administrator\Model;
 
 use Joomla\CMS\Table\Table;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\AdminModel;
 use Joomla\Database\ParameterType;
 use Joomla\CMS\Component\ComponentHelper;
@@ -138,6 +139,13 @@ class ConfigModel extends AdminModel
 
     public function save($data)
     {
+        $data['ip_restriction'] = trim((string) ($data['ip_restriction'] ?? ''));
+
+        if (!$this->isValidIpRestriction($data['ip_restriction'])) {
+            $this->setError(Text::_('COM_JOOMDLE_ERROR_INVALID_IP_RESTRICTION'));
+            return false;
+        }
+
         //Get joomdle extension id
         $db = $this->getDatabase();
         $query = $db->createQuery()
@@ -175,6 +183,70 @@ class ConfigModel extends AdminModel
         $ext->params = $json;
 
         $db->updateObject('#__extensions', $ext, 'extension_id');
+
+        return true;
+    }
+
+    /**
+     * Validate a comma-separated list of IP addresses or ranges.
+     *
+     * @param   string  $ip_restriction  IP restriction to validate.
+     *
+     * @return  boolean
+     */
+    private function isValidIpRestriction($ip_restriction)
+    {
+        if ($ip_restriction === '') {
+            return true;
+        }
+
+        $ip_expressions = explode(',', $ip_restriction);
+
+        foreach ($ip_expressions as $ip_expression) {
+            $ip_expression = trim($ip_expression);
+
+            if ($ip_expression === '') {
+                return false;
+            }
+
+            if (str_contains($ip_expression, '-')) {
+                $range = explode('-', $ip_expression, 2);
+                $start_ip = trim($range[0]);
+                $end_ip = trim($range[1]);
+
+                if (
+                    !filter_var($start_ip, FILTER_VALIDATE_IP)
+                    || !filter_var($end_ip, FILTER_VALIDATE_IP)
+                    || str_contains($start_ip, ':') !== str_contains($end_ip, ':')
+                ) {
+                    return false;
+                }
+
+                continue;
+            }
+
+            if (str_contains($ip_expression, '/')) {
+                $cidr = explode('/', $ip_expression, 2);
+                $network_ip = trim($cidr[0]);
+                $prefix_length = trim($cidr[1]);
+
+                if (!filter_var($network_ip, FILTER_VALIDATE_IP) || !ctype_digit($prefix_length)) {
+                    return false;
+                }
+
+                $maximum_prefix_length = str_contains($network_ip, ':') ? 128 : 32;
+
+                if ((int) $prefix_length > $maximum_prefix_length) {
+                    return false;
+                }
+
+                continue;
+            }
+
+            if (!filter_var($ip_expression, FILTER_VALIDATE_IP)) {
+                return false;
+            }
+        }
 
         return true;
     }

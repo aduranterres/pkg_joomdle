@@ -23,7 +23,7 @@ $course_info = $this->course_info;
 $itemid = ContentHelper::getMenuItem();
 
 $show_contents_link = $this->params->get('show_contents_link');
-$show_topics_link = $this->params->get('show_topìcs_link');
+$show_topics_link = $this->params->get('show_topics_link');
 $show_grading_system_link = $this->params->get('show_grading_system_link');
 $show_teachers_link = $this->params->get('show_teachers_link');
 $show_category = $this->params->get('show_detail_category', 1);

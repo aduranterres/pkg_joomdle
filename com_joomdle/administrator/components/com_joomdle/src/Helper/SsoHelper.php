@@ -34,17 +34,15 @@ class SsoHelper
         $db = Factory::getContainer()->get('DatabaseDriver');
         $db->insertObject('#__joomdle_sso_tickets', $ticket);
 
-        self::deleteExpiredTickets();
-
         return $token;
     }
 
     /**
      * Delete SSO tickets created more than 24 hours ago.
      *
-     * @return  void
+     * @return  int  Number of deleted tickets.
      */
-    private static function deleteExpiredTickets(): void
+    public static function deleteExpiredTickets(): int
     {
         $db = Factory::getContainer()->get('DatabaseDriver');
         $expiration_limit = time() - 86400;
@@ -57,6 +55,8 @@ class SsoHelper
 
         $db->setQuery($query);
         $db->execute();
+
+        return $db->getAffectedRows();
     }
 
     /**

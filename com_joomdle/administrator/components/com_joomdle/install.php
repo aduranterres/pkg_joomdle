@@ -12,12 +12,9 @@ use Joomla\CMS\Application\AdministratorApplication;
 use Joomla\CMS\Installer\Installer;
 use Joomla\CMS\Installer\InstallerAdapter;
 use Joomla\CMS\Installer\InstallerScriptInterface;
-use Joomla\CMS\Language\Text;
 use Joomla\Database\DatabaseInterface;
 use Joomla\DI\Container;
 use Joomla\DI\ServiceProviderInterface;
-use Joomla\Filesystem\File;
-use Joomla\Filesystem\Exception\FilesystemException;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomdle\Component\Joomdle\Administrator\Helper\ContentHelper;
 
@@ -25,12 +22,12 @@ use Joomdle\Component\Joomdle\Administrator\Helper\ContentHelper;
 \defined('_JEXEC') or die;
 // phpcs:enable PSR1.Files.SideEffects
 
-return new class () implements ServiceProviderInterface {
+return new class() implements ServiceProviderInterface {
     public function register(Container $container)
     {
         $container->set(
             InstallerScriptInterface::class,
-            new class (
+            new class(
                 $container->get(AdministratorApplication::class),
                 $container->get(DatabaseInterface::class)
             ) implements InstallerScriptInterface {
@@ -73,8 +70,8 @@ return new class () implements ServiceProviderInterface {
                         $installed_moodle_version = $this->getMoodleVersion();
                         if ($installed_moodle_version < $manifest->requiresMoodleVersion) {
                             $parent->getParent()->abort('Your Moodle version does not support this Joomdle release.<br>' .
-                                    'Installed Moodle version: ' . $installed_moodle_version . '<br>' .
-                                    'Required Moodle version >= ' . $manifest->requiresMoodleVersion);
+                                'Installed Moodle version: ' . $installed_moodle_version . '<br>' .
+                                'Required Moodle version >= ' . $manifest->requiresMoodleVersion);
                             return false;
                         }
                     }
@@ -84,18 +81,73 @@ return new class () implements ServiceProviderInterface {
 
                 public function postflight(string $type, InstallerAdapter $parent): bool
                 {
-                    // Set Joomdle user plugin ordering to execute last
-					// Set plugin ordering
-					$this->db->setQuery(
-						"UPDATE #__extensions
-						SET ordering=100
-						WHERE element = 'joomdle' 
-						AND folder = 'user'"
-					);
+                    if ($type === 'install' || $type === 'update') {
+                        // Enable the Joomdle user and task plugins after installation or update
+                        $this->db->setQuery(
+                            "UPDATE #__extensions
+                            SET enabled = 1
+                            WHERE type = 'plugin'
+                            AND element = 'joomdle'
+                            AND folder = 'task'"
+                        );
 
-					$this->db->execute();
+                        $this->db->execute();
+
+                        $this->ensureDailySchedulerTask();
+                    }
+
+                    // Set Joomdle user plugin ordering to execute last
+                    // Set plugin ordering
+                    $this->db->setQuery(
+                        "UPDATE #__extensions
+                        SET ordering=100
+                        WHERE element = 'joomdle' 
+                        AND folder = 'user'"
+                    );
+
+                    $this->db->execute();
 
                     return true;
+                }
+
+                private function ensureDailySchedulerTask(): void
+                {
+                    $taskType = 'joomdle.deleteExpiredSsoTickets';
+
+                    $query = $this->db->getQuery(true)
+                        ->select('COUNT(*)')
+                        ->from($this->db->quoteName('#__scheduler_tasks'))
+                        ->where($this->db->quoteName('type') . ' = ' . $this->db->quote($taskType));
+
+                    $this->db->setQuery($query);
+
+                    if ((int) $this->db->loadResult() > 0) {
+                        return;
+                    }
+
+                    $component = $this->app->bootComponent('com_scheduler');
+                    $model = $component->getMVCFactory()->createModel(
+                        'Task',
+                        'Administrator',
+                        ['ignore_request' => true]
+                    );
+
+                    $task = [
+                        'title'           => 'Joomdle - Delete expired SSO tickets',
+                        'type'            => $taskType,
+                        'execution_rules' => [
+                            'rule-type'     => 'interval-days',
+                            'interval-days' => 1,
+                            'exec-time'     => gmdate('H:i'),
+                            'exec-day'      => gmdate('d'),
+                        ],
+                        'state'            => 1,
+                        'params'           => [],
+                    ];
+
+                    if (!$model->save($task)) {
+                        throw new \RuntimeException($model->getError() ?: 'Could not create Joomdle scheduled task.');
+                    }
                 }
 
                 private function systemReadyForVersionCheck()
@@ -128,7 +180,7 @@ return new class () implements ServiceProviderInterface {
                     if ($response == '') {
                         return false;
                     } else {
-                        if ($response ['joomdle_auth'] != 1) {
+                        if ($response['joomdle_auth'] != 1) {
                             return false;
                         } elseif ($response['joomdle_configured'] == 0) {
                             return false;

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="plugin" group="system" method="upgrade" version="5.0">
     <name>plg_system_joomdlemfa</name>
-    <author>Antonio Duran</author>
+    <author>Antonio Duran Terres</author>
     <creationDate>2026-04</creationDate>
     <license>GNU General Public License version 3 or later; see LICENSE.txt</license>
-    <version>1.0.0</version>
+    <version>3.1.1</version>
     <description>PLG_SYSTEM_JOOMDLEMFA_XML_DESCRIPTION</description>
     <namespace path="src">Joomla\Plugin\System\Joomdlemfa</namespace>
 

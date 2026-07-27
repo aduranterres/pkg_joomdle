@@ -512,6 +512,9 @@ class ContentHelper
             if (array_key_exists('debuginfo', $response)) {
                 $system[3]['error'] .= ' ' . $response['debuginfo'];
             }
+        } elseif ((is_array($response)) && (array_key_exists('curl_blocked', $response)) && ($response['curl_blocked'] == 1)) {
+            $system[3]['value'] = 0;
+            $system[3]['error'] =  Text::_('COM_JOOMDLE_JOOMDLE_CURL_BLOCKED_IN_MOODLE');
         } else {
             if ($response['joomdle_auth'] != 1) {
                 $system[3]['value'] = 0;

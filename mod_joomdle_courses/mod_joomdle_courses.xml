@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 3 or later; see LICENSE.txt</license>
     <authorEmail>antonio@joomdle.com</authorEmail>
     <authorUrl>www.joomdle.com</authorUrl>
-	<version>3.1.0</version>
+	<version>3.1.1</version>
 	<description>MOD_JOOMDLE_COURSES_XML_DESCRIPTION</description>
 	<namespace path="src">Joomla\Module\JoomdleCourses</namespace>
 	<files>

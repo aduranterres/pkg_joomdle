@@ -41,11 +41,20 @@ class ConfigController extends FormController
         $this->checkToken();
 
         $data = $this->input->post->get('jform', [], 'array');
+        $model = $this->getModel();
+        $saved = $model->save($data);
 
-        $saved = $this->getModel()->save($data);
+        if (!$saved) {
+            $this->app->setUserState('com_joomdle.edit.config.data', $data);
+            $this->setMessage($model->getError(), 'error');
+            $this->setRedirect('index.php?option=com_joomdle&view=config');
 
-        $this->setMessage(Text::_("Configuration saved."));
-        $this->setRedirect("index.php?option=com_joomdle&view=config");
+            return false;
+        }
+
+        $this->app->setUserState('com_joomdle.edit.config.data', null);
+        $this->setMessage(Text::_('Configuration saved.'));
+        $this->setRedirect('index.php?option=com_joomdle&view=config');
 
         return $saved;
     }

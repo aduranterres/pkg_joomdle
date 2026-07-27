@@ -30,6 +30,12 @@
             readonly="true"
         />
 
+        <field name="ip_restriction" type="text"
+            description="COM_JOOMDLE_IP_RESTRICTION_DESCRIPTION"
+            label="COM_JOOMDLE_IP_RESTRICTION"
+            class="input-xlarge"
+        />
+
         <field
             name="redirectless_sso"
             type="radio"
