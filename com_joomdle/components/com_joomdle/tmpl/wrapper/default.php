@@ -36,7 +36,7 @@ $wrapperUrl = htmlspecialchars(
         <?php if (!$this->params->get('autoheight', 1)) { ?>
         height="<?php echo $this->params->get('height', '500'); ?>"
         onload="scroll(0,0);"
-        <?php
+            <?php
         }
         ?>
 
@@ -44,7 +44,7 @@ $wrapperUrl = htmlspecialchars(
         frameborder="0"
         <?php if ($this->params->get('autoheight', 1)) { ?>
         onload='itspower(this, false, true, 20, <?php echo $min_height; ?>)'
-        <?php
+            <?php
         }
         ?>
 

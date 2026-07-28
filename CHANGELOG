@@ -1,3 +1,24 @@
+Joomdle 3.1.1 for Joomla 5 and 6
+------------------------------------
+- Added support for Joomla Multi-Factor Authentication
+- Added temporary one-time SSO tickets and a scheduled cleanup task
+- Improved security across Joomla and Moodle
+- Updated iframe-resizer integration
+- Improved PostgreSQL installation and upgrade support
+- Fixed redirect-less SSO from Moodle to Joomla
+- Removed obsolete code and updated code to current Joomla and Moodle APIs
+
+Joomdle 3.0.1 for Joomla 5 and 6
+------------------------------------
+- Fix name sync problem when no additional data source is set
+- Add mycompletedcourses view
+- Change backend panel icons and documentation link
+- Show all categories, including subcategories, in views config options
+
+Joomdle 3.0 for Joomla 5 and 6
+------------------------------------
+- First stable release for Joomla 5/6
+
 Joomdle 2.4 for Joomla 3, 4 and 5
 ------------------------------------
 - Added config options to set User agent for web service calls

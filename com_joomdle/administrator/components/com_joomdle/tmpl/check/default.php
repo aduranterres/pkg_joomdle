@@ -19,9 +19,9 @@ use Joomla\CMS\Language\Text;
         <?php echo $this->sidebar; ?>
     </div>
     <div id="j-main-container" class="span10">
-    <?php else : ?>
+<?php else : ?>
         <div id="j-main-container">
-        <?php endif; ?>
+<?php endif; ?>
 
         <table width="100%" class="table table-striped">
             <thead>
@@ -36,13 +36,13 @@ use Joomla\CMS\Language\Text;
                 $k = 0;
                 $i = 0;
                 foreach ($this->system_info as $row) {
-                ?>
+                    ?>
                     <tr class="<?php echo "row$k"; ?>">
                         <td><?php echo $row['description']; ?></td>
                         <td align="center"><?php echo ($row['value'] == 1) ? HTMLHelper::image('media/com_joomdle/images/tick.png', 'Ok') : HTMLHelper::image('media/com_joomdle/images/publish_r.png', 'Error'); ?></td>
                         <td align="center"><?php echo $row['error']; ?> </td>
                     </tr>
-                <?php
+                    <?php
                     $k = 1 - $k;
                     $i++;
                 }

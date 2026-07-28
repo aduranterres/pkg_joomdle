@@ -16,7 +16,7 @@ use Joomla\CMS\Router\Route;
 use Joomla\CMS\Language\Text;
 use Joomdle\Component\Joomdle\Administrator\Helper\ContentHelper;
 
-if (!count($this->items)) {
+if ((!is_array($this->items)) || (!count($this->items))) {
     echo '<span class="joomdle_nocourses_message">' . $this->params->get('nocourses_text') . "</span>";
     return;
 }
@@ -41,7 +41,7 @@ if ($linkto == 'moodle') {
 
 $linkstarget = $this->params->get('linkstarget');
 if ($linkstarget == "new") {
-     $target = " target='_blank'";
+    $target = " target='_blank'";
 } else {
     $target = "";
 }
@@ -49,85 +49,85 @@ if ($linkstarget == "new") {
 $show_unenrol_link = $this->params->get('show_unenrol_link');
 $show_images_and_summary = $this->params->get('show_images_and_summary');
 ?>
-<div class="joomdle-mycourses<?php echo $this->pageclass_sfx;?>">
+<div class="joomdle-mycourses<?php echo $this->pageclass_sfx; ?>">
     <?php if ($this->params->get('show_page_heading', 1)) : ?>
-    <h1>
-        <?php echo $this->escape($this->params->get('page_heading')); ?>
-    </h1>
+        <h1>
+            <?php echo $this->escape($this->params->get('page_heading')); ?>
+        </h1>
     <?php endif; ?>
 
     <?php if ($show_images_and_summary) : ?>
-    <div class="joomdle_mycourses_no_list">
+        <div class="joomdle_mycourses_no_list">
     <?php else : ?>
-    <div class="joomdle_mycourses">
+            <div class="joomdle_mycourses">
     <?php endif; ?>
-    <ul>
-    <?php
-    $lang = ContentHelper::getLang();
-    if (is_array($this->items)) {
-        foreach ($this->items as $id => $item) :  ?>
+            <ul>
                 <?php
-                $slug = ApplicationHelper::stringURLSafe($item['fullname']);
-                ?>
-            <li>
-                <?php
-                if ($linkto == 'moodle') {
-                    $data = array ();
-                    $data['moodle_page_type'] = 'course';
-                    $data['id'] = $item['id'];
-                    if ($lang) {
-                        $data['lang'] = $lang;
-                    }
-
-                    $link = ContentHelper::getJumpURL($data);
-                    $redirect_url = $link;
-
-                    $course_link =  "<a $target href=\"$link\">" . $item['fullname'] . "</a>";
-                } elseif ($linkto == 'detail') {
-                    // Link to detail view
-                    $redirect_url = Route::_("index.php?option=com_joomdle&view=detail&course_id=" . $item['id'] . '-' . $slug .
-                    "&Itemid=$itemid");
-                    $course_link =  "<a href=\"" . $redirect_url . "\">" . $item['fullname'] . "</a>";
-                }
-
-                if ($show_images_and_summary) {
-                    if (count($item['summary_files'])) {
-                        foreach ($item['summary_files'] as $file) :
-                            echo "<a $target href=\"$redirect_url\">";
-                            ?>
-                                <div class='joomdle_course_image'>
-                                    <img style="float:none;" hspace="5" vspace="5" align="left" src="<?php echo $file['url']; ?>">
-                                </div>
-                            <?php
-                            echo "</a>";
-                        endforeach;
-                    }
-                }
-
-                echo $course_link;
-
-                if ($show_unenrol_link) {
-                    if ($item['can_unenrol']) {
-                        ?>
-                        <form action="<?php echo Route::_('index.php?option=com_joomdle'); ?>" method="post" class="joomdle_unenrol_form">
-                            <input type="hidden" name="task" value="course.unenrol">
-                            <input type="hidden" name="course_id" value="<?php echo (int) $item['id']; ?>">
-                            <?php echo HTMLHelper::_('form.token'); ?>
-                            <button type="submit" class="joomdle_unenrol_link">(<?php echo Text::_('COM_JOOMDLE_UNENROL'); ?>)</button>
-                        </form>
+                $lang = ContentHelper::getLang();
+                if (is_array($this->items)) {
+                    foreach ($this->items as $id => $item) :  ?>
                         <?php
-                    }
-                }
+                        $slug = ApplicationHelper::stringURLSafe($item['fullname']);
+                        ?>
+                        <li>
+                            <?php
+                            if ($linkto == 'moodle') {
+                                $data = array();
+                                $data['moodle_page_type'] = 'course';
+                                $data['id'] = $item['id'];
+                                if ($lang) {
+                                    $data['lang'] = $lang;
+                                }
 
-                if ($show_images_and_summary) {
-                    echo "<div class='course_summary'>" . $item['summary'] . "</div>";
-                    echo "<div class='clear_float'></div>";
-                }
+                                $link = ContentHelper::getJumpURL($data);
+                                $redirect_url = $link;
 
-                ?>
-            </li>
-        <?php endforeach;
-    }; ?>
-    </ul>
-    </div>
-</div>
+                                $course_link =  "<a $target href=\"$link\">" . $item['fullname'] . "</a>";
+                            } elseif ($linkto == 'detail') {
+                                // Link to detail view
+                                $redirect_url = Route::_("index.php?option=com_joomdle&view=detail&course_id=" . $item['id'] . '-' . $slug .
+                                    "&Itemid=$itemid");
+                                $course_link =  "<a href=\"" . $redirect_url . "\">" . $item['fullname'] . "</a>";
+                            }
+
+                            if ($show_images_and_summary) {
+                                if (count($item['summary_files'])) {
+                                    foreach ($item['summary_files'] as $file) :
+                                        echo "<a $target href=\"$redirect_url\">";
+                                        ?>
+                                        <div class='joomdle_course_image'>
+                                            <img style="float:none;" hspace="5" vspace="5" align="left" src="<?php echo $file['url']; ?>">
+                                        </div>
+                                        <?php
+                                        echo "</a>";
+                                    endforeach;
+                                }
+                            }
+
+                            echo $course_link;
+
+                            if ($show_unenrol_link) {
+                                if ($item['can_unenrol']) {
+                                    ?>
+                                    <form action="<?php echo Route::_('index.php?option=com_joomdle'); ?>" method="post" class="joomdle_unenrol_form">
+                                        <input type="hidden" name="task" value="course.unenrol">
+                                        <input type="hidden" name="course_id" value="<?php echo (int) $item['id']; ?>">
+                                        <?php echo HTMLHelper::_('form.token'); ?>
+                                        <button type="submit" class="joomdle_unenrol_link">(<?php echo Text::_('COM_JOOMDLE_UNENROL'); ?>)</button>
+                                    </form>
+                                    <?php
+                                }
+                            }
+
+                            if ($show_images_and_summary) {
+                                echo "<div class='course_summary'>" . $item['summary'] . "</div>";
+                                echo "<div class='clear_float'></div>";
+                            }
+
+                            ?>
+                        </li>
+                    <?php endforeach;
+                }; ?>
+            </ul>
+            </div>
+        </div>

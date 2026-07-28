@@ -21,7 +21,7 @@ use Joomla\DI\ServiceProviderInterface;
 use Joomla\CMS\User\UserFactoryInterface;
 use Joomla\Plugin\User\Joomdle\Extension\Joomdle;
 
-return new class() implements ServiceProviderInterface {
+return new class () implements ServiceProviderInterface {
     /**
      * Registers the service provider with a DI container.
      *
