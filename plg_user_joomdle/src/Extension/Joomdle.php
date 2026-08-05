@@ -164,7 +164,7 @@ final class Joomdle extends CMSPlugin implements SubscriberInterface
             return;
         }
 
-        if ($app->isClient('administrator')) {
+        if (($app->isClient('administrator')) || ($app->isClient('api'))) {
             return true;
         }
 

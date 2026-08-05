@@ -18,46 +18,47 @@ use Joomdle\Component\Joomdle\Administrator\Helper\ContentHelper;
 
 ?>
 
-<div class="joomdle-itemlist<?php echo $this->pageclass_sfx;?>">
+<div class="joomdle-itemlist<?php echo $this->pageclass_sfx; ?>">
     <h1>
         <?php echo $this->course['fullname'] . ': '; ?>
         <?php echo Text::_('COM_JOOMDLE_COURSE_EVENTS'); ?>
     </h1>
 
-<?php
-$lang = ContentHelper::getLang();
-foreach ($this->items as $item) : ?>
-    <div class="joomdle_item_list_item">
-        <div class="">
+    <?php
+    $lang = ContentHelper::getLang();
+    foreach ($this->items as $item) : ?>
+        <div class="joomdle_item_list_item">
             <div class="">
-            <?php
-            $linkstarget = $this->params->get('linkstarget');
-            if ($linkstarget == "new") {
-                     $target = " target='_blank'";
-            } else {
-                $target = "";
-            }
+                <div class="">
+                    <?php
+                    $linkstarget = $this->params->get('linkstarget');
+                    if ($linkstarget == "new") {
+                        $target = " target='_blank'";
+                    } else {
+                        $target = "";
+                    }
 
-            $data = [];
-            $data['moodle_page_type'] = 'event';
-            $data['id'] = ''; // Not needed here
-            $jump_url = ContentHelper::getJumpURL($data);
+                    $data = [];
+                    $data['moodle_page_type'] = 'event';
+                    $data['id'] = ''; // Not needed here
+                    $data['course_id'] = $item['courseid'];
+                    $jump_url = ContentHelper::getJumpURL($data);
 
-            $link = $jump_url . "&mtype=item&id=" . $item['courseid'] . "&time=" . $item['timestart'];
-            if ($lang) {
-                $link .= "&lang=$lang";
-            }
+                    $link = $jump_url . "&id=" . $item['courseid'] . "&time=" . $item['timestart'];
+                    if ($lang) {
+                        $link .= "&lang=$lang";
+                    }
 
-            echo "<a $target href=\"$link\">" . HTMLHelper::_('date', $item['timestart'], Text::_('DATE_FORMAT_LC2')) . "</a>";
+                    echo "<a $target href=\"$link\">" . HTMLHelper::_('date', $item['timestart'], Text::_('DATE_FORMAT_LC2')) . "</a>";
 
-            ?>
-            </div>
-            <div class="">
-                <p>
-                <?php echo $item['name']; ?>
-                </p>
+                    ?>
+                </div>
+                <div class="">
+                    <p>
+                        <?php echo $item['name']; ?>
+                    </p>
+                </div>
             </div>
         </div>
-    </div>
-<?php endforeach; ?>
+    <?php endforeach; ?>
 </div>

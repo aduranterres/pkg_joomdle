@@ -52,7 +52,7 @@ $listDirn   = $this->state->get('list.direction');
                                     <?php echo Text::_('COM_JOOMDLE_SELL_ON_SHOP'); ?>
                                 </th>
                                 <th scope="col" class="w-5 d-none d-md-table-cell">
-                                    <?php echo Text::_('JGRID_HEADING_ID'); ?>
+                                    <?php echo HTMLHelper::_('searchtools.sort', 'JGRID_HEADING_ID', 'id', $listDirn, $listOrder); ?>
                                 </th>
                             </tr>              
                         </thead>

@@ -1,3 +1,12 @@
+Joomdle 3.1.2 for Joomla 5 and 6
+------------------------------------
+- Set correct lastip address in Moodle when using redirect-less SSO from Joomla
+- Allow sorting by Moodle course id in Shop backend view
+- Ignore Joomdle user plugin on API access
+- Add option to disable topics view
+- Fix links to Moodle in events and grades views when not using the wrapper
+- Fixes and improvements in certificate sending
+
 Joomdle 3.1.1 for Joomla 5 and 6
 ------------------------------------
 - Added support for Joomla Multi-Factor Authentication

@@ -16,6 +16,10 @@ use Joomla\CMS\MVC\Model\AdminModel;
 use Joomla\CMS\Language\Text;
 use Joomdle\Component\Joomdle\Administrator\Helper\ContentHelper;
 use Joomla\CMS\Mail\MailerFactoryInterface;
+use Joomla\CMS\Helper\ModuleHelper;
+use Joomla\CMS\Log\Log;
+use Joomla\Filesystem\File;
+use Joomla\Registry\Registry;
 
 // phpcs:disable PSR1.Files.SideEffects
 \defined('_JEXEC') or die;
@@ -128,20 +132,49 @@ class SendcertModel extends AdminModel
 
             $data = $this->item;
 
-            $data->cert_id = Factory::getApplication()->getInput()->get('cert_id', '', 'string');
-            $data->cert_type = Factory::getApplication()->getInput()->get('type', '', 'string');
+            $data->cert_id = Factory::getApplication()->getInput()->getInt('cert_id');
+            $data->cert_type = Factory::getApplication()->getInput()->getCmd('type');
+            $data->module_id = Factory::getApplication()->getInput()->getInt('module_id');
         }
 
         return $data;
+    }
+
+    public function assertCanSendCertificate($cert_type, $cert_id, $module_id = 0)
+    {
+        $app = Factory::getApplication();
+        $user = $app->getIdentity();
+
+        if ($user->guest) {
+            throw new \RuntimeException(Text::_('JERROR_ALERTNOAUTHOR'), 403);
+        }
+
+        $params = $app->getParams();
+        $allowed_types = ['normal', 'simple', 'custom', 'coursecertificate'];
+        $configured_type = $params->get('certificate_type', 'custom');
+
+        if (!in_array($cert_type, $allowed_types, true) || $cert_type !== $configured_type) {
+            throw new \RuntimeException(Text::_('COM_JOOMDLE_SEND_CERTIFICATE_NOT_ALLOWED'), 403);
+        }
+
+        if (!is_int($cert_id) || $cert_id < 1) {
+            throw new \RuntimeException(Text::_('COM_JOOMDLE_SEND_CERTIFICATE_NOT_ALLOWED'), 403);
+        }
+
+        return true;
     }
 
     public function sendCertificate($data)
     {
         /** @var CMSApplication $app */
         $app = Factory::getApplication();
-        $params = $app->getParams();
+        $user = $app->getIdentity();
 
-        $user = Factory::getApplication()->getIdentity();
+        $this->assertCanSendCertificate($data['cert_type'], $data['cert_id'], $data['module_id'] ?? 0);
+
+        if (strpbrk($data['sender'], "\r\n") !== false || strpbrk($data['subject'], "\r\n") !== false) {
+            throw new \RuntimeException(Text::_('COM_JOOMDLE_INVALID_CERTIFICATE_DATA'));
+        }
 
         $subject_default = Text::sprintf('COM_JOOMDLE_CERTIFICATE_EMAIL_SUBJECT', $user->name);
         $subject  = $data['subject'];
@@ -150,9 +183,8 @@ class SendcertModel extends AdminModel
         }
 
         $mailer = Factory::getContainer()->get(MailerFactoryInterface::class)->createMailer();
-        ;
 
-        $config = Factory::getApplication()->getConfig();
+        $config = $app->getConfig();
         $sender = array(
             $data['from'],
             $data['sender']
@@ -167,16 +199,52 @@ class SendcertModel extends AdminModel
 
         $cert_id = $data['cert_id'];
         $pdf_data = ContentHelper::getCertificate($user->username, $data['cert_type'], $cert_id);
-        $pdf = base64_decode($pdf_data['content']);
+
+        if (!is_array($pdf_data) || !isset($pdf_data['content']) || !is_string($pdf_data['content'])) {
+            throw new \RuntimeException(Text::_('COM_JOOMDLE_INVALID_CERTIFICATE_DATA'));
+        }
+
+        $pdf = base64_decode($pdf_data['content'], true);
+
+        if ($pdf === false || $pdf === '' || strncmp($pdf, '%PDF-', 5) !== 0) {
+            throw new \RuntimeException(Text::_('COM_JOOMDLE_INVALID_CERTIFICATE_DATA'));
+        }
 
         $tmp_path = $config->get('tmp_path');
-        $filename = 'certificate-' . $cert_id . '-' . $user->name . '.pdf';
-        file_put_contents($tmp_path . '/' . $filename, $pdf);
-        $mailer->addAttachment($tmp_path . '/' . $filename);
 
-        $sent = $mailer->Send();
-        unlink($tmp_path . '/' . $filename);
+        if (!is_string($tmp_path) || !is_dir($tmp_path) || !is_writable($tmp_path)) {
+            throw new \RuntimeException(Text::_('COM_JOOMDLE_INVALID_CERTIFICATE_DATA'));
+        }
 
-        return $sent;
+        $tmp_file = tempnam($tmp_path, 'joomdle_cert_');
+
+        if ($tmp_file === false) {
+            throw new \RuntimeException(Text::_('COM_JOOMDLE_INVALID_CERTIFICATE_DATA'));
+        }
+
+        try {
+            $written_bytes = file_put_contents($tmp_file, $pdf, LOCK_EX);
+
+            if ($written_bytes === false || $written_bytes !== strlen($pdf)) {
+                throw new \RuntimeException(Text::_('COM_JOOMDLE_INVALID_CERTIFICATE_DATA'));
+            }
+
+            $filename = 'certificate-' . $cert_id . '.pdf';
+            $attached = $mailer->addAttachment($tmp_file, $filename, 'base64', 'application/pdf');
+
+            if ($attached === false) {
+                throw new \RuntimeException(Text::_('COM_JOOMDLE_INVALID_CERTIFICATE_DATA'));
+            }
+
+            return $mailer->send();
+        } finally {
+            if (is_file($tmp_file)) {
+                try {
+                    File::delete($tmp_file);
+                } catch (\Throwable $exception) {
+                    Log::add($exception->getMessage(), Log::WARNING, 'com_joomdle.sendcert');
+                }
+            }
+        }
     }
 }

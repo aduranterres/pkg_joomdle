@@ -14,6 +14,7 @@ defined('_JEXEC') or die;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Factory;
 
 ?>
 <script type="text/javascript">
@@ -30,13 +31,25 @@ use Joomla\CMS\Language\Text;
 </script>
 <?php
 $data   = $this->get('data');
+$item_id = Factory::getApplication()->getInput()->getInt('Itemid');
+$form_url = 'index.php?option=com_joomdle&view=sendcert&layout=edit&tmpl=component';
+
+if ($item_id) {
+    $form_url .= '&Itemid=' . $item_id;
+}
 ?>
 
 <div id="mailto-window">
     <h2>
         <?php echo Text::_('COM_JOOMDLE_EMAIL_CERTIFICATE'); ?>
     </h2>
-    <form action="<?php echo Route::_('index.php?option=com_joomdle&view=sendcert&layout=edit&tmpl=component'); ?>" method="post" name="adminForm" id="sendcert-form" class="form-validate form-horizontal">
+    <form
+        action="<?php echo Route::_($form_url); ?>"
+        method="post"
+        name="adminForm"
+        id="sendcert-form"
+        class="form-validate form-horizontal"
+    >
 
         <div>
             <div class="row">

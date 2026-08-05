@@ -109,7 +109,7 @@ if (is_array($this->items)) {
                 if ($show_images_and_summary) {
                     if (count($course['summary_files'])) {
                         foreach ($course['summary_files'] as $file) :
-                            echo "<a $target href=\"$link\">";
+                            echo "<a $target href=\"$redirect_url\">";
                             ?>
                                 <div class="joomdle_course_image">
                                     <img style="float:none;" hspace="5" vspace="5" align="left" src="<?php echo $file['url']; ?>">

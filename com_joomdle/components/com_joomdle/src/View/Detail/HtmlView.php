@@ -60,6 +60,10 @@ class HtmlView extends BaseHtmlView
             throw new GenericDataException(implode("\n", $errors), 500);
         }
 
+        if (!$this->course_info['visible']) {
+            return;
+        }
+
         // Create a shortcut to the parameters.
         $this->params = $this->state->params;
 

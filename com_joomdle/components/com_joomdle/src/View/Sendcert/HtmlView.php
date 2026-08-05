@@ -44,8 +44,20 @@ class HtmlView extends BaseHtmlView
     public function display($tpl = null)
     {
         // Get model data.
+        $model = $this->getModel();
         $this->form = $this->get('Form');
         $this->item = $this->get('Item');
+
+        if (!$this->form) {
+            throw new \RuntimeException(Text::_('COM_JOOMDLE_SEND_CERTIFICATE_NOT_ALLOWED'), 500);
+        }
+
+        $data = $this->form->getData();
+        $model->assertCanSendCertificate(
+            $data->get('cert_type'),
+            $data->get('cert_id'),
+            $data->get('module_id')
+        );
 
         $this->prepareDocument();
 

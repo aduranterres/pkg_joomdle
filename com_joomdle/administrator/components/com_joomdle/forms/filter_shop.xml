@@ -40,6 +40,8 @@
             <option value="">JGLOBAL_SORT_BY</option>
             <option value="name ASC">COM_JOOMDLE_HEADING_COURSE_ASC</option>
             <option value="name DESC">COM_JOOMDLE_HEADING_COURSE_DESC</option>
+            <option value="id ASC">JGRID_HEADING_ID_ASC</option>
+            <option value="id DESC">JGRID_HEADING_ID_DESC</option>
         </field>
         <field
             name="limit"

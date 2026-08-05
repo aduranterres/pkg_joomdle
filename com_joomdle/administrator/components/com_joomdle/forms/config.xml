@@ -399,6 +399,19 @@
 
         <fieldset name="topicsview" label="COM_JOOMDLE_CONFIG_TOPICS_VIEW">
             <field
+                name="enable_topics_view"
+                type="radio"
+                default="1"
+                label="COM_JOOMDLE_ENABLE_TOPICS_VIEW"
+                description="COM_JOOMDLE_ENABLE_TOPICS_VIEW_DESCRIPTION"
+                layout="joomla.form.field.radio.switcher"
+                filter="integer">
+                <option
+                    value="0">JNO</option>
+                <option
+                    value="1">JYES</option>
+            </field>
+            <field
                 name="topics_show_numbers"
                 type="radio"
                 default="0"

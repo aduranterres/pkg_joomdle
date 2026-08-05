@@ -25,6 +25,7 @@ use Joomla\Utilities\ArrayHelper;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\User\UserFactoryInterface;
 use Joomla\CMS\User\User;
+use Joomla\Utilities\IpHelper;
 
 /**
  * Content helper.
@@ -916,11 +917,13 @@ class ContentHelper
         $cookie_path = $comp_params->get('cookie_path', "/");
 
         $land_file = $moodle_url . '/auth/joomdle/land.php';
+        $ip = IpHelper::getIp();
         $post_data = [
             'username' => $username,
             'token' => $token,
             'use_wrapper' => 0,
             'create_user' => 1,
+            'loginip' => $ip,
         ];
 
         $ch = curl_init();
@@ -993,6 +996,11 @@ class ContentHelper
         /** @var CMSApplication $app */
         $app = Factory::getApplication();
 
+        // This response contains a short-lived, single-use SSO ticket and must
+        // never be stored or compressed by Joomla's page cache.
+        $app->allowCache(false);
+        $app->set('gzip', false);
+
         $form_action = htmlspecialchars($moodle_url, ENT_QUOTES, 'UTF-8');
         $form_fields = '';
 
@@ -1014,6 +1022,9 @@ class ContentHelper
             . '</body>'
             . '</html>';
 
+        $app->setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0', true);
+        $app->setHeader('Pragma', 'no-cache', true);
+        $app->setHeader('Expires', 'Thu, 01 Jan 1970 00:00:00 GMT', true);
         $app->setHeader('Content-Type', 'text/html; charset=utf-8', true);
         $app->setBody($html);
         $app->sendHeaders();
@@ -1053,7 +1064,17 @@ class ContentHelper
                 $url .= "&itemid=$default_itemid";
             }
         } else {
-            $url = $params->get('MOODLE_URL') . "/course/view.php?id=" . $data['id'];
+            switch ($data['moodle_page_type']) {
+                case 'event':
+                    $url = $params->get('MOODLE_URL') . "/calendar/view.php?course=" . $data['course_id'];
+                    break;
+                case 'course':
+                    $url = $params->get('MOODLE_URL') . "/course/view.php?id=" . $data['id'];
+                    break;
+                default:
+                    $url = $params->get('MOODLE_URL') . "/course/view.php?id=" . $data['course_id'];
+                    break;
+            }
 
             if ((array_key_exists('lang', $data)) && ($data['lang'])) {
                 $url .= "&lang=" . $data['lang'];

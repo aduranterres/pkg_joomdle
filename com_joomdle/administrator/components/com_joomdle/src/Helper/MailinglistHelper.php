@@ -32,7 +32,7 @@ class MailinglistHelper
     {
         $courses = ContentHelper::getCourseList(0);
 
-        $cs = array ();
+        $cs = array();
         if (!is_array($courses)) {
             return $cs;
         }
@@ -131,7 +131,7 @@ class MailinglistHelper
         $course_info = ContentHelper::getCourseInfo($course_id);
 
         // Add to mailing list component
-        $data = array ();
+        $data = array();
         $data['name'] = $course_info['fullname'] . $type_str;
         $data['description'] = $course_info['summary'];
 
@@ -169,7 +169,7 @@ class MailinglistHelper
 
         $type_str = MailinglistHelper::getTypeStr($type);
 
-        $data = array ();
+        $data = array();
         $data['name'] = $type_str;
         $data['description'] = '';
 
@@ -203,7 +203,7 @@ class MailinglistHelper
 
     public static function addSub($list_id, $user_id)
     {
-        $data = array ();
+        $data = array();
         $data['list_id'] = $list_id;
         $data['user_id'] = $user_id;
 
@@ -215,7 +215,7 @@ class MailinglistHelper
 
     public static function removeSub($list_id, $user_id)
     {
-        $data = array ();
+        $data = array();
         $data['list_id'] = $list_id;
         $data['user_id'] = $user_id;
 
@@ -229,6 +229,10 @@ class MailinglistHelper
     {
         $list_id = MailinglistHelper::getCourseListId($course_id, $type);
         $user_id = UserHelper::getUserId($username);
+
+        if (!$user_id) {
+            return;
+        }
 
         if ($list_id) {
             MailinglistHelper::addSub($list_id, $user_id);
@@ -244,6 +248,10 @@ class MailinglistHelper
     {
         $list_id = MailinglistHelper::getCourseListId($course_id, $type);
         $user_id = UserHelper::getUserId($username);
+
+        if (!$user_id) {
+            return;
+        }
 
         // Remove from general list if necessary
         $remove = false;
@@ -281,6 +289,11 @@ class MailinglistHelper
                 $students = ContentHelper::getCourseStudents($course_id, 0);
                 foreach ($students as $student) {
                     $user_id = UserHelper::getUserId($student['username']);
+
+                    if (!$user_id) {
+                        continue;
+                    }
+
                     MailinglistHelper::addSub($list_id, $user_id);
                 }
                 break;
@@ -288,6 +301,11 @@ class MailinglistHelper
                 $teachers = ContentHelper::getCourseTeachers($course_id);
                 foreach ($teachers as $teacher) {
                     $user_id = UserHelper::getUserId($teacher['username']);
+
+                    if (!$user_id) {
+                        continue;
+                    }
+
                     MailinglistHelper::addSub($list_id, $user_id);
                 }
                 break;
@@ -304,11 +322,16 @@ class MailinglistHelper
             case 'course_students':
                 $courses = ContentHelper::getCourseList();
                 foreach ($courses as $course) {
-                    $teachers = array ();
+                    $teachers = array();
                     $course_id = $course['remoteid'];
                     $students = ContentHelper::getCourseStudents($course_id, 0);
                     foreach ($students as $student) {
                         $user_id = UserHelper::getUserId($student['username']);
+
+                        if (!$user_id) {
+                            continue;
+                        }
+
                         MailinglistHelper::addSub($list_id, $user_id);
                     }
                 }
@@ -316,11 +339,16 @@ class MailinglistHelper
             case 'course_teachers':
                 $courses = ContentHelper::getCourseList();
                 foreach ($courses as $course) {
-                    $teachers = array ();
+                    $teachers = array();
                     $course_id = $course['remoteid'];
                     $teachers = ContentHelper::getCourseTeachers($course_id);
                     foreach ($teachers as $teacher) {
                         $user_id = UserHelper::getUserId($teacher['username']);
+
+                        if (!$user_id) {
+                            continue;
+                        }
+
                         MailinglistHelper::addSub($list_id, $user_id);
                     }
                 }

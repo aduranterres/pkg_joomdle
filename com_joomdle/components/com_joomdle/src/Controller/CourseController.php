@@ -76,6 +76,9 @@ class CourseController extends BaseController
         /** @var CMSApplication $app */
         $app = Factory::getApplication();
 
+        $params = $app->getParams('com_joomdle');
+        $show_unenrol_link = $params->get('show_unenrol_link');
+
         $user = Factory::getApplication()->getIdentity();
 
         $course_id = (int) $this->input->post->get('course_id');

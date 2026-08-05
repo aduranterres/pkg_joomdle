@@ -26,18 +26,19 @@ use Joomla\Component\Fields\Administrator\Helper\FieldsHelper;
 class ShopModel extends ListModel
 {
     /**
-    * Constructor.
-    *
-    * @param   array  $config  An optional associative array of configuration settings.
-    *
-    * @see        JController
-    * @since      1.6
-    */
+     * Constructor.
+     *
+     * @param   array  $config  An optional associative array of configuration settings.
+     *
+     * @see        JController
+     * @since      1.6
+     */
     public function __construct($config = array())
     {
         if (empty($config['filter_fields'])) {
             $config['filter_fields'] = array(
-                'id', 'a.id',
+                'id',
+                'a.id',
                 'name',
             );
         }
@@ -60,7 +61,7 @@ class ShopModel extends ListModel
     protected function populateState($ordering = null, $direction = null)
     {
         // List state information.
-        parent::populateState("a.id", "ASC");
+        parent::populateState('name', 'ASC');
 
         $context = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
         $this->setState('filter.search', $context);
@@ -123,13 +124,13 @@ class ShopModel extends ListModel
 
         $search = $this->getState('filter.search');
         if ($search) {
-                $search = $db->quote('%' . $db->escape($search, true) . '%');
-                $query->where('(a.joomla_field LIKE ' . $search . ' OR a.moodle_field LIKE ' . $search . ')');
+            $search = $db->quote('%' . $db->escape($search, true) . '%');
+            $query->where('(a.joomla_field LIKE ' . $search . ' OR a.moodle_field LIKE ' . $search . ')');
         }
 
         $filter_type = $this->getState('filter.state');
         if ($filter_type) {
-                $query->where('a.joomla_app = ' . $db->quote($filter_type));
+            $query->where('a.joomla_app = ' . $db->quote($filter_type));
         }
 
         $orderCol    = $this->state->get('list.ordering', 'name');
@@ -147,10 +148,7 @@ class ShopModel extends ListModel
 
         $limit = $pagination->limit;
 
-        $listOrder  = $this->state->get('list.ordering');
-        $listDirn   = $this->state->get('list.direction');
-        $filter_order = $listOrder; // Not really used, always sort by course name
-        $filter_order_Dir = $listDirn;
+        $filter_order_dir = $this->state->get('list.direction', 'ASC');
 
         $filter_type = $this->getState('filter.state');
 
@@ -160,14 +158,14 @@ class ShopModel extends ListModel
         $products = array_merge($bundles, $courses);
         usort($products, array($this, "cmp"));
 
-        if ($filter_order_Dir == 'DESC') {
+        if ($filter_order_dir == 'DESC') {
             $products = array_reverse($products);
         }
 
         $published = $this->getState('filter.published', '');
         $search = $this->getState('filter.search', '');
         $producttype = $this->getState('filter.producttype', '');
-        $p = array ();
+        $p = array();
         foreach ($products as $product) {
             if ($search != '') {
                 if (!stristr($product->fullname, $search)) {
@@ -181,11 +179,11 @@ class ShopModel extends ListModel
             }
             if ($producttype !== '') {
                 if ($producttype == 'bundles') {
-                    if (!$product->is_bundle) {
+                    if ((!property_exists($product, 'is_bundle')) || (!$product->is_bundle)) {
                         continue;
                     }
                 } elseif ($producttype == 'courses') {
-                    if ($product->is_bundle) {
+                    if ((property_exists($product, 'is_bundle')) && ($product->is_bundle)) {
                         continue;
                     }
                 }
@@ -201,9 +199,13 @@ class ShopModel extends ListModel
         return array_slice($products, $limitstart, $limit, true);
     }
 
-    private function cmp($a, $b)
+    private function cmp($product_a, $product_b)
     {
-        return strcasecmp($a->fullname, $b->fullname);
+        if ($this->state->get('list.ordering', 'name') === 'id') {
+            return (int) $product_a->id <=> (int) $product_b->id;
+        }
+
+        return strcasecmp($product_a->fullname, $product_b->fullname);
     }
 
     public function getTotal()
@@ -216,7 +218,7 @@ class ShopModel extends ListModel
         $published = $this->getState('filter.published', '');
         $search = $this->getState('filter.search', '');
         $producttype = $this->getState('filter.producttype', '');
-        $p = array ();
+        $p = array();
         foreach ($products as $product) {
             if ($search != '') {
                 if (!stristr($product->fullname, $search)) {
@@ -230,11 +232,11 @@ class ShopModel extends ListModel
             }
             if ($producttype !== '') {
                 if ($producttype == 'bundles') {
-                    if (!$product->is_bundle) {
+                    if ((!property_exists($product, 'is_bundle')) || (!$product->is_bundle)) {
                         continue;
                     }
                 } elseif ($producttype == 'courses') {
-                    if ($product->is_bundle) {
+                    if ((property_exists($product, 'is_bundle')) && ($product->is_bundle)) {
                         continue;
                     }
                 }

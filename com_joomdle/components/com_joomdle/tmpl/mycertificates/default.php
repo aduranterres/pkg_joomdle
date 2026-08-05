@@ -11,8 +11,11 @@
 \defined('_JEXEC') or die;
 
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Factory;
 
 $this->moodle_url = $this->params->get('MOODLE_URL');
+$item_id = Factory::getApplication()->getInput()->getInt('Itemid');
 
 if (!count($this->items)) {
     echo '<span class="joomdle_nocourses_message">' . Text::_('COM_JOOMDLE_NO_CERTIFICATES_YET') . "</span>";
@@ -39,20 +42,34 @@ if (!count($this->items)) {
 
                         switch ($this->type) {
                             case 'simple':
-                                $redirect_url = $this->moodle_url . "/mod/simplecertificate/view.php?id=$id&certificate=1&action=review";
+                                $redirect_url = $this->moodle_url
+                                    . "/mod/simplecertificate/view.php?id=$id&certificate=1&action=review";
                                 break;
                             case 'custom':
                                 $redirect_url = $this->moodle_url . "/mod/customcert/view.php?id=$id&downloadown=1";
                                 break;
                             case 'coursecertificate':
-                                $redirect_url = $this->moodle_url . "/admin/tool/certificate/view.php?code=" . $cert['code'];
+                                $redirect_url = $this->moodle_url
+                                    . "/admin/tool/certificate/view.php?code=" . $cert['code'];
                                 break;
                         }
+
+                        $send_url = Route::_(
+                            'index.php?option=com_joomdle&view=sendcert&layout=edit&tmpl=component&type='
+                                . $this->type . '&cert_id=' . $id . '&Itemid=' . $item_id
+                        );
                         ?>
                         <span>
                             <a target='_blank' href="<?php echo $redirect_url; ?>"><?php echo $cert['name']; ?></a>
                             <?php if ($this->params->get('show_send_certificate')) : ?>
-                                <a href="index.php?option=com_joomdle&view=sendcert&layout=edit&tmpl=component&type=<?php echo $this->type; ?>&cert_id=<?php echo $id; ?>" onclick="window.open(this.href,'win2','width=400,height=500,top=100,left=500,menubar=yes,resizable=yes'); return false;" title="Email"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+                                <a
+                                    href="<?php echo $send_url; ?>"
+                                    onclick="window.open(
+                                        this.href,
+                                        'win2',
+                                        'width=400,height=500,top=100,left=500,menubar=yes,resizable=yes'
+                                    ); return false;"
+                                    title="Email"><i class="fa fa-envelope" aria-hidden="true"></i></a>
                             <?php endif; ?>
                         </span>
                     </li>

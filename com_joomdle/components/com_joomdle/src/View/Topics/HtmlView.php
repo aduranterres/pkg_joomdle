@@ -50,9 +50,6 @@ class HtmlView extends BaseHtmlView
      */
     public function display($tpl = null)
     {
-        // Get model data.
-        $this->items = $this->get('Items');
-        $this->course = $this->get('Course');
         $this->state = $this->get('State');
 
         // Check for errors.
@@ -62,6 +59,19 @@ class HtmlView extends BaseHtmlView
 
         // Create a shortcut to the parameters.
         $this->params = $this->state->params;
+
+        if (!$this->params->get('enable_topics_view', 1)) {
+            Factory::getApplication()->enqueueMessage(Text::_('COM_JOOMDLE_TOPICS_VIEW_NOT_ENABLED'), 'warning');
+            return;
+        }
+
+        // Get model data.
+        $this->items = $this->get('Items');
+        $this->course = $this->get('Course');
+
+        if (!$this->course['visible']) {
+            return;
+        }
 
         $this->pageclass_sfx = htmlspecialchars($this->params->get('pageclass_sfx', ''));
 
