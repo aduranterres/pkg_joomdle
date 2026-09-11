@@ -14,8 +14,8 @@ use Joomla\CMS\Application\ApplicationHelper;
 use Joomla\CMS\Router\Route;
 use Joomdle\Component\Joomdle\Administrator\Helper\SystemHelper;
 
-$free_courses_button = $this->params->get('free_courses_button');
-$paid_courses_button = $this->params->get('paid_courses_button');
+$free_courses_button = $this->params->get('free_courses_button', 'enrol');
+$paid_courses_button = $this->params->get('paid_courses_button', 'buy');
 $show_buttons = $this->params->get('show_buttons');
 $show_description = $this->params->get('show_description');
 ?>

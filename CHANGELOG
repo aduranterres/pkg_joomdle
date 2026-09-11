@@ -6,6 +6,8 @@ Joomdle 3.1.2 for Joomla 5 and 6
 - Add option to disable topics view
 - Fix links to Moodle in events and grades views when not using the wrapper
 - Fixes and improvements in certificate sending
+- Skip token based logins in Moodle auth plugin user authenticated hook
+- Fix name sync problem when no additional data source is set for sites upgrading from Joomdle 2
 
 Joomdle 3.1.1 for Joomla 5 and 6
 ------------------------------------

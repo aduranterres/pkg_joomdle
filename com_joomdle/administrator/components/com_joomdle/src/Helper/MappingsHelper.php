@@ -67,6 +67,7 @@ class MappingsHelper
         $more_info = array();
         switch ($additional_data_source) {
             case '':
+            case 'no': // Neded for sites coming from Joomdle 2 and not saving config or not changing value
                 $more_info = MappingsHelper::getUserInfoJoomla($username);
                 break;
             default:
