@@ -18,15 +18,6 @@
             required="true"
         />
 
-        <field name="from" type="email"
-            description="COM_JOOMDLE_SENDCERT_SENDER_MAIL"
-            label="COM_JOOMDLE_SENDCERT_SENDER_MAIL"
-            filter="string"
-            validate="email"
-            maxlength="254"
-            required="true"
-        />
-
         <field name="subject" type="text"
             description="COM_JOOMDLE_SENDCERT_SUBJECT"
             label="COM_JOOMDLE_SENDCERT_SUBJECT"

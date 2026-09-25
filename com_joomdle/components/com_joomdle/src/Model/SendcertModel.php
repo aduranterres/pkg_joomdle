@@ -12,14 +12,12 @@ namespace Joomdle\Component\Joomdle\Site\Model;
 
 use Joomla\CMS\Table\Table;
 use Joomla\CMS\Factory;
-use Joomla\CMS\MVC\Model\AdminModel;
 use Joomla\CMS\Language\Text;
 use Joomdle\Component\Joomdle\Administrator\Helper\ContentHelper;
 use Joomla\CMS\Mail\MailerFactoryInterface;
-use Joomla\CMS\Helper\ModuleHelper;
 use Joomla\CMS\Log\Log;
+use Joomla\CMS\MVC\Model\FormModel;
 use Joomla\Filesystem\File;
-use Joomla\Registry\Registry;
 
 // phpcs:disable PSR1.Files.SideEffects
 \defined('_JEXEC') or die;
@@ -30,7 +28,7 @@ use Joomla\Registry\Registry;
  *
  * @since  2.0.0
  */
-class SendcertModel extends AdminModel
+class SendcertModel extends FormModel
 {
     /**
      * @var    string  The prefix to use with controller messages.
@@ -52,23 +50,6 @@ class SendcertModel extends AdminModel
      * @since  2.0.0
      */
     protected $item = null;
-
-    /**
-     * Returns a reference to the a Table object, always creating it.
-     *
-     * @param   string  $type    The table type to instantiate
-     * @param   string  $prefix  A prefix for the table class name. Optional.
-     * @param   array   $config  Configuration array for model. Optional.
-     *
-     * @return  Table    A database object
-     *
-     * @since   2.0.0
-     */
-    // FIXME esto no se
-    public function getTable($type = 'Users', $prefix = '', $config = array())
-    {
-        return false;
-    }
 
     /**
      * Method to get the record form.
@@ -107,7 +88,6 @@ class SendcertModel extends AdminModel
 
         if ($user) {
             $item->sender = $user->name;
-            $item->from = $user->email;
         }
 
         return $item;
@@ -186,11 +166,12 @@ class SendcertModel extends AdminModel
 
         $config = $app->getConfig();
         $sender = array(
-            $data['from'],
+            $config->get('mailfrom'),
             $data['sender']
         );
 
         $mailer->setSender($sender);
+        $mailer->addReplyTo($user->email);
         $mailer->addRecipient($data['to']);
 
         $body   = Text::sprintf('COM_JOOMDLE_CERTIFICATE_EMAIL_BODY', $user->name);

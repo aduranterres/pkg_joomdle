@@ -47,6 +47,10 @@ if (!count($this->items)) {
                                 break;
                             case 'custom':
                                 $redirect_url = $this->moodle_url . "/mod/customcert/view.php?id=$id&downloadown=1";
+                                //$redirect_url = $this->moodle_url . "/mod/my_certificates.php?userid=16683&certificateid=2522&downloadcert=1";
+                                //                               $redirect_url = $this->moodle_url . "/mod/my_certificates.php?certificateid=2522&downloadcert=1";
+                                $certid = $cert['certid'];
+                                $redirect_url = $this->moodle_url . "/mod/customcert/my_certificates.php?certificateid=$certid&downloadcert=1";
                                 break;
                             case 'coursecertificate':
                                 $redirect_url = $this->moodle_url
@@ -73,7 +77,7 @@ if (!count($this->items)) {
                             <?php endif; ?>
                         </span>
                     </li>
-                <?php }
+            <?php }
             } ?>
         </ul>
     </div>

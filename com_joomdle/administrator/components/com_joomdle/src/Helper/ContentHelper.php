@@ -981,6 +981,28 @@ class ContentHelper
     }
 
     /**
+     * Redirect the browser to Moodle with the SSO data in the query string.
+     *
+     * @param   string  $moodle_url  Moodle endpoint receiving the request.
+     * @param   array   $get_data    Fields to send in the query string.
+     *
+     * @return  void
+     */
+    public static function redirectToMoodleWithGet($moodle_url, array $get_data)
+    {
+        $app = Factory::getApplication();
+        $separator = str_contains($moodle_url, '?') ? '&' : '?';
+        $redirect_url = $moodle_url . $separator . http_build_query($get_data, '', '&', PHP_QUERY_RFC3986);
+
+        $app->allowCache(false);
+        $app->setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0', true);
+        $app->setHeader('Pragma', 'no-cache', true);
+        $app->setHeader('Expires', 'Thu, 01 Jan 1970 00:00:00 GMT', true);
+        $app->setHeader('Referrer-Policy', 'no-referrer', true);
+        $app->redirect($redirect_url, 303);
+    }
+
+    /**
      * Redirect the browser to Moodle by submitting an HTML form via POST.
      *
      * HTTP redirects cannot change the following request to POST, so this
@@ -1107,6 +1129,7 @@ class ContentHelper
 
         $moodle_user['name'] = $user_details['firstname'] . ' ' . $user_details['lastname'];
         $moodle_user['email'] = $user_details['email'];
+        $moodle_user['block'] = $user_details['block'];
 
         $moodle_user['activation'] = '';
         $moodle_user['sendEmail'] = 0;

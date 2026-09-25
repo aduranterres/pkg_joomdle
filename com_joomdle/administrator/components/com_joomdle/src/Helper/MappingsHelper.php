@@ -58,7 +58,7 @@ class MappingsHelper
         }
         $user_info['suspended'] = $user->block;
 
-        if ($user->activation) {
+        if ($user->activation && $user->block) {
             $user_info['confirmed'] = 0;
         } else {
             $user_info['confirmed'] = 1;

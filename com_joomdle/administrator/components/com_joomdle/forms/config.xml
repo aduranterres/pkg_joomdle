@@ -606,6 +606,19 @@
                     value="1">JYES</option>
             </field>
         </fieldset>
+    </fieldset>
+
+    <fieldset name="advanced" label="COM_JOOMDLE_CONFIG_ADVANCED">
+
+        <field name="redirect_to_moodle_method" type="list" label="COM_JOOMDLE_REDIRECT_TO_MOODLE_METHOD"
+            description="COM_JOOMDLE_REDIRECT_TO_MOODLE_METHOD_DESCRIPTION"
+            size="1" default="post"
+        >
+            <option value="get">
+                GET</option>
+            <option value="post">
+                POST</option>
+        </field>
 
     </fieldset>
 

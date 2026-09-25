@@ -219,17 +219,31 @@ final class Joomdle extends CMSPlugin implements SubscriberInterface
             // Use redirect-less SSO
             ContentHelper::logIntoMoodle($username, $token);
         } else {
-            // Use SSO with POST redirect
-            ContentHelper::redirectToMoodleWithPost(
-                $moodle_url . '/auth/joomdle/land.php',
-                [
-                    'username' => $username,
-                    'token' => $token,
-                    'use_wrapper' => 0,
-                    'create_user' => 0,
-                    'wantsurl' => $login_url,
-                ]
-            );
+            // Use SSO with POST or GET redirect
+            $redirect_to_moodle_method = $comp_params->get('redirect_to_moodle_method', 'post');
+            if ($redirect_to_moodle_method == 'post') {
+                ContentHelper::redirectToMoodleWithPost(
+                    $moodle_url . '/auth/joomdle/land.php',
+                    [
+                        'username' => $username,
+                        'token' => $token,
+                        'use_wrapper' => 0,
+                        'create_user' => 0,
+                        'wantsurl' => $login_url,
+                    ]
+                );
+            } else {
+                ContentHelper::redirectToMoodleWithGet(
+                    $moodle_url . '/auth/joomdle/land.php',
+                    [
+                        'username' => $username,
+                        'token' => $token,
+                        'use_wrapper' => 0,
+                        'create_user' => 0,
+                        'wantsurl' => $login_url,
+                    ]
+                );
+            }
         }
     }
 

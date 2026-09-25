@@ -1,13 +1,18 @@
 Joomdle 3.1.2 for Joomla 5 and 6
 ------------------------------------
+- Fix problems when activating users from Joomla
 - Set correct lastip address in Moodle when using redirect-less SSO from Joomla
 - Allow sorting by Moodle course id in Shop backend view
 - Ignore Joomdle user plugin on API access
 - Add option to disable topics view
 - Fix links to Moodle in events and grades views when not using the wrapper
+- Adapt to Custom Certificate module changes
 - Fixes and improvements in certificate sending
 - Skip token based logins in Moodle auth plugin user authenticated hook
 - Fix name sync problem when no additional data source is set for sites upgrading from Joomdle 2
+- Add enrolment start and end dates to my courses endpoint
+- Block/suspended status sync improvements
+- Add option to choose GET/POST on SSO with redirect
 
 Joomdle 3.1.1 for Joomla 5 and 6
 ------------------------------------

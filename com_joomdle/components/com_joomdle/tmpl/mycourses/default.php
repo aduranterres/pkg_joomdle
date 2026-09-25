@@ -58,9 +58,9 @@ $show_images_and_summary = $this->params->get('show_images_and_summary');
 
     <?php if ($show_images_and_summary) : ?>
         <div class="joomdle_mycourses_no_list">
-    <?php else : ?>
+        <?php else : ?>
             <div class="joomdle_mycourses">
-    <?php endif; ?>
+            <?php endif; ?>
             <ul>
                 <?php
                 $lang = ContentHelper::getLang();
@@ -94,11 +94,11 @@ $show_images_and_summary = $this->params->get('show_images_and_summary');
                                 if (count($item['summary_files'])) {
                                     foreach ($item['summary_files'] as $file) :
                                         echo "<a $target href=\"$redirect_url\">";
-                                        ?>
+                            ?>
                                         <div class='joomdle_course_image'>
                                             <img style="float:none;" hspace="5" vspace="5" align="left" src="<?php echo $file['url']; ?>">
                                         </div>
-                                        <?php
+                                    <?php
                                         echo "</a>";
                                     endforeach;
                                 }
@@ -115,7 +115,7 @@ $show_images_and_summary = $this->params->get('show_images_and_summary');
                                         <?php echo HTMLHelper::_('form.token'); ?>
                                         <button type="submit" class="joomdle_unenrol_link">(<?php echo Text::_('COM_JOOMDLE_UNENROL'); ?>)</button>
                                     </form>
-                                    <?php
+                            <?php
                                 }
                             }
 
@@ -126,7 +126,7 @@ $show_images_and_summary = $this->params->get('show_images_and_summary');
 
                             ?>
                         </li>
-                    <?php endforeach;
+                <?php endforeach;
                 }; ?>
             </ul>
             </div>
