@@ -16,7 +16,7 @@ use Joomla\CMS\Language\Text;
 <fieldset class="form-horizontal options-menu options-form">
     <legend><?php echo Text::_('COM_JOOMDLE_ADVANCED'); ?></legend>
     <?php
-    foreach ($this->form->getFieldset('advanced') as $field):
+    foreach ($this->form->getFieldset('advanced') as $field) :
         ?>
         <div class="control-group">
             <div class="control-label"><?php echo $field->label; ?></div>

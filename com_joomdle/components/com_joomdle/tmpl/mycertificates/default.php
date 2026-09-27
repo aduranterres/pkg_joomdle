@@ -77,7 +77,7 @@ if (!count($this->items)) {
                             <?php endif; ?>
                         </span>
                     </li>
-            <?php }
+                <?php }
             } ?>
         </ul>
     </div>
