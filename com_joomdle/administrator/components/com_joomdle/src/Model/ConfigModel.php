@@ -167,9 +167,6 @@ class ConfigModel extends AdminModel
             $data['joomla_auth_token'] = $token;
         }
 
-//        $data['license_key'] = trim($data['license_key']);
-//        $license_key = $data['license_key'];
-
         // Token cannot have spaces
         $data['auth_token'] = trim($data['auth_token']);
 
@@ -183,6 +180,8 @@ class ConfigModel extends AdminModel
         $ext->params = $json;
 
         $db->updateObject('#__extensions', $ext, 'extension_id');
+
+        parent::cleanCache('_system');
 
         return true;
     }

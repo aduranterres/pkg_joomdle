@@ -1,4 +1,8 @@
-Joomdle 3.1.2 for Joomla 5 and 6
+Joomdle 3.2.1 for Joomla 5 and 6
+------------------------------------
+- Clear cache after Joomdle configuration update in Joomla
+
+Joomdle 3.2.0 for Joomla 5 and 6
 ------------------------------------
 - Fix problems when activating users from Joomla
 - Set correct lastip address in Moodle when using redirect-less SSO from Joomla
