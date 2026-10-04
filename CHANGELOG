@@ -1,6 +1,10 @@
+Joomdle 3.2.2 for Joomla 5 and 6
+------------------------------------
+- Fix wrong version in Joomla XML file
+
 Joomdle 3.2.1 for Joomla 5 and 6
 ------------------------------------
-- Clear cache after Joomdle configuration update in Joomla
+- Clear cache after Joomdle configuration update in Joomla (Seyi)
 
 Joomdle 3.2.0 for Joomla 5 and 6
 ------------------------------------
