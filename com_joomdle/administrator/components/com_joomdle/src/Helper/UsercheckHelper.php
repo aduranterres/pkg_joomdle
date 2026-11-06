@@ -88,11 +88,6 @@ class UsercheckHelper
     // Checks if username has valid format for Moodle
     public static function checkUsername($username)
     {
-        // No spaces
-        if (strstr($username, ' ')) {
-            throw new \RuntimeException(Text::_('COM_JOOMDLE_USERNAME_CANNOT_CONTAIN_SPACES'));
-        }
-
         // No uppercase
         $clean_username = strtolower($username);
         if (strcmp($clean_username, $username) != 0) {
@@ -104,6 +99,11 @@ class UsercheckHelper
         $extendedusernamechars =  $params->get('extendedusernamechars');
         if (!$extendedusernamechars) {
             $clean_username = preg_replace('/[^-\.@_a-z0-9]/', '', $username);
+
+            // No spaces
+            if (strstr($username, ' ')) {
+                throw new \RuntimeException(Text::_('COM_JOOMDLE_USERNAME_CANNOT_CONTAIN_SPACES'));
+            }
 
             if ($clean_username != $username) {
                 throw new \RuntimeException(Text::_('COM_JOOMDLE_INVALID_USERNAME'));
